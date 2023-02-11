@@ -1,0 +1,8 @@
+.myError{
+    padding: 10px;
+    color: red;
+    display: flex;
+    align-self: center;
+    border: 1px dashed red ;
+    border-radius: 5px;
+}

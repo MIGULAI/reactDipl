@@ -1,0 +1,9 @@
+.myLable{
+    display: flex;
+    max-width: 100%;
+    width: 50%;
+    margin-bottom: 5px;
+    padding: 0px 10px;
+    font-weight: 700;
+    align-self: center;
+}
