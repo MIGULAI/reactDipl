@@ -1,0 +1,29 @@
+.PG__wrapper{
+    display: flex;
+    position: relative;
+    min-height: 100vh;
+    left: 350px;
+    width: calc(100% - 350px);
+    flex-direction: column;
+}
+
+
+.sub__wrapper{
+    align-content: center;
+    justify-content: center;
+    display: flex;
+    min-height: 90vh;
+    flex-direction: row;
+    width: 100%;
+}
+
+.page__title{
+    padding: 0;
+    margin: 0;
+    height: 10%;
+    width: 100%;
+    display: flex;
+    align-self: flex-start;
+    justify-content: center;
+    padding-top: 2vh;
+}

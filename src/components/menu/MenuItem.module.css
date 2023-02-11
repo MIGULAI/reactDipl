@@ -1,0 +1,38 @@
+.MenuItem{
+    position: relative;
+    list-style: none;
+    width: 100%;
+    display: flex;
+    text-decoration: none;
+    color: #fff;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    font-size: 1em;
+}
+
+.MenuItem p{
+    text-align: center;
+    display: block;
+    padding-left: 10px;
+    height: 60px;
+    line-height: 60px;
+    white-space: normal;
+}
+
+.icon{
+    position: relative;
+    display: block;
+    min-width: 60px;
+    height: 60px;
+    line-height: 70px;
+    text-align: center;
+}
+
+.ActiveMenuItem{
+    background: #fff;
+    color: #333;
+}
+
+
+
+
