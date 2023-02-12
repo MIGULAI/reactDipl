@@ -8,17 +8,17 @@ import { AuthContext } from "../../context";
 const Menu = () => {
     const [menuItems, setMenuItems] = useState([])
     const [isActive, setIsActive] = useState([])
-    const [keyActive, setKeyActive] = useState(0)
-    const { isAuth, setIsAuth } = useContext(AuthContext);
+
+    const { isAuth, setIsAuth,  setApiKey, keyActive, setKeyActive } = useContext(AuthContext);
 
     useEffect(() => {
         let menuArr = []
-        if (isAuth){
+        if (isAuth) {
             menuArr = IsLogingMenuItems
 
-        } 
+        }
         else menuArr = NotLogingMenuItems
-        
+
         setMenuItems(menuArr)
         let activeArray = []
         for (let i = 0; i < menuArr.length; i++) {
@@ -30,7 +30,9 @@ const Menu = () => {
 
     const logout = () => {
         setIsAuth(false)
+        setApiKey(null)
         localStorage.removeItem('auth')
+        localStorage.removeItem('apiKey')
     }
 
     return (
@@ -49,7 +51,7 @@ const Menu = () => {
                     ? <MenuItem
                         isActive={isActive[menuItems.length]}
                         index={menuItems.length}
-                        onClick={()=> logout()}
+                        onClick={() => logout()}
                         changeActive={(key) => setKeyActive(key)}
                         icon={'log-out-outline'}
                         path={'/logout'}

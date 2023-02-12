@@ -2,7 +2,9 @@
     display: flex;
     flex-direction: column;
     width: 95%;
+    height: auto;
     padding-top: 30px;
+    justify-items: center;
 }
 
 .myContent__header{
@@ -16,5 +18,13 @@
 .header_item{
     width: 30%;
     display: flex;
+    justify-content: center;
+}
+.contTable__wrapper{
+    display: flex;
+    align-self: center;
+    justify-self: center;
+    height: auto;
+    width: 100%;
     justify-content: center;
 }

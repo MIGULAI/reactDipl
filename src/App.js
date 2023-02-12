@@ -9,17 +9,22 @@ import { AuthContext } from "./context";
 function App() {
   const [isAuth, setIsAuth] = useState(false);
   const [isLoading, setIsLoading] = useState(true)
+  const [apiKey, setApiKey] = useState(null)
+  const [keyActive, setKeyActive] = useState(0)
 
   useEffect(() => {
     if (localStorage.getItem('auth')) {
       setIsAuth(true)
+    }
+    if(localStorage.getItem('apiKey')){
+      setApiKey(localStorage.getItem('apiKey'))
     }
     setIsLoading(false)
   }, []);
 
   return (
     <AuthContext.Provider value={{
-      isAuth, setIsAuth, isLoading
+      isAuth, setIsAuth, isLoading, apiKey, setApiKey, keyActive, setKeyActive
     }}>
       <BrowserRouter>
         <Menu />

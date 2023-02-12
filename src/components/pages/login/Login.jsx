@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import MyButton from "../../UI/MyButton/MyButton";
 import MyError from "../../UI/MyError/MyError";
 import MyInput from "../../UI/MyInput/MyInput";
@@ -10,11 +10,12 @@ import PostService from "../../../API/PostService";
 
 import classes from "./Login.module.css"
 import { AuthContext } from "../../../context";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-    const { isAuth, setIsAuth } = useContext(AuthContext)
+    const {setIsAuth, setApiKey, setKeyActive} = useContext(AuthContext)
 
-
+    const navig = useNavigate()
     const [user, setUser] = useState({ email: '', password: '' })
     const [err, setErr] = useState(null)
 
@@ -28,13 +29,21 @@ const Login = () => {
             let res = await PostService.LoginService(user);
             if (res.data[0]) {
                 setIsAuth(true)
+                setApiKey(res.data[2])
                 localStorage.setItem('auth', 'true')
+                localStorage.setItem('apiKey', res.data[2])
+                setKeyActive(0)
+                navig('/plan')
+                
             } else {
                 setErr(res.data[1])
             }
         }
 
     }
+    useEffect(() => {
+        setKeyActive(3)
+    }, [setKeyActive]);
 
     return (
         <PageWrapper title="Сторінка входу">

@@ -1,0 +1,24 @@
+.myTable{
+    display: flex;
+    align-self: center;
+    justify-self: center;
+    min-width: 50%;
+    border-spacing: 0px;
+    font-size: 14px;
+
+}
+
+.myTable tbody{
+    width: 100%;
+}
+
+.myTable tr{
+    width: 100%;
+    cursor: pointer;
+    transition: all .25s ease-in-out;
+}
+
+.myTable tr td{
+    border: solid 1px black;
+    width: 10%;
+}
