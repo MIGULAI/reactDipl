@@ -1,7 +1,7 @@
 import React from "react";
 import classes from "./MyTable.module.css"
 
-const PlanTable = ({ children, header}) => {
+const MyTable = ({ children, header}) => {
     return (
         <table className={classes.myTable}>
             <tbody>
@@ -22,4 +22,4 @@ const PlanTable = ({ children, header}) => {
     );
 }
 
-export default PlanTable
+export default MyTable

@@ -1,9 +1,9 @@
 import React from "react";
 
-const MySelector =({options, selectedYear, onChange}) =>{
+const MySelector =({options, selected, onChange}) =>{
     return (
         <select 
-            value={selectedYear}
+            value={selected}
             onChange={onChange}
         >
             {options.map( option => 

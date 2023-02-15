@@ -9,6 +9,8 @@ export const NotLogingMenuItems = [
 
 export const IsLogingMenuItems = [
     {icon:"list-outline" , name: 'План публікацій', path: "/plan"},
+    {icon:"add-outline" , name: 'Додати публікацію', path: "/add/public"},
+    {icon:"add-outline" , name: 'Додати Автора', path: "/add/autor"},
     {icon: "file-tray-stacked-outline", name: 'Пошук запису у БД', path: "/search"},
     {icon: "analytics-outline", name: 'Аналіз Публікацій', path: "/analyze"},
 ]

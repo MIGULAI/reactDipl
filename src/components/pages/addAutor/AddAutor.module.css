@@ -1,0 +1,32 @@
+.columItem {
+    display: flex;
+    flex-direction: column;
+}
+
+.inputFuild {
+    padding-top: 5px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+.inputFuild lable {
+    width: 50%;
+}
+
+.inputFuild input,
+.inputFuild select {
+    width: 50%
+}
+
+.table_wrapper {
+    display: flex;
+    flex-direction: row;
+}
+
+.but__wrapper{
+    padding-top: 10px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}

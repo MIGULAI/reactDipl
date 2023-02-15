@@ -5,6 +5,7 @@ import AppRouter from "./components/AppRouter";
 
 import './styles/App.css';
 import { AuthContext } from "./context";
+import { useMemo } from "react";
 
 function App() {
   const [isAuth, setIsAuth] = useState(false);
@@ -12,7 +13,7 @@ function App() {
   const [apiKey, setApiKey] = useState(null)
   const [keyActive, setKeyActive] = useState(0)
 
-  useEffect(() => {
+  useMemo(() => {
     if (localStorage.getItem('auth')) {
       setIsAuth(true)
     }
