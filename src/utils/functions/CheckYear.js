@@ -1,5 +1,3 @@
-
-
 export const CheckYear = () => {
     const now = new Date();
     const d = new Date();
@@ -8,5 +6,6 @@ export const CheckYear = () => {
     if (now < d) {
         return now.getFullYear() -1
     }
+    console.log(now.getFullYear());
     return now.getFullYear()
 }

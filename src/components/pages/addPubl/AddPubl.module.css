@@ -1,0 +1,8 @@
+.form__wrapper{
+    display: flex;
+    flex-direction: row;
+}
+
+.form__wrapper .columItem{
+    width: 50%;
+}

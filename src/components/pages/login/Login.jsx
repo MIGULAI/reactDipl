@@ -2,44 +2,35 @@ import React, { useState, useContext, useEffect } from "react";
 import MyButton from "../../UI/MyButton/MyButton";
 import MyError from "../../UI/MyError/MyError";
 import MyInput from "../../UI/MyInput/MyInput";
-import MyLable from "../../UI/MyLable/MyLable";
+import MyLabel from "../../UI/MyLabel/MyLabel";
 import CardWrapper from "../CardWrapper";
 import PageWrapper from "../PageWrapper";
-import { EmailValidation, PasswordValidation } from "../../../utils/functions/validation.js"
-import PostService from "../../../API/PostService";
 
 import classes from "./Login.module.css"
 import { AuthContext } from "../../../context";
 import { useNavigate } from "react-router-dom";
+import { loginLogic } from "./LoginLogic.js"
 
 const Login = () => {
+
+    const {buttonWrapper, inputWrapper, loginForm} = classes
+
     const {setIsAuth, setApiKey, setKeyActive} = useContext(AuthContext)
 
     const navig = useNavigate()
     const [user, setUser] = useState({ email: '', password: '' })
-    const [err, setErr] = useState(null)
+    const [err, setErr] = useState([])
 
     const login = async (e) => {
         e.preventDefault()
-        let emailValid = EmailValidation(user.email)
-        let passwordValid = PasswordValidation(user.password)
-        if (!emailValid[0]) setErr(emailValid[1])
-        if (!passwordValid[0]) setErr(passwordValid[1])
-        if (emailValid[0] && passwordValid[0]) {
-            let res = await PostService.LoginService(user);
-            if (res.data[0]) {
-                setIsAuth(true)
-                setApiKey(res.data[2])
-                localStorage.setItem('auth', 'true')
-                localStorage.setItem('apiKey', res.data[2])
-                setKeyActive(0)
-                navig('/plan')
-                
-            } else {
-                setErr(res.data[1])
-            }
+        let results = await loginLogic(user, setIsAuth, setApiKey)
+        if(!results.length){
+            setKeyActive(0)
+            navig('/plan')
+        }else{
+            setUser({...user, password: ''})
+            setErr(results)
         }
-
     }
     useEffect(() => {
         setKeyActive(3)
@@ -47,26 +38,25 @@ const Login = () => {
 
     return (
         <PageWrapper title="Сторінка входу">
-
             <CardWrapper>
-                <form className={classes.login__form} onSubmit={login}>
+                <form className={loginForm} onSubmit={login}>
                     {
-                        err === null
-                            ? <></>
-                            : <MyError>{err}</MyError>
+                        err.length !== 0 && <MyError onClick={() => setErr([])}>{err}</MyError>
                     }
-                    <div className={classes.input__wrapper}>
-                        <MyLable>Email</MyLable>
+                    <div className={inputWrapper}>
+                        <MyLabel htmlFor={"login"} >Email</MyLabel>
                         <MyInput
+                            id="login"
                             type="text"
                             placeholder="Email"
                             value={user.email}
                             onChange={e => setUser({ ...user, email: e.target.value })}
                         />
                     </div>
-                    <div className={classes.input__wrapper}>
-                        <MyLable>Password</MyLable>
+                    <div className={inputWrapper}>
+                        <MyLabel htmlFor={"password"}>Password</MyLabel>
                         <MyInput
+                            id="password"
                             type="password"
                             placeholder="Password"
                             autoComplete="on"
@@ -74,12 +64,10 @@ const Login = () => {
                             onChange={e => setUser({ ...user, password: e.target.value })}
                         />
                     </div>
-
-                    <div className={classes.but__wrapper}>
+                    <div className={buttonWrapper}>
                         <MyButton>Login</MyButton>
                     </div>
                 </form>
-
             </CardWrapper>
         </PageWrapper>
     )

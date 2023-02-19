@@ -1,5 +1,7 @@
 import React from "react";
 import classes from "./MyTable.module.css"
+import PropTypes from 'prop-types';
+
 
 const MyTable = ({ children, header}) => {
     return (
@@ -16,10 +18,18 @@ const MyTable = ({ children, header}) => {
 
                 </tr>
                 {children}
-
             </tbody>
         </table>
     );
+}
+
+MyTable.defaultProps = {
+    children: null,
+    header: []
+}
+
+MyTable.propTypes  = {
+    header: PropTypes.arrayOf(PropTypes.string).isRequired
 }
 
 export default MyTable

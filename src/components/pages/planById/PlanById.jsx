@@ -12,8 +12,6 @@ import MyButton from "../../UI/MyButton/MyButton";
 import MyTable from "../../UI/MyTable/MyTable"
 import AboutTR from "./AboutTR";
 
-
-
 const PlanById = () => {
     const params = useParams()
 
@@ -36,7 +34,7 @@ const PlanById = () => {
 
 
     const [fetchingPlan, isPlanLoading, plansError] = useFetching(async (id) => {
-        const response = await PostService.getPlanById(id);
+        const response = await PostService.fetchPlanById(id);
         if (response.data[0]) {
             setTDK(response.data[1].theses)
             setManual(response.data[1].manuals)
@@ -63,7 +61,7 @@ const PlanById = () => {
 
     const [setAutorPubs, isPubsFetching, pubsError] = useFetching(async (autorId) => {
         if (autorId !== undefined) {
-            const response = await PostService.getPubsByAutorId(autorId);
+            const response = await PostService.fetchPubsByAutorId(autorId);
             // console.log(response.data, autorId)
             setPubls(response.data)
         }

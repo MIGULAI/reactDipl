@@ -5,4 +5,5 @@
     align-self: center;
     border: 1px dashed red ;
     border-radius: 5px;
+    flex-direction: column;
 }

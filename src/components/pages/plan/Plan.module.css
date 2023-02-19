@@ -1,4 +1,4 @@
-.myContent_wrapper{
+.myContentWrapper{
     display: flex;
     flex-direction: column;
     width: 95%;
@@ -7,7 +7,7 @@
     justify-items: center;
 }
 
-.myContent__header{
+.myContentHeader{
     display: flex;
     flex-direction: row;
     padding: 10px;
@@ -15,12 +15,12 @@
     justify-content: space-around;
 }
 
-.header_item{
+.headerItem{
     width: 30%;
     display: flex;
     justify-content: center;
 }
-.contTable__wrapper{
+.contTableWrapper{
     display: flex;
     align-self: center;
     justify-self: center;

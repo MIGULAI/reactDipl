@@ -19,8 +19,6 @@ const AppRouter = () => {
                     <Route path="*" element={<Navigate to="/plan" replace />} />
 
                 </Route>
-
-
                 :
                 <Route>
                     {

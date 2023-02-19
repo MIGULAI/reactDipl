@@ -1,46 +1,41 @@
 import axios from "axios";
+import {Env} from "../utils/data/Env"
 
 export default class PostService {
 
-    static async LoginService(obj) {
-        let apiUrl = "http://127.0.0.1:8000/api"
-        let response = await axios.post(`${apiUrl}/login`, obj)
+    static async loginService(obj) {
+        let response = await axios.post(`${Env.API_URL}/login`, obj)
         return response;
     }
 
-    static async getPlanYearList(){
-        let apiUrl = "http://127.0.0.1:8000/api"
-        let response = await axios.get(`${apiUrl}/plans/years`)
+    static async fetchPlanYearList(apiUrl){
+        let response = await axios.get(`${Env.API_URL}/plans/years`)
         return response;
     }
 
-    static async getPlansByYear(year, apiKey){
-        let apiUrl = "http://127.0.0.1:8000/api"
-        let response = await axios.post(`${apiUrl}/plans/year`,{
+    static async fetchPlansByYear(year, apiKey){
+        let response = await axios.post(`${Env.API_URL}/plans/year`,{
             year: year,
             apiKey: apiKey
         })
         return response;
     }
 
-    static async nextYearPlanCreate(nextYear, apiKey){
-        let apiUrl = "http://127.0.0.1:8000/api"
-        let response = await axios.post(`${apiUrl}/plans/new`, {
+    static async createNextYearPlan(nextYear, apiKey){
+        let response = await axios.post(`${Env.API_URL}/plans/new`, {
             nextYear: nextYear,
             apiKey: apiKey
         } )
         return response;
     }
-    static async getPlanById(id){
-        let apiUrl = "http://127.0.0.1:8000/api"
-        let response = await axios.post(`${apiUrl}/plan/about`,{
+    static async fetchPlanById(id){
+        let response = await axios.post(`${Env.API_URL}/plan/about`,{
             id: id
         })
         return response
     }
     static async setPlan(plan, id, apiKey, autorId){
-        let apiUrl = "http://127.0.0.1:8000/api"
-        let response = await axios.post(`${apiUrl}/plan/set`,{
+        let response = await axios.post(`${Env.API_URL}/plan/set`,{
             plan: plan,
             id: id,
             apiKey: apiKey,
@@ -48,16 +43,33 @@ export default class PostService {
         })
         return response
     }
-    static async getPubsByAutorId(id){
-        let apiUrl = "http://127.0.0.1:8000/api"
-        let response = await axios.post(`${apiUrl}/pub/byAutorId`,{
+    static async fetchPubsByAutorId(id){
+        let response = await axios.post(`${Env.API_URL}/pub/byAutorId`,{
             id: id
         })
         return response
     }
-    static async getAllSettings(){
-        let apiUrl = "http://127.0.0.1:8000/api"
-        let response = await axios.get(`${apiUrl}/set`)
+    static async fetchAutorSettings(apiUrl){
+        let response = await axios.get(`${Env.API_URL}/set`)
         return response
     }
+
+    static async fetchPublSettings(apiUrl){
+        let response = await axios.get(`${Env.API_URL}/set/publ`)
+        return response
+    }
+    static async addAutor(obj){
+        let response = await axios.post(`${Env.API_URL}/autor/add`,{
+            obj: obj
+        })
+        return response
+    }
+
+    static async addPub(obj){
+        let response = await axios.post(`${Env.API_URL}/pub/add`,{
+            obj: obj
+        })
+        return response
+    }
+    
 }
