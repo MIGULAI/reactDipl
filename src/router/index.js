@@ -5,6 +5,7 @@ import Analyze from "../components/pages/analyze/Analyze"
 import PlanById from "../components/pages/planById/PlanById"
 import AddPubl from "../components/pages/addPubl/AddPubl"
 import AddAutor from "../components/pages/addAutor/AddAutor"
+import Admin from "../components/pages/adminPage/Admin"
 
 
 export const privateRoutes = [
@@ -14,6 +15,7 @@ export const privateRoutes = [
     {path: '/search', element: <SearchDB/>, exact: true},
     {path: '/analyze', element: <Analyze/>, exact: true},
     {path: '/plan/change/:id', element: <PlanById/>, exact: true},
+    {path: '/admin', element: <Admin/>, exact: true},
 ]
 
 export const publicRoutes = [

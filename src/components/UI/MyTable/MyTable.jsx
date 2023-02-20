@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 const MyTable = ({ children, header}) => {
     return (
         <table className={classes.myTable}>
-            <tbody>
+            <thead>
                 <tr>
                     {
                         header.map(elem =>
@@ -18,7 +18,7 @@ const MyTable = ({ children, header}) => {
 
                 </tr>
                 {children}
-            </tbody>
+            </thead>
         </table>
     );
 }
@@ -29,7 +29,8 @@ MyTable.defaultProps = {
 }
 
 MyTable.propTypes  = {
-    header: PropTypes.arrayOf(PropTypes.string).isRequired
+    header: PropTypes.arrayOf(PropTypes.string).isRequired,
+    children: PropTypes.node
 }
 
 export default MyTable

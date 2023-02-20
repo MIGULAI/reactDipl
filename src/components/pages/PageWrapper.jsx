@@ -24,7 +24,7 @@ PageWrapper.defaultProps = {
 }
 
 PageWrapper.propTypes = {
-    children: PropTypes.element.isRequired,
+    children: PropTypes.node.isRequired,
     title: PropTypes.string
 }
 

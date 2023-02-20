@@ -1,0 +1,33 @@
+
+
+.header {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.subWrapper{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 0 5px;
+    align-items: center;
+}
+
+.tableWrapper{
+    margin-top: 10px;
+    width: auto;
+    justify-content: center;
+    height: auto;
+    max-height: 400px;
+    overflow: auto;
+    border: 1px solid black;
+}
+
+.btnWrapper{
+    margin-top: 10px;
+    display: flex;
+}
+.header > * {
+    margin-top: 10px;
+}

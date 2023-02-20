@@ -8,11 +8,15 @@ const MySelector = ({ options, selected, onChange }) => {
             value={selected}
             onChange={onChange}
         >
-            {options.map(option =>
-                <option key={option.value} value={option.value} >{option.str}</option>
+            {options.map((option , i) =>
+                <option key={option.value ? option.value : i} value={option.value ? option.value : i} >{option.str}</option>
             )}
         </select>
     )
+}
+
+MySelector.defaultProps = {
+    selected: 0
 }
 
 MySelector.propTypes = {

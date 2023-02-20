@@ -8,7 +8,7 @@ export default class PostService {
         return response;
     }
 
-    static async fetchPlanYearList(apiUrl){
+    static async fetchPlanYearList(){
         let response = await axios.get(`${Env.API_URL}/plans/years`)
         return response;
     }
@@ -49,12 +49,12 @@ export default class PostService {
         })
         return response
     }
-    static async fetchAutorSettings(apiUrl){
+    static async fetchAutorSettings(){
         let response = await axios.get(`${Env.API_URL}/set`)
         return response
     }
 
-    static async fetchPublSettings(apiUrl){
+    static async fetchPublSettings(){
         let response = await axios.get(`${Env.API_URL}/set/publ`)
         return response
     }
@@ -69,6 +69,10 @@ export default class PostService {
         let response = await axios.post(`${Env.API_URL}/pub/add`,{
             obj: obj
         })
+        return response
+    }
+    static async fetchAutors(){
+        let response = await axios.get(`${Env.API_URL}/autor/all`)
         return response
     }
     
