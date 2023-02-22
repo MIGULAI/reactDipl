@@ -30,3 +30,8 @@
     display: flex;
     justify-content: center;
 }
+.content{
+    margin: 5px;
+    display: flex;
+    flex-direction: column;
+}

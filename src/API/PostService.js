@@ -58,16 +58,18 @@ export default class PostService {
         let response = await axios.get(`${Env.API_URL}/set/publ`)
         return response
     }
-    static async addAutor(obj){
-        let response = await axios.post(`${Env.API_URL}/autor/add`,{
-            obj: obj
+    static async addAutor(obj, apiKey){
+        let response = await axios.post(`${Env.API_URL}/author/add`,{
+            obj: obj,
+            apiKey: apiKey
         })
         return response
     }
 
-    static async addPub(obj){
+    static async addPub(obj, apiKey){
         let response = await axios.post(`${Env.API_URL}/pub/add`,{
-            obj: obj
+            obj: obj,
+            apiKey: apiKey
         })
         return response
     }

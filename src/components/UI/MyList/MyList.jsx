@@ -3,29 +3,37 @@ import DatalistInput, { useComboboxControls } from 'react-datalist-input';
 import 'react-datalist-input/dist/styles.css';
 import MyButton from "../MyButton/MyButton";
 import PropTypes from 'prop-types';
+import { indexSelector } from "./IndexSelector";
 
 import classes from "./MyList.module.css"
 
 const MyList = ({ header, autorsList, autors, setAutors }) => {
     const { activate, listWrapper, table, headerClass, buttonWrapper } = classes
 
+
+
     const [isActivate, setIsActivate] = useState(null)
-    const [index, setIndex] = useState(0)
+    const [index, setIndex] = useState(() =>indexSelector(autors))
     const [isSelected, setIsSelected] = useState(null)
 
     const { setValue, value } = useComboboxControls({ initialValue: '' })
+
+    
 
     const addAutor = () => {
         let a = [...autors]
         let obj = { id: isSelected.id, value: isSelected.value }
         const pos = autorsList.map(e => e.id).indexOf(isSelected.id)
+        const isContain = a.map(e=> e && e.id).indexOf(isSelected.id)
         let i = index
         if (pos !== -1) {
             a[index] = obj
-            i++
         }
-        setAutors(a)
-        if (i <= 6) setIndex(i)
+        if(isContain === -1) {
+            i++
+            setAutors(a)
+        }
+        if (i < autors.length) setIndex(i)
         setValue("")
     }
 

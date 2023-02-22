@@ -16,73 +16,59 @@ import MyButton from "../../UI/MyButton/MyButton";
 
 import myClasses from "./AddPubl.module.css"
 import MyError from "../../UI/MyError/MyError";
+import { IsSetFetching } from "./AddPublLogic";
 
 const AddPubl = () => {
 
     const [isLoading, setIsLoading] = useState(true)
-    const { setIsAuth, setKeyActive } = useContext(AuthContext)
-    const [err, setError] = useState()
+    const {apiKey, setIsAuth, setKeyActive } = useContext(AuthContext)
+    const [err, setError] = useState([])
 
-    //publicSetup
     const [types, setTypes] = useState([])
     const [langueges, setLangueges] = useState([])
     const [publishers, setPublishers] = useState([])
-    const [autors, setAutors] = useState(Array(7).fill(null))
+    const [authors, setAuthors] = useState(Array(7).fill(null))
 
     const [autorList, setAutorList] = useState([])
     const [publ, setPubl] = useState({
-        name: '', type: 1, lang: 1, publisher: 1, date: '', issue_numb: '', url: '', autors: []
+        name: '', type: 1, lang: 1, publisher: 1, date: '', issue_numb: '', url: '', authors: []
     })
 
-
     const [isSetFetching, isFetching, setErr] = useFetching(async () => {
-        const response = await PostService.fetchPublSettings()
-        let typees = []
-        for (let i = 0; i < response.data.types.length; i++) {
-            let type = { value: response.data.types[i].id, str: response.data.types[i].ShortName }
-            typees.push(type);
-        }
-        let languages = []
-        for (let i = 0; i < response.data.language.length; i++) {
-            let language = { value: response.data.language[i].id, str: response.data.language[i].Language }
-            languages.push(language);
-        }
-        let publishers = []
-        for (let i = 0; i < response.data.publisher.length; i++) {
-            let publisher = { value: response.data.publisher[i].id, str: response.data.publisher[i].publisher_name }
-            publishers.push(publisher);
-        }
-        let autores = []
-        for (let i = 0; i < response.data.autors.length; i++) {
-            let autor = { id: response.data.autors[i].id, value: response.data.autors[i].Ukr_PIP }
-            autores.push(autor);
-        }
-        setAutorList(autores)
+        const [typees, languages, publishers, authores] = await IsSetFetching()
+        setAutorList(authores)
         setLangueges(languages)
         setPublishers(publishers)
         setTypes(typees)
     })
 
     const [isAddPublFetching, isSaveFetching, pubErr] = useFetching(async (publ) => {
-        const response = await PostService.addPub(publ)
-        console.log(response.data);
+        const response = await PostService.addPub(publ, apiKey)
+
+        if(!response.data.success) setError([...err, response.data.message])
+        if(response.data.success){
+            setPubl({ name: '', type: 1, lang: 1, publisher: 1, date: '', issue_numb: '', url: '', authors: []})
+            setAuthors(Array(7).fill(null))
+        }
     })
 
     const savePubl = () => {
         let obj = publ
         let a = []
-        for (let i = 0; i < autors.length; i++) {
-            if (autors[i] !== -1) a.push(autors[i])
+        for (let i = 0; i < authors.length; i++) {
+            if (authors[i]) a.push(authors[i])
         }
         if (a.length === 0) {
-            setError("Публікація повинна мати хочаб одного автора!!!")
+            setError([ ...err, "Публікація повинна мати хочаб одного автора!!!"])
         } else {
-            obj.autors = a
-            console.log(obj);
+            obj.authors = a
             isAddPublFetching(publ);
-            setAutors(Array(7).fill(null))
         }
     }
+
+    useEffect(() => {
+        if(setErr) setError([...err, setErr])
+    },[setErr])
 
     useEffect(() => {
         setKeyActive(1)
@@ -96,13 +82,8 @@ const AddPubl = () => {
                 isLoading || isFetching || isSaveFetching
                     ? <MyLoader />
                     : <div>
-                        <div onClick={e => setError(undefined)}>
-                            {
-                                err !== undefined
-                                ?<MyError>{err}</MyError>
-                                :<></>
-                            }
-                        </div>
+                        {err.length != 0 && <MyError onClick={e => setError([])}>{err}</MyError>}
+
                         <div className={myClasses.form__wrapper} >
                             <div style={{ width: '50%' }} className={classes.columItem}>
                                 <div className={classes.inputFuild}>
@@ -172,7 +153,7 @@ const AddPubl = () => {
                             <div style={{ width: '50%' }} className={classes.columItem}>
 
                                 <div className={classes.columItem}>
-                                    <MyList header={'Прізвище'} autors={autors} setAutors={setAutors} autorsList={autorList} />
+                                    <MyList header={'Прізвище'} autors={authors} setAutors={setAuthors} autorsList={autorList} />
                                 </div>
                             </div>
                         </div>
