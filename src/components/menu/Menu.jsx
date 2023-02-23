@@ -4,18 +4,18 @@ import MenuItem from "./MenuItem";
 
 import { IsLogingMenuItems, NotLogingMenuItems } from "../../utils/data/MenuItems";
 import { AuthContext } from "../../context";
+import { eraseCookie } from "../../utils/functions/Cookie"; 
 
 const Menu = () => {
     const [menuItems, setMenuItems] = useState([])
     const [isActive, setIsActive] = useState([])
 
-    const { isAuth, setIsAuth,  setApiKey, keyActive, setKeyActive } = useContext(AuthContext);
+    const { isAuth, setIsAuth,  setAccessToken, keyActive, setKeyActive } = useContext(AuthContext);
 
     useEffect(() => {
         let menuArr = []
         if (isAuth) {
             menuArr = IsLogingMenuItems
-
         }
         else menuArr = NotLogingMenuItems
 
@@ -30,9 +30,9 @@ const Menu = () => {
 
     const logout = () => {
         setIsAuth(false)
-        setApiKey(null)
-        localStorage.removeItem('auth')
-        localStorage.removeItem('apiKey')
+        setAccessToken(null)
+        eraseCookie('auth')
+        eraseCookie('access_token')
     }
 
     return (

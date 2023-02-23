@@ -26,7 +26,7 @@ const Plan = () => {
     const [nextYear, setNextYear] = useState(false)
     const [plans, setPlans] = useState([])
     const [selectedPlan, setSelectedPlan] = useState(-1)
-    const [err, setError] = useState()
+    const [err, setError] = useState([])
 
     const { isAuth, apiKey, setKeyActive } = useContext(AuthContext)
 
@@ -72,20 +72,21 @@ const Plan = () => {
     }, [isLoading])
 
     useEffect(() => {
-        if (plansError !== undefined) setError(plansError)
-        if (yearError !== undefined) setError(yearError)
-    }, [plansError, yearError, err])
+        let errorArray = []
+        plansError !== undefined && errorArray.push(plansError)
+        yearError !== undefined && errorArray.push(yearError)
+        errorArray.length && setError([...err, errorArray])
+    }, [plansError, yearError])
 
     useEffect(() => {
         fetchPlans(planYear, apiKey)
         setSelectedPlan(-1)
     }, [planYear])
 
-
     return (
         <PageWrapper title="Сторінка плану">
             {err
-                ? <MyError>{err}</MyError>
+                ? <MyError onClick={e => setError([]) }>{err}</MyError>
                 : <>
                     {isYearLoading
                         ? < MyLoader />

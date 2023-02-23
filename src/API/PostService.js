@@ -1,41 +1,64 @@
 import axios from "axios";
-import {Env} from "../utils/data/Env"
+import { Env } from "../utils/data/Env"
 
 export default class PostService {
 
+    static protectionInit = async() => {
+        const axiosInstance = axios.create({
+            baseURL: Env.API_URL_NO_API,
+        });
+        const config = {
+            headers: { 'Content-Type': 'application/json' },
+            withCredentials: true
+        }
+        await axiosInstance.get(`/sanctum/csrf-cookie`, config)
+        return axiosInstance
+    }
+
+    static async fetchingGlobalSetup(){
+        const instance = await this.protectionInit()
+        let response = await instance.get('api/setup')
+        return response
+    }
+
     static async loginService(obj) {
-        let response = await axios.post(`${Env.API_URL}/login`, obj)
+        const instance = await this.protectionInit()
+        // const config = {
+        //     headers: { 'Content-Type': 'application/json' },
+        //     withCredentials: true
+        // }
+        let response = await instance.post('/api/login', obj)
         return response;
     }
 
-    static async fetchPlanYearList(){
+    static async fetchPlanYearList() {
         let response = await axios.get(`${Env.API_URL}/plans/years`)
         return response;
     }
 
-    static async fetchPlansByYear(year, apiKey){
-        let response = await axios.post(`${Env.API_URL}/plans/year`,{
+    static async fetchPlansByYear(year, apiKey) {
+        let response = await axios.post(`${Env.API_URL}/plans/year`, {
             year: year,
             apiKey: apiKey
         })
         return response;
     }
 
-    static async createNextYearPlan(nextYear, apiKey){
+    static async createNextYearPlan(nextYear, apiKey) {
         let response = await axios.post(`${Env.API_URL}/plans/new`, {
             nextYear: nextYear,
             apiKey: apiKey
-        } )
+        })
         return response;
     }
-    static async fetchPlanById(id){
-        let response = await axios.post(`${Env.API_URL}/plan/about`,{
+    static async fetchPlanById(id) {
+        let response = await axios.post(`${Env.API_URL}/plan/about`, {
             id: id
         })
         return response
     }
-    static async setPlan(plan, id, apiKey, autorId){
-        let response = await axios.post(`${Env.API_URL}/plan/set`,{
+    static async setPlan(plan, id, apiKey, autorId) {
+        let response = await axios.post(`${Env.API_URL}/plan/set`, {
             plan: plan,
             id: id,
             apiKey: apiKey,
@@ -43,39 +66,84 @@ export default class PostService {
         })
         return response
     }
-    static async fetchPubsByAutorId(id){
-        let response = await axios.post(`${Env.API_URL}/pub/byAutorId`,{
+    static async fetchPubsByAutorId(id) {
+        let response = await axios.post(`${Env.API_URL}/pub/byAutorId`, {
             id: id
         })
         return response
     }
-    static async fetchAutorSettings(){
-        let response = await axios.get(`${Env.API_URL}/set`)
+    static async fetchAutorSettings(token) {
+        const instance = await this.protectionInit()
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        }
+        let response = await instance.get(`api/authors/setup`, config)
         return response
     }
 
-    static async fetchPublSettings(){
-        let response = await axios.get(`${Env.API_URL}/set/publ`)
+    static async fetchPublSettings(token) {
+        const instance = await this.protectionInit()
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        }
+        let response = await instance.get(`api/publications/setup`, config)
         return response
     }
-    static async addAutor(obj, apiKey){
-        let response = await axios.post(`${Env.API_URL}/author/add`,{
-            obj: obj,
-            apiKey: apiKey
-        })
+    static async addAutor(obj, token) {
+        const instance = await this.protectionInit()
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        }
+        let response = await instance.post(`api/author/add`, {
+            obj: obj
+        },config)
         return response
     }
 
-    static async addPub(obj, apiKey){
-        let response = await axios.post(`${Env.API_URL}/pub/add`,{
-            obj: obj,
-            apiKey: apiKey
-        })
+    static async addPub(obj, token) {
+        const instance = await this.protectionInit()
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        }
+        let response = await instance.post(`api/publications/add`, {
+            obj: obj
+        },config)
         return response
     }
-    static async fetchAutors(){
-        let response = await axios.get(`${Env.API_URL}/autor/all`)
+    static async fetchAutors() {
+        const instance = await this.protectionInit()
+
+        let response = await instance.get(`api/authors`)
+        return response
+    }
+
+    static async fetchPositions(){
+        const instance = await this.protectionInit()
+        let response = await instance.get(`api/positions`)
         return response
     }
     
+    static async fetchingStatistic(token){
+        const instance = await this.protectionInit()
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        }
+        let response = await instance.get('api/statistic/auth',config)
+        return response
+    }
 }

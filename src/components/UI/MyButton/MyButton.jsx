@@ -18,7 +18,10 @@ MyButton.defaultProps = {
 }
 
 MyButton.propTypes  = {
-    children: PropTypes.string,
+    children: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.element
+    ]),
     buttonType: PropTypes.string
 }
 

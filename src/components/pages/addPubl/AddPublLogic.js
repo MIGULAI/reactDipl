@@ -1,26 +1,32 @@
 import PostService from "../../../API/PostService"
 
-export const IsSetFetching = async () => {
-    const response = await PostService.fetchPublSettings()
+export const IsSetFetching = async (accessToken) => {
+    const response = await PostService.fetchPublSettings(accessToken)
     let typees = []
-    for (let i = 0; i < response.data.types.length; i++) {
-        let type = { value: response.data.types[i].id, str: response.data.types[i].ShortName }
+    for (let i = 0; i < response.data.data.types.length; i++) {
+        let type = { value: response.data.data.types[i].id, str: response.data.data.types[i].TypeShortName }
         typees.push(type);
     }
     let languages = []
-    for (let i = 0; i < response.data.language.length; i++) {
-        let language = { value: response.data.language[i].id, str: response.data.language[i].Language }
+    for (let i = 0; i < response.data.data.languages.length; i++) {
+        let language = { value: response.data.data.languages[i].id, str: response.data.data.languages[i].LanguageShortName }
         languages.push(language);
     }
     let publishers = []
-    for (let i = 0; i < response.data.publisher.length; i++) {
-        let publisher = { value: response.data.publisher[i].id, str: response.data.publisher[i].publisher_name }
+    for (let i = 0; i < response.data.data.publishers.length; i++) {
+        let publisher = { value: response.data.data.publishers[i].id, str: response.data.data.publishers[i].PublisherName }
         publishers.push(publisher);
     }
     let authores = []
-    for (let i = 0; i < response.data.autors.length; i++) {
-        let author = { id: response.data.autors[i].id, value: response.data.autors[i].Ukr_PIP }
+    for (let i = 0; i < response.data.data.authors.length; i++) {
+        let author = { id: response.data.data.authors[i].id, value: `${response.data.data.authors[i].SerName} ${response.data.data.authors[i].Name[0]}. ${response.data.data.authors[i].Patronic[0]}.` }
         authores.push(author);
     }
-    return [ typees, languages, publishers, authores]
+
+    let supervisors = []
+    for (let i = 0; i < response.data.data.authors.length; i++) {
+        let supervisor = { value: response.data.data.authors[i].id, str: `${response.data.data.authors[i].SerName} ${response.data.data.authors[i].Name[0]}. ${response.data.data.authors[i].Patronic[0]}.` }
+        supervisors.push(supervisor);
+    }
+    return [typees, languages, publishers, authores, supervisors]
 }

@@ -5,6 +5,7 @@ import classes from './MyError.module.css'
 
 const MyError = ({ children, ...props }) => {
     const { myError} = classes
+    children = children.flat()
     return (
         <div className={myError} {...props}>
             {

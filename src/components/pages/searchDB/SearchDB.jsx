@@ -14,7 +14,6 @@ import PostService from "../../../API/PostService";
 import MyButton from "../../UI/MyButton/MyButton";
 import MyTable from "../../UI/MyTable/MyTable";
 import SearchTR from "./SearchTR";
-import { string } from "prop-types";
 
 const SearchDB = () => {
     const { isAuth, setKeyActive } = useContext(AuthContext)
@@ -30,9 +29,9 @@ const SearchDB = () => {
     const [searchedAutorsList, setSearchedAutorsList] = useState([])
 
     const [fetchAutors, isFetchingAutors, autErr] = useFetching(async () => {
-        const autors = await PostService.fetchAutors()
-        setAutorsList(autors.data)
-        setSearchedAutorsList(autors.data)
+        const authors = await PostService.fetchAutors()
+        setAutorsList(authors.data.data.authors)
+        setSearchedAutorsList(authors.data.data.authors)
     })
 
     const positionFilter = (e) => {
@@ -47,7 +46,7 @@ const SearchDB = () => {
             let aList = [...autorsList]
             e = e.toLowerCase()
             const re = new RegExp(e)
-            aList = aList.filter(a => a.Last_Name.toLowerCase().match(re))
+            aList = aList.filter(a => a.SerName.toLowerCase().match(re))
             setSearchedAutorsList(aList)
         }
     }
@@ -63,6 +62,7 @@ const SearchDB = () => {
         setSearchType(type)
         setIsLoading(false)
     }
+
     useEffect(() => {
         sernameFilter(searchParam)
     }, [searchParam])
@@ -90,11 +90,11 @@ const SearchDB = () => {
                                 header={['Прізвище', "Ім'я", 'По Батькові', 'Організація', 'Наукове звання', 'Наукова ступінь', 'Email']}
                             >
                                 {
-                                    searchedAutorsList.map(autor =>
+                                    searchedAutorsList.map((author, i) =>
                                         <SearchTR
-                                            key={autor.id}
-                                            option={autor}
-                                            index={autor.id}
+                                            key={i}
+                                            option={author}
+                                            index={i}
                                             selected={setTrSelected}
                                             selectedItem={trSelected}
                                         />
@@ -102,9 +102,10 @@ const SearchDB = () => {
                                 }
                             </MyTable>
                         </div>
-                        <div className={btnWrapper}>
-                            <MyButton>Детальніше</MyButton>
-                        </div>
+                        {
+                            trSelected && <div className={btnWrapper}><MyButton>Детальніше</MyButton></div>
+                        }
+                        
 
                     </div>
 

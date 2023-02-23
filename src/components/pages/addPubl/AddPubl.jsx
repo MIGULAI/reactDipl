@@ -20,8 +20,9 @@ import { IsSetFetching } from "./AddPublLogic";
 
 const AddPubl = () => {
 
+    let now = new Date()
     const [isLoading, setIsLoading] = useState(true)
-    const {apiKey, setIsAuth, setKeyActive } = useContext(AuthContext)
+    const { accessToken, setKeyActive } = useContext(AuthContext)
     const [err, setError] = useState([])
 
     const [types, setTypes] = useState([])
@@ -30,24 +31,25 @@ const AddPubl = () => {
     const [authors, setAuthors] = useState(Array(7).fill(null))
 
     const [autorList, setAutorList] = useState([])
+    const [supervisorList, setSupervisorList] = useState([])
     const [publ, setPubl] = useState({
-        name: '', type: 1, lang: 1, publisher: 1, date: '', issue_numb: '', url: '', authors: []
+        name: '', startPage: 0, lastPage: 0, UPP: 0, type: 1, lang: 1, publisher: 1, date: now, issue_numb: '', url: '', authors: [], supervisor: 0
     })
 
     const [isSetFetching, isFetching, setErr] = useFetching(async () => {
-        const [typees, languages, publishers, authores] = await IsSetFetching()
+        const [typees, languages, publishers, authores, supervisor] = await IsSetFetching(accessToken)
         setAutorList(authores)
         setLangueges(languages)
         setPublishers(publishers)
         setTypes(typees)
+        setSupervisorList([{ value: 0, str: 'Відсутнє' }, ...supervisor])
     })
 
     const [isAddPublFetching, isSaveFetching, pubErr] = useFetching(async (publ) => {
-        const response = await PostService.addPub(publ, apiKey)
-
-        if(!response.data.success) setError([...err, response.data.message])
-        if(response.data.success){
-            setPubl({ name: '', type: 1, lang: 1, publisher: 1, date: '', issue_numb: '', url: '', authors: []})
+        const response = await PostService.addPub(publ, accessToken)
+        if (!response.data.success) setError([...err, response.data.message])
+        if (response.data.success) {
+            setPubl({ name: '', type: 1, lang: 1, publisher: 1, date: '', issue_numb: '', url: '', authors: [] })
             setAuthors(Array(7).fill(null))
         }
     })
@@ -59,7 +61,7 @@ const AddPubl = () => {
             if (authors[i]) a.push(authors[i])
         }
         if (a.length === 0) {
-            setError([ ...err, "Публікація повинна мати хочаб одного автора!!!"])
+            setError([...err, "Публікація повинна мати хочаб одного автора!!!"])
         } else {
             obj.authors = a
             isAddPublFetching(publ);
@@ -67,8 +69,11 @@ const AddPubl = () => {
     }
 
     useEffect(() => {
-        if(setErr) setError([...err, setErr])
-    },[setErr])
+        let errArray = []
+        setErr !== '' && errArray.push(setErr)
+        pubErr !== '' && errArray.push(pubErr)
+        errArray.length && setError([...err, errArray])
+    }, [setErr, pubErr])
 
     useEffect(() => {
         setKeyActive(1)
@@ -82,7 +87,7 @@ const AddPubl = () => {
                 isLoading || isFetching || isSaveFetching
                     ? <MyLoader />
                     : <div>
-                        {err.length != 0 && <MyError onClick={e => setError([])}>{err}</MyError>}
+                        {err.length !== 0 && <MyError onClick={e => setError([])}>{err}</MyError>}
 
                         <div className={myClasses.form__wrapper} >
                             <div style={{ width: '50%' }} className={classes.columItem}>
@@ -129,7 +134,7 @@ const AddPubl = () => {
                                 </div>
                                 <div className={classes.columItem}>
                                     <div className={classes.inputFuild}>
-                                        <MyLabel >Номер видання:</MyLabel>
+                                        <MyLabel >Номер видання :</MyLabel>
                                         <MyInput
                                             type="text"
                                             placeholder={'Номер видання'}
@@ -140,13 +145,36 @@ const AddPubl = () => {
                                 </div>
                                 <div className={classes.columItem}>
                                     <div className={classes.inputFuild}>
-                                        <MyLabel >Зовнішній файл:</MyLabel>
+                                        <MyLabel >DOI :</MyLabel>
                                         <MyInput
                                             type="text"
-                                            placeholder={'Url'}
+                                            placeholder={'DOI'}
                                             value={publ.url}
                                             onChange={e => setPubl({ ...publ, url: e.target.value })}
                                         />
+                                    </div>
+                                </div>
+                                <div className={classes.columItem}>
+                                    <div className={classes.inputFuild}>
+                                        <MyInput 
+                                            type="text" 
+                                            placeholder="Початкова Сторінка" 
+                                            value={publ.startPage}
+                                            onChange={e => setPubl({...publ, startPage: Number(e.target.value), UPP: ( publ.lastPage -Number(e.target.value) + 1)*0.1031})}
+                                        />
+                                        <MyInput 
+                                            type="text" 
+                                            placeholder="Кінцева Сторінка" 
+                                            value={publ.lastPage}
+                                            onChange={e => setPubl({...publ, lastPage: Number(e.target.value), UPP: ( Number(e.target.value) - publ.startPage + 1)*0.1031})}
+                                        />
+                                        <MyInput 
+                                            type="text" 
+                                            placeholder="Друковані аркуші" 
+                                            value={publ.UPP}
+                                            onChange={e => setPubl({...publ, UPP: Number(e.target.value)})}
+                                        />
+
                                     </div>
                                 </div>
                             </div>
@@ -154,6 +182,16 @@ const AddPubl = () => {
 
                                 <div className={classes.columItem}>
                                     <MyList header={'Прізвище'} autors={authors} setAutors={setAuthors} autorsList={autorList} />
+                                </div>
+                                <div className={classes.columItem}>
+                                    <div className={classes.inputFuild}>
+                                        <MyLabel>Наукове керівництво</MyLabel>
+                                        <MySelector
+                                            options={supervisorList}
+                                            selected={publ.supervisor}
+                                            onChange={e => setPubl({...publ, supervisor: Number(e.target.value)})}
+                                        />
+                                    </div>
                                 </div>
                             </div>
                         </div>

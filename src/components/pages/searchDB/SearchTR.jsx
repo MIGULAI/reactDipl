@@ -7,26 +7,25 @@ const SearchTR = ({ option, index, selected, selectedItem }) => {
     const selecting = () => index !== selectedItem ? selected(index) : selected(null)
 
 
-    // console.log(option);
     return (
         <tr className={index === selectedItem ? classes.isSelected : ""} onClick={selecting}>
             <td>
-                <span>{option.Last_Name}</span>
+                <span>{option.SerName}</span>
             </td>
             <td>
-                <span>{option.First_Name}</span>
+                <span>{option.Name}</span>
             </td>
             <td>
                 <span>{option.Patronic}</span>
             </td>
             <td>
-                <span>{option.Organization}</span>
+                <span>{option.OrganizationName}</span>
             </td>
             <td>
-                <span>{option.Scientific_Degree}</span>
+                <span>{option.DegreeName}</span>
             </td>
             <td>
-                <span>{option.Scientific_Rank}</span>
+                <span>{option.RankName}</span>
             </td>
             <td>
                 <span>{option.Email}</span>

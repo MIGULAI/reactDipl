@@ -11,11 +11,11 @@ import PostService from "../../../API/PostService";
 import MyLoader from "../../UI/MyLoader/MyLoader"
 import MyButton from "../../UI/MyButton/MyButton";
 import MyError from "../../UI/MyError/MyError";
+import { getSetup } from "./AddAuthorLogic";
 
 const AddAutor = () => {
 
-    const { isAuth, apiKey, setKeyActive } = useContext(AuthContext)
-    const [isLoading, setIsLoading] = useState(true)
+    const {accessToken, setKeyActive } = useContext(AuthContext)
     const [err, setErr] = useState([])
     const [autor, setAutor] = useState({
         name: '', sername: '', partonic: '', PIPua: '', PIPen: '', phone: '', email: '', group: 1, department: 1, organization: 1, place: 6, rank: 1, degree: 1
@@ -28,60 +28,22 @@ const AddAutor = () => {
     const [degrees, setDegrees] = useState([]);
     const [ranks, setRanks] = useState([]);
 
-
-    const [subArray, setSubArray] = useState({ scientific_rank: [], scientific_degree: [], place: [], organization: [], group: [], department: [] })
-
     const [subArrFetch, isSubArrFetching, subArrErr] = useFetching(async () => {
-        const response = await PostService.fetchAutorSettings()
-        let groups = []
-        for (let i = 0; i < response.data.group.length; i++) {
-            let group = { value: response.data.group[i].id, str: response.data.group[i].Group }
-            groups.push(group)
-        }
+        const [error, groups, organizations, departments, places, degrees, ranks] = await getSetup(accessToken)
+        error && setErr([...err, error])
         setGroups(groups)
-        let organizations = []
-
-        for (let i = 0; i < response.data.organization.length; i++) {
-            let organization = { value: response.data.organization[i].id, str: response.data.organization[i].organization }
-            organizations.push(organization)
-        }
         setOrganizations(organizations)
-
-        let departments = []
-
-        for (let i = 0; i < response.data.department.length; i++) {
-            let department = { value: response.data.department[i].id, str: response.data.department[i].department }
-            departments.push(department)
-        }
         setDepartments(departments)
-
-        let places = []
-        for (let i = 0; i < response.data.place.length; i++) {
-            let place = { value: response.data.place[i].id, str: response.data.place[i].place }
-            places.push(place)
-        }
         setPlaces(places)
-
-        let degrees = []
-        for (let i = 0; i < response.data.scientific_degree.length; i++) {
-            let degree = { value: response.data.scientific_degree[i].id, str: response.data.scientific_degree[i].scientific_degree }
-            degrees.push(degree)
-        }
         setDegrees(degrees)
-
-        let ranks = []
-        for (let i = 0; i < response.data.scientific_rank.length; i++) {
-            let scientific_rank = { value: response.data.scientific_rank[i].id, str: response.data.scientific_rank[i].scientific_rank }
-            ranks.push(scientific_rank)
-        }
         setRanks(ranks)
+        
     });
 
     const [saveNewAuthor, isAuthorSaving, saveError] = useFetching(async (newAuthor) => {
-        const response = await PostService.addAutor(newAuthor, apiKey)
+        const response = await PostService.addAutor(newAuthor, accessToken)
         console.log(response.data);
         if (!response.data.success) setErr([...err, response.data.message])
-
     })
 
     const saveAuthor = () => {
@@ -93,9 +55,12 @@ const AddAutor = () => {
         setKeyActive(2)
     }, [])
 
-    useMemo(() => {
-        setErr(subArrErr)
-    }, [subArrErr])
+    useEffect(() => {
+        let errorArray = []
+        saveError !== '' && errorArray.push(saveError)
+        subArrErr !== '' && errorArray.push(subArrErr)
+        errorArray.length && setErr([...err, errorArray])
+    }, [saveError, subArrErr])
 
     return (
         <PageWrapper style={{ justifyContent: 'space-around' }} title={'Створення нового автора'}>
@@ -175,27 +140,27 @@ const AddAutor = () => {
                             <div className={classes.columItem}>
                                 <div className={classes.inputFuild}>
                                     <MyLabel>Группа:</MyLabel>
-                                    <MySelector options={groups} selected={autor.group} onChange={e => setAutor({ ...autor, group: e.target.value })} />
+                                    <MySelector options={groups} selected={autor.group} onChange={e => setAutor({ ...autor, group: Number(e.target.value) })} />
                                 </div>
                                 <div className={classes.inputFuild}>
                                     <MyLabel>Відділ (Кафедра):</MyLabel>
-                                    <MySelector options={departments} selected={autor.department} onChange={e => setAutor({ ...autor, department: e.target.value })} />
+                                    <MySelector options={departments} selected={autor.department} onChange={e => setAutor({ ...autor, department: Number(e.target.value) })} />
                                 </div>
                                 <div className={classes.inputFuild}>
                                     <MyLabel>Організація:</MyLabel>
-                                    <MySelector options={organizations} selected={autor.organization} onChange={e => setAutor({ ...autor, organization: e.target.value })} />
+                                    <MySelector options={organizations} selected={autor.organization} onChange={e => setAutor({ ...autor, organization: Number(e.target.value) })} />
                                 </div>
                                 <div className={classes.inputFuild}>
                                     <MyLabel>Посада:</MyLabel>
-                                    <MySelector options={places} selected={autor.place} onChange={e => setAutor({ ...autor, place: e.target.value })} />
+                                    <MySelector options={places} selected={autor.place} onChange={e => setAutor({ ...autor, place: Number(e.target.value) })} />
                                 </div>
                                 <div className={classes.inputFuild}>
                                     <MyLabel>Вчене звання:</MyLabel>
-                                    <MySelector options={ranks} selected={autor.rank} onChange={e => setAutor({ ...autor, rank: e.target.value })} />
+                                    <MySelector options={ranks} selected={autor.rank} onChange={e => setAutor({ ...autor, rank: Number(e.target.value) })} />
                                 </div>
                                 <div className={classes.inputFuild}>
                                     <MyLabel>Науковий ступінь:</MyLabel>
-                                    <MySelector options={degrees} selected={autor.degree} onChange={e => setAutor({ ...autor, degree: e.target.value })} />
+                                    <MySelector options={degrees} selected={autor.degree} onChange={e => setAutor({ ...autor, degree: Number(e.target.value) })} />
                                 </div>
                             </div>
 
