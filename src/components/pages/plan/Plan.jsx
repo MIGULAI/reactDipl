@@ -32,13 +32,14 @@ const Plan = () => {
 
     const [fetchYears, isYearLoading, yearError] = useFetching(async () => {
         const response = await PostService.fetchPlanYearList()
-        let yearsArray = response.data;
+        let yearsArray = response.data.data.years;
         let optionsArray = []
-        for (let i = 0; i < yearsArray[0].length; i++) {
-            let option = { value: Number(yearsArray[0][i].year_start), str: `${yearsArray[0][i].year_start} - ${yearsArray[1][i].year_end}` }
+        for (let i = 0; i < yearsArray.length; i++) {
+            let option = { value: Number(yearsArray[i]), str: `${Number(yearsArray[i])} - ${Number(yearsArray[i]) + 1}` }
             optionsArray.push(option);
         }
-        if (optionsArray[optionsArray.length - 1].value < planYear) {
+        console.log(optionsArray);
+        if (optionsArray[optionsArray.length - 1] < planYear) {
             setPlanYear(optionsArray[optionsArray.length - 1].value)
         }
         setNextYear(optionsArray[optionsArray.length - 1].value + 1)

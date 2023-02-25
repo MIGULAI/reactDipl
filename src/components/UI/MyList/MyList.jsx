@@ -60,7 +60,7 @@ const MyList = ({ header, autorsList, autors, setAutors }) => {
                         autors.map((e, i) =>
                             <tr key={i} onClick={item => isActivate && isActivate === item.target.getAttribute('value') ? setIsActivate(undefined) : setIsActivate(item.target.getAttribute('value'))}>
                                 <td
-                                    className={e && isActivate && isActivate === e.id ? activate : null}
+                                    className={e && isActivate && Number(isActivate) === e.id ? activate : null}
                                     value={e && e.id}
                                 >{e && e.value}</td>
                             </tr>

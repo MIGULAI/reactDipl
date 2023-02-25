@@ -22,13 +22,13 @@ const AddPubl = () => {
 
     let now = new Date()
     const [isLoading, setIsLoading] = useState(true)
-    const { accessToken, setKeyActive } = useContext(AuthContext)
+    const { accessToken, setKeyActive, globalSetup } = useContext(AuthContext)
     const [err, setError] = useState([])
 
     const [types, setTypes] = useState([])
     const [langueges, setLangueges] = useState([])
     const [publishers, setPublishers] = useState([])
-    const [authors, setAuthors] = useState(Array(7).fill(null))
+    const [authors, setAuthors] = useState(Array(Number(globalSetup.authorsPublCount)).fill(null))
 
     const [autorList, setAutorList] = useState([])
     const [supervisorList, setSupervisorList] = useState([])
@@ -50,7 +50,7 @@ const AddPubl = () => {
         if (!response.data.success) setError([...err, response.data.message])
         if (response.data.success) {
             setPubl({ name: '', type: 1, lang: 1, publisher: 1, date: '', issue_numb: '', url: '', authors: [] })
-            setAuthors(Array(7).fill(null))
+            setAuthors(Array(Number(globalSetup.authorsPublCount)).fill(null))
         }
     })
 

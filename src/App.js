@@ -16,9 +16,9 @@ function App() {
   const [isLoading, setIsLoading] = useState(true)
   const [accessToken, setAccessToken] = useState(null)
   const [keyActive, setKeyActive] = useState(0)
-  const [globalSetup, setGlobalSetup] = useState({authorsPublCount: '7', authoSuccess: 'false'})
+  const [globalSetup, setGlobalSetup] = useState({ authorsPublCount: '7', authoSuccess: 'false' })
 
-  const [fetchGlobalSetup, setupLoading, setErr] = useFetching( async() =>{
+  const [fetchGlobalSetup, setupLoading, setErr] = useFetching(async () => {
     const response = await PostService.fetchingGlobalSetup()
     setGlobalSetup(response.data.data)
   })
@@ -35,13 +35,17 @@ function App() {
       isAuth, setIsAuth, isLoading, accessToken, setAccessToken, keyActive, globalSetup, setGlobalSetup, setKeyActive
     }}>
       <BrowserRouter>
-      <Menu />
 
-      {
-        isLoading || setupLoading
-        ? <MyLoader></MyLoader>
-        : <AppRouter />
-      }
+
+        {
+           isLoading || setupLoading
+            ? <div className="globalLoaderWrapper"><MyLoader></MyLoader></div> 
+            :
+            <>
+              <Menu />
+              <AppRouter />
+            </>
+        }
       </BrowserRouter>
     </AuthContext.Provider>
 

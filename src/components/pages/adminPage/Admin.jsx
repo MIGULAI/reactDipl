@@ -10,18 +10,28 @@ import PostService from "../../../API/PostService";
 import MyError from "../../UI/MyError/MyError";
 import MyButton from "../../UI/MyButton/MyButton";
 import { useNavigate } from "react-router-dom";
+import MyModal from "../../UI/MyModal/MyModal";
+import { CheckYear } from "../../../utils/functions/CheckYear";
+import PlanModalChecker from "./modals/PlanModalChecker";
+import MyInputFile from "../../UI/MyInputFile/MyInputFile";
+import MyFileLoader from "../../UI/MyFileLoader/MyFileLoader";
 
 const Admin = () => {
-    const { statBar, item} = classes
-    const { accessToken, setKeyActive, globalSetup, setGlobalSetup  } = useContext(AuthContext)
+    const { statBar, item, fileLoader, loaderItem, fileInput } = classes
+    const { accessToken, setKeyActive, globalSetup, setGlobalSetup } = useContext(AuthContext)
+
     const navig = useNavigate()
+
     const [authorsPublCount, setAuthorsPublCount] = useState(Number(globalSetup.authorsPublCount))
     const [autoSubmit, setAutoSubmit] = useState('true' === globalSetup.authoSuccess)
-
     const [err, setErr] = useState([])
-
     const [isLoading, setIsLoading] = useState(true)
     const [statistic, setStatistic] = useState({ publicationsCount: 0, authorsCount: 0 })
+    const [modalPlan, setModalPlan] = useState(false)
+    const [defaultYear, setDefaultYear] = useState(() => CheckYear())
+    const [newPlans, setNewPlans] = useState([])
+
+
 
     const [statFetching, isStatFetching, statErr] = useFetching(async (token) => {
         const response = await PostService.fetchingStatistic(token)
@@ -29,8 +39,66 @@ const Admin = () => {
         !response.data.success && setErr([...err, response.data.message])
     })
 
+    const [createPlanFetching, isPlanCreating, createErr] = useFetching(async (year) => {
+        const response = await PostService.createPlanOnYear(accessToken, year)
+
+        setNewPlans(response.data.data.plans)
+    })
+
+    const [savePlan, isPlanSaving, saveErr] = useFetching(async (plan) => {
+        const response = await PostService.savePlan(accessToken, plan)
+        if (response.data.success) {
+            setNewPlans([])
+            alert(response.data.message)
+            setModalPlan(false)
+        }
+    })
+    const [fetchPlansYear, isFetchYears, yearsErr] = useFetching(async () => {
+        const response = await PostService.fetchPlanYearList()
+        console.log(response);
+        //перевірити рік і якщо він наявний встановити defaultYear у значення того року
+    })
+
+    const [fileFetching, isFileFetching, fileErr] = useFetching(async (file) => {
+        const response = await PostService.fetchJSONAuthors(accessToken, file)
+        console.log(response);
+    })
+
+    const [planCalc, isPlansCalcing, calcErr] = useFetching(async()=>{
+        const response = await PostService.calculatePlans(accessToken)
+        console.log(response.data);
+    })
+    const [setAuthorNumber, isNumberSetting, numbErr] = useFetching(async() => {
+        const response = await PostService.putMaxAuthors(accessToken, authorsPublCount)
+        console.log(response);
+        if(response.data.success) setGlobalSetup({...globalSetup, authorsPublCount: authorsPublCount})
+        else setErr([...err, response.data.message])
+    }) 
+
+    const handleUploadClick = (filePublications) => {
+        if (!filePublications) {
+            setErr([...err, 'File did not selected'])
+        } else {
+            fileFetching(filePublications)
+        }
+    }
+
+    const handleAuthorsNumber = () => {
+        setAuthorNumber()
+    }
+
+    const cencelPlans = () => {
+        setModalPlan(false)
+        setNewPlans([])
+    }
+
+    const createPlan = (year, status) => {
+        setModalPlan(true)
+        createPlanFetching(year, status)
+    }
+
     useEffect(() => {
-        console.log(globalSetup);
+        //fetchPlansYear()
         statFetching(accessToken)
         setKeyActive(5)
         setIsLoading(false)
@@ -41,8 +109,15 @@ const Admin = () => {
             {err.length !== 0 && <MyError onClick={() => setErr([])}>{err}</MyError>}
             {
                 isLoading || isStatFetching
-                    ? <MyLoader></MyLoader>
+                    ? <MyLoader/>
                     : <div>
+                        <MyModal visible={modalPlan} setVisible={setModalPlan}>
+                            {
+                                isPlanCreating || isPlanSaving
+                                    ? <MyFileLoader />
+                                    : <PlanModalChecker saveFunc={e => savePlan(newPlans)} cancelFunc={cencelPlans} newPlans={newPlans} setPlans={setNewPlans} />
+                            }
+                        </MyModal>
                         <div className={statBar}>
                             <div className={item}>
                                 <MyLabel>{'Кількість авторів :'}</MyLabel>
@@ -58,21 +133,19 @@ const Admin = () => {
                         </div>
                         <div className={statBar}>
                             <div className={item}>
-                                <MyButton onClick={e => console.log('Переглянути плани')}>{'Плани'}</MyButton>
+                                <MyButton onClick={e => setModalPlan(true)}>{'Плани'}</MyButton>
                             </div>
                             <div className={item}>
                                 <MyLabel>Створення плану на поточний рік :</MyLabel>
-                                <MyButton onClick={e => console.log(`створити план на ${'year'}`)}>{`створити план на ${'year'}`}</MyButton>
+                                <MyButton onClick={e => createPlan(defaultYear, false)}>{`створити план на ${defaultYear}`}</MyButton>
                             </div>
-
-
                         </div>
                         <div className={statBar}>
                             <div className={item}>
                                 <div className={item}>
                                     <MyLabel>Кількість авторів у однієї публікації :</MyLabel>
                                     <MyInput value={authorsPublCount} onChange={(e) => setAuthorsPublCount(Number(e.target.value))} />
-                                    <MyButton onClick={e => console.log(`Зберегти`)}>{`Зберегти`}</MyButton>
+                                    <MyButton onClick={handleAuthorsNumber}>{`Зберегти`}</MyButton>
                                 </div>
                                 <div className={item}>
                                     <MyLabel>Автопідтвердження :</MyLabel>
@@ -81,9 +154,19 @@ const Admin = () => {
                                 </div>
                             </div>
                         </div>
+                        <div className={statBar}>
+                            <MyInputFile 
+                                isFileFetching={isFileFetching}
+                                saveFile={handleUploadClick}
+                            />
+                        </div>
+                        <div className={statBar}>
+                            <div className={item}>
+                                <MyButton onClick={() => planCalc()}>Прорахунок планів</MyButton>
+                            </div>
+                        </div>
                     </div>
             }
-
         </PageWrapper>
     )
 }

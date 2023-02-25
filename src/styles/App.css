@@ -11,3 +11,9 @@ body{
     min-height: 100vh;
     background-color: #fff;
 }
+.globalLoaderWrapper{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}

@@ -5,20 +5,19 @@
     min-width: 50%;
     border-spacing: 0px;
     font-size: 14px;
-
 }
 
 .myTable thead{
-    width: 100%;
+    width: auto;
 }
 
 .myTable tr{
-    width: 100%;
+    width: auto;
     cursor: pointer;
     transition: all .25s ease-in-out;
 }
 
 .myTable tr td{
     border: solid 1px black;
-    width: 10%;
+    width: auto;
 }
