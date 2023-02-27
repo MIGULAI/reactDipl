@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import PageWrapper from "../PageWrapper";
 
 import { AuthContext } from "../../../context";
@@ -15,10 +15,10 @@ import { getSetup } from "./AddAuthorLogic";
 
 const AddAutor = () => {
 
-    const {accessToken, setKeyActive } = useContext(AuthContext)
+    const { accessToken, setKeyActive } = useContext(AuthContext)
     const [err, setErr] = useState([])
     const [autor, setAutor] = useState({
-        name: '', sername: '', partonic: '', PIPua: '', PIPen: '', phone: '', email: '', group: 1, department: 1, organization: 1, place: 6, rank: 1, degree: 1
+        name: '', sername: '', partonic: '', PIPua: '', PIPen: '', phone: '', email: '', group: 1, department: 1, organization: 1, place: 6, rank: 1, degree: 1, startDate: ''
     })
 
     const [groups, setGroups] = useState([]);
@@ -37,7 +37,7 @@ const AddAutor = () => {
         setPlaces(places)
         setDegrees(degrees)
         setRanks(ranks)
-        
+
     });
 
     const [saveNewAuthor, isAuthorSaving, saveError] = useFetching(async (newAuthor) => {
@@ -65,42 +65,42 @@ const AddAutor = () => {
     return (
         <PageWrapper style={{ justifyContent: 'space-around' }} title={'Створення нового автора'}>
             <div className={classes.content}>
-            {err.length !== 0 && <MyError onClick={e => setErr([])}>{err}</MyError>}
-            {
-                isSubArrFetching || isAuthorSaving
-                    ? <MyLoader />
-                    :
-                    <div>
-                        <div className={classes.table_wrapper}>
-                            <div className={classes.columItem}>
-                                <div className={classes.inputFuild}>
-                                    <MyLabel>Прізвище:</MyLabel>
-                                    <MyInput
-                                        type="text"
-                                        placeholder={'Прізвище'}
-                                        value={autor.sername}
-                                        onChange={e => setAutor({ ...autor, sername: e.target.value })}
-                                    />
-                                </div>
-                                <div className={classes.inputFuild}>
-                                    <MyLabel>Ім'я:</MyLabel>
-                                    <MyInput
-                                        type="text"
-                                        placeholder={`Ім'я`}
-                                        value={autor.name}
-                                        onChange={e => setAutor({ ...autor, name: e.target.value })}
-                                    />
-                                </div>
-                                <div className={classes.inputFuild}>
-                                    <MyLabel>Побатькові:</MyLabel>
-                                    <MyInput
-                                        type="text"
-                                        placeholder={'Побатькові'}
-                                        value={autor.partonic}
-                                        onChange={e => setAutor({ ...autor, partonic: e.target.value })}
-                                    />
-                                </div>
-                                <div className={classes.inputFuild}>
+                {err.length !== 0 && <MyError onClick={e => setErr([])}>{err}</MyError>}
+                {
+                    isSubArrFetching || isAuthorSaving
+                        ? <MyLoader />
+                        :
+                        <div>
+                            <div className={classes.table_wrapper}>
+                                <div className={classes.columItem}>
+                                    <div className={classes.inputFuild}>
+                                        <MyLabel>Прізвище:</MyLabel>
+                                        <MyInput
+                                            type="text"
+                                            placeholder={'Прізвище'}
+                                            value={autor.sername}
+                                            onChange={e => setAutor({ ...autor, sername: e.target.value })}
+                                        />
+                                    </div>
+                                    <div className={classes.inputFuild}>
+                                        <MyLabel>Ім'я:</MyLabel>
+                                        <MyInput
+                                            type="text"
+                                            placeholder={`Ім'я`}
+                                            value={autor.name}
+                                            onChange={e => setAutor({ ...autor, name: e.target.value })}
+                                        />
+                                    </div>
+                                    <div className={classes.inputFuild}>
+                                        <MyLabel>Побатькові:</MyLabel>
+                                        <MyInput
+                                            type="text"
+                                            placeholder={'Побатькові'}
+                                            value={autor.partonic}
+                                            onChange={e => setAutor({ ...autor, partonic: e.target.value })}
+                                        />
+                                    </div>
+                                    {/* <div className={classes.inputFuild}>
                                     <MyLabel>ПІБ українською:</MyLabel>
                                     <MyInput
                                         type="text"
@@ -135,41 +135,54 @@ const AddAutor = () => {
                                         value={autor.email}
                                         onChange={e => setAutor({ ...autor, email: e.target.value })}
                                     />
+                                </div> */}
+                                    <div className={classes.inputFuild}>
+                                        <MyLabel>Группа:</MyLabel>
+                                        <MySelector options={groups} selected={autor.group} onChange={e => setAutor({ ...autor, group: Number(e.target.value) })} />
+                                    </div>
+                                    <div className={classes.inputFuild}>
+                                        <MyLabel>Відділ (Кафедра):</MyLabel>
+                                        <MySelector options={departments} selected={autor.department} onChange={e => setAutor({ ...autor, department: Number(e.target.value) })} />
+                                    </div>
                                 </div>
-                            </div>
-                            <div className={classes.columItem}>
-                                <div className={classes.inputFuild}>
-                                    <MyLabel>Группа:</MyLabel>
-                                    <MySelector options={groups} selected={autor.group} onChange={e => setAutor({ ...autor, group: Number(e.target.value) })} />
-                                </div>
-                                <div className={classes.inputFuild}>
-                                    <MyLabel>Відділ (Кафедра):</MyLabel>
-                                    <MySelector options={departments} selected={autor.department} onChange={e => setAutor({ ...autor, department: Number(e.target.value) })} />
-                                </div>
-                                <div className={classes.inputFuild}>
-                                    <MyLabel>Організація:</MyLabel>
-                                    <MySelector options={organizations} selected={autor.organization} onChange={e => setAutor({ ...autor, organization: Number(e.target.value) })} />
-                                </div>
-                                <div className={classes.inputFuild}>
-                                    <MyLabel>Посада:</MyLabel>
-                                    <MySelector options={places} selected={autor.place} onChange={e => setAutor({ ...autor, place: Number(e.target.value) })} />
-                                </div>
-                                <div className={classes.inputFuild}>
-                                    <MyLabel>Вчене звання:</MyLabel>
-                                    <MySelector options={ranks} selected={autor.rank} onChange={e => setAutor({ ...autor, rank: Number(e.target.value) })} />
-                                </div>
-                                <div className={classes.inputFuild}>
-                                    <MyLabel>Науковий ступінь:</MyLabel>
-                                    <MySelector options={degrees} selected={autor.degree} onChange={e => setAutor({ ...autor, degree: Number(e.target.value) })} />
-                                </div>
-                            </div>
+                                <div className={classes.columItem}>
 
+                                    <div className={classes.inputFuild}>
+                                        <MyLabel>Організація:</MyLabel>
+                                        <MySelector options={organizations} selected={autor.organization} onChange={e => setAutor({ ...autor, organization: Number(e.target.value) })} />
+                                    </div>
+                                    <div className={classes.inputFuild}>
+                                        <MyLabel>Посада:</MyLabel>
+                                        <MySelector options={places} selected={autor.place} onChange={e => setAutor({ ...autor, place: Number(e.target.value) })} />
+                                    </div>
+                                    <div className={classes.inputFuild}>
+                                        <MyLabel>Вчене звання:</MyLabel>
+                                        <MySelector options={ranks} selected={autor.rank} onChange={e => setAutor({ ...autor, rank: Number(e.target.value) })} />
+                                    </div>
+                                    <div className={classes.inputFuild}>
+                                        <MyLabel>Науковий ступінь:</MyLabel>
+                                        <MySelector options={degrees} selected={autor.degree} onChange={e => setAutor({ ...autor, degree: Number(e.target.value) })} />
+                                    </div>
+                                    {
+                                        autor.department === 2 && <div className={classes.inputFuild}>
+                                            <MyLabel >Дата публікації:</MyLabel>
+                                            <MyInput
+                                                type="month"
+                                                placeholder={'Дата публікації'}
+                                                value={autor.startDate}
+                                                onChange={e => setAutor({ ...autor, startDate: e.target.value })}
+                                            />
+                                        </div>
+                                    }
+
+                                </div>
+
+                            </div>
+                            <div className={classes.but__wrapper}>
+                                <MyButton onClick={saveAuthor}>Додати</MyButton>
+                            </div>
                         </div>
-                        <div className={classes.but__wrapper}>
-                            <MyButton onClick={saveAuthor}>Додати</MyButton>
-                        </div>
-                    </div>
-            }
+                }
             </div>
 
 

@@ -38,6 +38,7 @@ const AddPubl = () => {
 
     const [isSetFetching, isFetching, setErr] = useFetching(async () => {
         const [typees, languages, publishers, authores, supervisor] = await IsSetFetching(accessToken)
+        
         setAutorList(authores)
         setLangueges(languages)
         setPublishers(publishers)
@@ -49,7 +50,7 @@ const AddPubl = () => {
         const response = await PostService.addPub(publ, accessToken)
         if (!response.data.success) setError([...err, response.data.message])
         if (response.data.success) {
-            setPubl({ name: '', type: 1, lang: 1, publisher: 1, date: '', issue_numb: '', url: '', authors: [] })
+            setPubl({ name: '', startPage: 0, lastPage: 0, UPP: 0, type: 1, lang: 1, publisher: 1, date: now, issue_numb: '', url: '', authors: [], supervisor: 0})
             setAuthors(Array(Number(globalSetup.authorsPublCount)).fill(null))
         }
     })

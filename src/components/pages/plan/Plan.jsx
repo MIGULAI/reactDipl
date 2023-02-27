@@ -38,7 +38,6 @@ const Plan = () => {
             let option = { value: Number(yearsArray[i]), str: `${Number(yearsArray[i])} - ${Number(yearsArray[i]) + 1}` }
             optionsArray.push(option);
         }
-        console.log(optionsArray);
         if (optionsArray[optionsArray.length - 1] < planYear) {
             setPlanYear(optionsArray[optionsArray.length - 1].value)
         }
@@ -48,7 +47,7 @@ const Plan = () => {
 
     const [fetchPlans, isPlanLoading, plansError] = useFetching(async (year, apiKey) => {
         const response = await PostService.fetchPlansByYear(year, apiKey)
-        setPlans(JSON.parse(response.data[1]));
+        setPlans(response.data.data.plans);
     })
     const createNewPlan = async () => {
         setIsLoading(true)
@@ -74,9 +73,9 @@ const Plan = () => {
 
     useEffect(() => {
         let errorArray = []
-        plansError !== undefined && errorArray.push(plansError)
-        yearError !== undefined && errorArray.push(yearError)
-        errorArray.length && setError([...err, errorArray])
+        plansError !== '' && errorArray.push(plansError)
+        yearError !== '' && errorArray.push(yearError)
+        errorArray.length !== 0 && setError([...err, errorArray])
     }, [plansError, yearError])
 
     useEffect(() => {
@@ -86,7 +85,7 @@ const Plan = () => {
 
     return (
         <PageWrapper title="Сторінка плану">
-            {err
+            {err.length !== 0
                 ? <MyError onClick={e => setError([]) }>{err}</MyError>
                 : <>
                     {isYearLoading

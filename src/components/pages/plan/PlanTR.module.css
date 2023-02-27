@@ -5,3 +5,7 @@
 .isFalse{
     background-color: red;
 }
+
+.item{
+    min-width: 100px;
+}

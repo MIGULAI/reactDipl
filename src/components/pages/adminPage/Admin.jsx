@@ -15,12 +15,15 @@ import { CheckYear } from "../../../utils/functions/CheckYear";
 import PlanModalChecker from "./modals/PlanModalChecker";
 import MyInputFile from "../../UI/MyInputFile/MyInputFile";
 import MyFileLoader from "../../UI/MyFileLoader/MyFileLoader";
+import DepAuthors from "../../files/depAuthors/DepAuthors";
+
+import Recalculate from "./SubFunctions/Recalculate";
 
 const Admin = () => {
     const { statBar, item, fileLoader, loaderItem, fileInput } = classes
     const { accessToken, setKeyActive, globalSetup, setGlobalSetup } = useContext(AuthContext)
 
-    const navig = useNavigate()
+    const navig = useNavigate();
 
     const [authorsPublCount, setAuthorsPublCount] = useState(Number(globalSetup.authorsPublCount))
     const [autoSubmit, setAutoSubmit] = useState('true' === globalSetup.authoSuccess)
@@ -30,7 +33,6 @@ const Admin = () => {
     const [modalPlan, setModalPlan] = useState(false)
     const [defaultYear, setDefaultYear] = useState(() => CheckYear())
     const [newPlans, setNewPlans] = useState([])
-
 
 
     const [statFetching, isStatFetching, statErr] = useFetching(async (token) => {
@@ -53,27 +55,20 @@ const Admin = () => {
             setModalPlan(false)
         }
     })
-    const [fetchPlansYear, isFetchYears, yearsErr] = useFetching(async () => {
-        const response = await PostService.fetchPlanYearList()
-        console.log(response);
-        //перевірити рік і якщо він наявний встановити defaultYear у значення того року
-    })
+
 
     const [fileFetching, isFileFetching, fileErr] = useFetching(async (file) => {
         const response = await PostService.fetchJSONAuthors(accessToken, file)
         console.log(response);
     })
 
-    const [planCalc, isPlansCalcing, calcErr] = useFetching(async()=>{
-        const response = await PostService.calculatePlans(accessToken)
-        console.log(response.data);
-    })
-    const [setAuthorNumber, isNumberSetting, numbErr] = useFetching(async() => {
+
+    const [setAuthorNumber, isNumberSetting, numbErr] = useFetching(async () => {
         const response = await PostService.putMaxAuthors(accessToken, authorsPublCount)
         console.log(response);
-        if(response.data.success) setGlobalSetup({...globalSetup, authorsPublCount: authorsPublCount})
+        if (response.data.success) setGlobalSetup({ ...globalSetup, authorsPublCount: authorsPublCount })
         else setErr([...err, response.data.message])
-    }) 
+    })
 
     const handleUploadClick = (filePublications) => {
         if (!filePublications) {
@@ -96,6 +91,9 @@ const Admin = () => {
         setModalPlan(true)
         createPlanFetching(year, status)
     }
+    const docxGenerate = () => {
+
+    }
 
     useEffect(() => {
         //fetchPlansYear()
@@ -109,7 +107,7 @@ const Admin = () => {
             {err.length !== 0 && <MyError onClick={() => setErr([])}>{err}</MyError>}
             {
                 isLoading || isStatFetching
-                    ? <MyLoader/>
+                    ? <MyLoader />
                     : <div>
                         <MyModal visible={modalPlan} setVisible={setModalPlan}>
                             {
@@ -155,14 +153,19 @@ const Admin = () => {
                             </div>
                         </div>
                         <div className={statBar}>
-                            <MyInputFile 
+                            <MyInputFile
                                 isFileFetching={isFileFetching}
                                 saveFile={handleUploadClick}
                             />
                         </div>
                         <div className={statBar}>
                             <div className={item}>
-                                <MyButton onClick={() => planCalc()}>Прорахунок планів</MyButton>
+                                <Recalculate accessToken={accessToken} />
+                            </div>
+                        </div>
+                        <div className={statBar}>
+                            <div className={item}>
+                            <DepAuthors />
                             </div>
                         </div>
                     </div>

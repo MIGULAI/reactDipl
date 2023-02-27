@@ -1,3 +1,4 @@
+import React  from 'react';
 import Login from "../components/pages/login/Login"
 import Plan from "../components/pages/plan/Plan"
 import SearchDB from "../components/pages/searchDB/SearchDB"
@@ -16,6 +17,7 @@ export const privateRoutes = [
     {path: '/analyze', element: <Analyze/>, exact: true},
     {path: '/plan/change/:id', element: <PlanById/>, exact: true},
     {path: '/admin', element: <Admin/>, exact: true},
+
 ]
 
 export const publicRoutes = [

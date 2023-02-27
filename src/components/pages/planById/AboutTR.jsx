@@ -21,16 +21,16 @@ const AboutTR = ({option, index, selected, selectedItem}) =>{
     return(
         <tr className={paint} onClick={selecting}>
             <td>
-                <span>{option.Publication_Name}</span>
+                <span>{option.Name}</span>
             </td>
             <td>
-                <span>{option.Type}</span>
+                <span>{option.TypeName}</span>
             </td>
             <td>
-                <span>{option.Language}</span>
+                <span>{option.LanguageName}</span>
             </td>
             <td>
-                <span>{option.Publication_Date}</span>
+                <span>{option.PublicationDate}</span>
             </td>
         </tr>
     )

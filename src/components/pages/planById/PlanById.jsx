@@ -18,9 +18,9 @@ const PlanById = () => {
     const [isLoading, setIsLoading] = useState(false)
 
     const [planSet, setPlanSet] = useState({
-        autor: '', year_start: '', year_end: ''
+        AuthorId: undefined, year_start: '', year_end: ''
     })
-    const [err, setErr] = useState()
+    const [err, setErr] = useState([])
     const [tdk, setTDK] = useState(0)
     const [pa, setPA] = useState(0)
     const [scopus, setScopus] = useState(0)
@@ -30,40 +30,42 @@ const PlanById = () => {
 
 
 
-    const { isAuth, apiKey, setKeyActive } = useContext(AuthContext)
+    const { isAuth, accessToken, setKeyActive } = useContext(AuthContext)
 
 
     const [fetchingPlan, isPlanLoading, plansError] = useFetching(async (id) => {
         const response = await PostService.fetchPlanById(id);
-        if (response.data[0]) {
-            setTDK(response.data[1].theses)
-            setManual(response.data[1].manuals)
-            setScopus(response.data[1].scopus)
-            setPA(response.data[1].professional_articles)
-            setPlanSet(response.data[1])
-            console.log(response.data[1]);
+        if (response.data.success) {
+            console.log(response.data.data.plan);
+
+            setTDK(response.data.data.plan.Theses)
+            setManual(response.data.data.plan.Manuals)
+            setScopus(response.data.data.plan.Scopus)
+            setPA(response.data.data.plan.ProfetionalArticles)
+            setPlanSet(response.data.data.plan)
         }
-        else throw new Error(response.data[1])
+        else throw new Error(response.data.message)
     })
 
-    const [setFetchPlan, isPlanFetching, sePlanError] = useFetching(async (plan, id, apiKey, autorId) => {
-        const response = await PostService.setPlan(plan, id, apiKey, autorId)
+    const [setFetchPlan, isPlanFetching, sePlanError] = useFetching(async (plan, id, autorId) => {
+        const response = await PostService.setPlan(plan, id, autorId)
         if (response.data[0]) {
             setTDK(response.data[1].theses)
             setManual(response.data[1].manuals)
             setScopus(response.data[1].scopus)
             setPA(response.data[1].professional_articles)
             setPlanSet(response.data[1])
-            console.log(response.data[1]);
         }
-        else throw new Error(response.data[1])
+        else throw new Error(response.data.message)
     })
 
     const [setAutorPubs, isPubsFetching, pubsError] = useFetching(async (autorId) => {
+        
         if (autorId !== undefined) {
             const response = await PostService.fetchPubsByAutorId(autorId);
-            // console.log(response.data, autorId)
-            setPubls(response.data)
+            console.log(response.data);
+
+            setPubls(response.data.data.publs)
         }
     })
 
@@ -74,7 +76,7 @@ const PlanById = () => {
             scopus: scopus,
             manusl: manusl
         }
-        setFetchPlan(el, params.id, apiKey, planSet.id_autor)
+        setFetchPlan(el, params.id, planSet.id_autor)
     }
 
     useEffect(() => {
@@ -85,13 +87,13 @@ const PlanById = () => {
 
     useEffect(() => {
         if (planSet !== []) {
-            setAutorPubs(planSet.id_autor)
+            setAutorPubs(planSet.AuthorId)
         }
 
     }, [planSet])
 
     useEffect(() => {
-        if (plansError !== null) setErr(plansError)
+        if (plansError !== '') setErr([...err, plansError])
     }, [plansError])
     return (
         <>
@@ -100,7 +102,7 @@ const PlanById = () => {
                     ? <PageWrapper><MyLoader /></PageWrapper>
                     : <>
                         {
-                            err
+                            err.length !== 0
                                 ? <PageWrapper><MyError>{err}</MyError></PageWrapper>
                                 : <PageWrapper style={{ flexDirection: 'column', justifyContent: 'start' }} title={`${planSet.autor} ${planSet.year_start} - ${planSet.year_end} `}>
                                     {

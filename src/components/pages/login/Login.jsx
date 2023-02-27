@@ -5,7 +5,6 @@ import MyInput from "../../UI/MyInput/MyInput";
 import MyLabel from "../../UI/MyLabel/MyLabel";
 import CardWrapper from "../CardWrapper";
 import PageWrapper from "../PageWrapper";
-import PostService from "../../../API/PostService";
 import { useFetching } from "../../../hooks/useFetching";
 
 import classes from "./Login.module.css"

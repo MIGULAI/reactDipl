@@ -33,12 +33,11 @@ export default class PostService {
         return response;
     }
 
-    static async fetchPlansByYear(year, apiKey) {
+    static async fetchPlansByYear(year) {
         const instance = await this.protectionInit()
 
-        let response = await instance.post(`${Env.API_URL}/plans/year`, {
-            year: year,
-            apiKey: apiKey
+        let response = await instance.post(`api/plans/year`, {
+            year: year
         })
         return response;
     }
@@ -51,22 +50,30 @@ export default class PostService {
         return response;
     }
     static async fetchPlanById(id) {
-        let response = await axios.post(`${Env.API_URL}/plan/about`, {
+        const instance = await this.protectionInit()
+        let response = await instance.post(`api/plan/about`, {
             id: id
         })
         return response
     }
-    static async setPlan(plan, id, apiKey, autorId) {
-        let response = await axios.post(`${Env.API_URL}/plan/set`, {
+    static async setPlan(plan, id, token, autorId) {
+        const instance = await this.protectionInit()
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        }
+        let response = await instance.put(`api/plan/set`, {
             plan: plan,
             id: id,
-            apiKey: apiKey,
             autorId: autorId
-        })
+        }, config)
         return response
     }
     static async fetchPubsByAutorId(id) {
-        let response = await axios.post(`${Env.API_URL}/pub/byAutorId`, {
+        const instance = await this.protectionInit()
+        let response = await instance.post(`api/publication/byAutorId`, {
             id: id
         })
         return response

@@ -4,7 +4,7 @@ import classes from "./PlanTR.module.css"
 const PlanTR = ({ option, index, selected, selectedPlan }) => {
 
     let paint = ''
-    if(!option.status && index !== selectedPlan){
+    if(!option.Stat && index !== selectedPlan){
         paint += classes.isFalse
     }
     if (index === selectedPlan) {
@@ -23,20 +23,20 @@ const PlanTR = ({ option, index, selected, selectedPlan }) => {
 
     return (
         <tr className={paint} onClick={selecting}>
-            <td>
-                <span>{option.autor}</span>
+            <td className={classes.item}>
+                <span>{option.AuthorPatronic !== '' ? `${option.AuthorSerName} ${option.AuthorName[0]}.  ${option.AuthorPatronic[0]}. `: `${option.AuthorSerName} ${option.AuthorName[0]}.`}</span>
             </td>
-            <td>
-                <span>{option.theses}</span>
+            <td className={classes.item}>
+                <span>{option.Theses}</span>
             </td>
-            <td>
-                <span>{option.professional_articles}</span>
+            <td className={classes.item}>
+                <span>{option.ProfetionalArticles}</span>
             </td>
-            <td>
-                <span>{option.scopus}</span>
+            <td className={classes.item}>
+                <span>{option.Scopus}</span>
             </td>
-            <td>
-                <span>{option.manuals}</span>
+            <td className={classes.item}>
+                <span>{option.Manuals}</span>
             </td>
         </tr>
     );
