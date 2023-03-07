@@ -33,7 +33,7 @@ const AddPubl = () => {
     const [autorList, setAutorList] = useState([])
     const [supervisorList, setSupervisorList] = useState([])
     const [publ, setPubl] = useState({
-        name: '', startPage: 0, lastPage: 0, UPP: 0, type: 1, lang: 1, publisher: 1, date: now, issue_numb: '', url: '', authors: [], supervisor: 0
+        name: '', startPage: 0, lastPage: 0, UPP: 0, type: 1, lang: 1, publisher: 1, date: null, issue_numb: '', url: '', authors: [], supervisor: 0
     })
 
     const [isSetFetching, isFetching, setErr] = useFetching(async () => {

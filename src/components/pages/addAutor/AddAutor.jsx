@@ -100,42 +100,6 @@ const AddAutor = () => {
                                             onChange={e => setAutor({ ...autor, partonic: e.target.value })}
                                         />
                                     </div>
-                                    {/* <div className={classes.inputFuild}>
-                                    <MyLabel>ПІБ українською:</MyLabel>
-                                    <MyInput
-                                        type="text"
-                                        placeholder={'ПІБ українською'}
-                                        value={autor.PIPua}
-                                        onChange={e => setAutor({ ...autor, PIPua: e.target.value })}
-                                    />
-                                </div>
-                                <div className={classes.inputFuild}>
-                                    <MyLabel>ПІБ англійською:</MyLabel>
-                                    <MyInput
-                                        type="text"
-                                        placeholder={'ПІБ англійською'}
-                                        value={autor.PIPen}
-                                        onChange={e => setAutor({ ...autor, PIPen: e.target.value })}
-                                    />
-                                </div>
-                                <div className={classes.inputFuild}>
-                                    <MyLabel>Телефон :</MyLabel>
-                                    <MyInput
-                                        type="tel"
-                                        placeholder={'Телефон'}
-                                        value={autor.phone}
-                                        onChange={e => setAutor({ ...autor, phone: e.target.value })}
-                                    />
-                                </div>
-                                <div className={classes.inputFuild}>
-                                    <MyLabel>Єлектронна пошта:</MyLabel>
-                                    <MyInput
-                                        type="email"
-                                        placeholder={'Єлектронна пошта'}
-                                        value={autor.email}
-                                        onChange={e => setAutor({ ...autor, email: e.target.value })}
-                                    />
-                                </div> */}
                                     <div className={classes.inputFuild}>
                                         <MyLabel>Группа:</MyLabel>
                                         <MySelector options={groups} selected={autor.group} onChange={e => setAutor({ ...autor, group: Number(e.target.value) })} />
