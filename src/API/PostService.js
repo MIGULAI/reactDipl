@@ -220,4 +220,5 @@ export default class PostService {
         let response = await instance.get('api/plans/calculate', config)
         return response
     }
+
 }

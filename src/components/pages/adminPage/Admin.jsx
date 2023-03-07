@@ -18,6 +18,7 @@ import MyFileLoader from "../../UI/MyFileLoader/MyFileLoader";
 import DepAuthors from "../../files/depAuthors/DepAuthors";
 
 import Recalculate from "./SubFunctions/Recalculate";
+import MySelector from "../../UI/MySelector/MySelector";
 
 const Admin = () => {
     const { statBar, item, fileLoader, loaderItem, fileInput } = classes
@@ -56,7 +57,6 @@ const Admin = () => {
         }
     })
 
-
     const [fileFetching, isFileFetching, fileErr] = useFetching(async (file) => {
         const response = await PostService.fetchJSONAuthors(accessToken, file)
         console.log(response);
@@ -68,6 +68,29 @@ const Admin = () => {
         console.log(response);
         if (response.data.success) setGlobalSetup({ ...globalSetup, authorsPublCount: authorsPublCount })
         else setErr([...err, response.data.message])
+    })
+
+    const [fetchPlansYear, isYearFetching, yearErr] = useFetching(() => {
+        // const response = await PostService.fetchPlanYearList();
+        // const years = response.data.data.years
+
+        let years = ['2023', '2024']
+        console.log(years);
+        let posibleYears = []
+        for (let i = Number(years[0]) - 5; i < Number(years[0]); i++) {
+            posibleYears.push(i);
+        }
+
+        let start = parseInt(years[0], 10)
+        for(let i = 0; i < years.length;i=i){
+            start += 1;
+            (start !== Number(years[i]) && start < Number(years[years.length -1 ]))? posibleYears.push(start) : ++i
+        }
+        for(let i = Number(years[years.length -1]) + 1; i <= Number(years[years.length -1]) + 5; i++){
+            posibleYears.push(i)
+        }
+        console.log(posibleYears);
+
     })
 
     const handleUploadClick = (filePublications) => {
@@ -91,12 +114,12 @@ const Admin = () => {
         setModalPlan(true)
         createPlanFetching(year, status)
     }
-    const docxGenerate = () => {
-
-    }
+    useEffect(() => {
+        console.log(yearErr);
+    }, [yearErr])
 
     useEffect(() => {
-        //fetchPlansYear()
+        // fetchPlansYear()
         statFetching(accessToken)
         setKeyActive(5)
         setIsLoading(false)
@@ -126,7 +149,6 @@ const Admin = () => {
                                 <MyLabel>{'Кількість публікацій :'}</MyLabel>
                                 <MyInput value={statistic.publicationsCount} type={'text'} readOnly={true} />
                                 <MyButton onClick={e => navig('/add/public')}><ion-icon name="add-outline"></ion-icon></MyButton>
-
                             </div>
                         </div>
                         <div className={statBar}>
@@ -136,6 +158,11 @@ const Admin = () => {
                             <div className={item}>
                                 <MyLabel>Створення плану на поточний рік :</MyLabel>
                                 <MyButton onClick={e => createPlan(defaultYear, false)}>{`створити план на ${defaultYear}`}</MyButton>
+                            </div>
+                            <div className={item}>
+                                <MyLabel>Роки з відсутнім планом :</MyLabel>
+                                <MyButton onClick={fetchPlansYear}>Завантажити</MyButton>
+                                {/* <MySelector   /> */}
                             </div>
                         </div>
                         <div className={statBar}>
@@ -165,7 +192,7 @@ const Admin = () => {
                         </div>
                         <div className={statBar}>
                             <div className={item}>
-                            <DepAuthors />
+                                <DepAuthors />
                             </div>
                         </div>
                     </div>

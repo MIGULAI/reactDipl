@@ -21,7 +21,8 @@ MySelector.defaultProps = {
 
 MySelector.propTypes = {
     options: PropTypes.arrayOf(PropTypes.object),
-    selected: PropTypes.number
+    selected: PropTypes.number,
+    onChange: PropTypes.func
 }
 
 export default MySelector;
