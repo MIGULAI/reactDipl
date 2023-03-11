@@ -21,7 +21,7 @@ const AddAutor = () => {
         name: '', sername: '', partonic: '', PIPua: '', PIPen: '', phone: '', email: '', group: 1, department: 1, organization: 1, place: 6, rank: 1, degree: 1, startDate: ''
     })
 
-    const [groups, setGroups] = useState([]);
+    const [specialties, setSpecialties] = useState([]);
     const [organizations, setOrganizations] = useState([]);
     const [departments, setDepartments] = useState([]);
     const [places, setPlaces] = useState([]);
@@ -29,9 +29,9 @@ const AddAutor = () => {
     const [ranks, setRanks] = useState([]);
 
     const [subArrFetch, isSubArrFetching, subArrErr] = useFetching(async () => {
-        const [error, groups, organizations, departments, places, degrees, ranks] = await getSetup(accessToken)
+        const [error, specialties, organizations, departments, places, degrees, ranks] = await getSetup(accessToken)
         error && setErr([...err, error])
-        setGroups(groups)
+        setSpecialties(specialties)
         setOrganizations(organizations)
         setDepartments(departments)
         setPlaces(places)
@@ -52,7 +52,7 @@ const AddAutor = () => {
 
     useEffect(() => {
         subArrFetch()
-        setKeyActive(2)
+        setKeyActive(0)
     }, [])
 
     useEffect(() => {
@@ -102,7 +102,7 @@ const AddAutor = () => {
                                     </div>
                                     <div className={classes.inputFuild}>
                                         <MyLabel>Группа:</MyLabel>
-                                        <MySelector options={groups} selected={autor.group} onChange={e => setAutor({ ...autor, group: Number(e.target.value) })} />
+                                        <MySelector options={specialties} selected={autor.group} onChange={e => setAutor({ ...autor, group: Number(e.target.value) })} />
                                     </div>
                                     <div className={classes.inputFuild}>
                                         <MyLabel>Відділ (Кафедра):</MyLabel>

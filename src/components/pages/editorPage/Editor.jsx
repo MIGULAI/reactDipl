@@ -3,7 +3,7 @@ import MyInput from "../../UI/MyInput/MyInput";
 import MyLabel from "../../UI/MyLabel/MyLabel";
 import MyLoader from "../../UI/MyLoader/MyLoader";
 import PageWrapper from "../PageWrapper";
-import classes from "./Admin.module.css"
+import classes from "./Editor.module.css"
 import { AuthContext } from "../../../context";
 import { useFetching } from "../../../hooks/useFetching";
 import PostService from "../../../API/PostService";
@@ -19,10 +19,12 @@ import DepAuthors from "../../files/depAuthors/DepAuthors";
 
 import Recalculate from "./SubFunctions/Recalculate";
 import MySelector from "../../UI/MySelector/MySelector";
+import MyActions from "../../UI/MyActionKeys/MyActions";
+import MyStats from "../../UI/MyStats/MyStats";
 
-const Admin = () => {
+const Editor = () => {
     const { statBar, item, fileLoader, loaderItem, fileInput } = classes
-    const { accessToken, setKeyActive, globalSetup, setGlobalSetup } = useContext(AuthContext)
+    const { isAuth, accessToken, setKeyActive, globalSetup, setGlobalSetup } = useContext(AuthContext)
 
     const navig = useNavigate();
 
@@ -30,17 +32,18 @@ const Admin = () => {
     const [autoSubmit, setAutoSubmit] = useState('true' === globalSetup.authoSuccess)
     const [err, setErr] = useState([])
     const [isLoading, setIsLoading] = useState(true)
+    const [isStatsLoading, setIsStatsLoading] = useState(false)
     const [statistic, setStatistic] = useState({ publicationsCount: 0, authorsCount: 0 })
     const [modalPlan, setModalPlan] = useState(false)
     const [defaultYear, setDefaultYear] = useState(() => CheckYear())
     const [newPlans, setNewPlans] = useState([])
 
 
-    const [statFetching, isStatFetching, statErr] = useFetching(async (token) => {
+   /* const [statFetching, isStatFetching, statErr] = useFetching(async (token) => {
         const response = await PostService.fetchingStatistic(token)
         setStatistic({ publicationsCount: response.data.data.publicationsCount, authorsCount: response.data.data.authorsCount })
         !response.data.success && setErr([...err, response.data.message])
-    })
+    })*/
 
     const [createPlanFetching, isPlanCreating, createErr] = useFetching(async (year) => {
         const response = await PostService.createPlanOnYear(accessToken, year)
@@ -119,9 +122,7 @@ const Admin = () => {
     }, [yearErr])
 
     useEffect(() => {
-        // fetchPlansYear()
-        statFetching(accessToken)
-        setKeyActive(5)
+        setKeyActive(0)
         setIsLoading(false)
     }, [])
 
@@ -129,7 +130,7 @@ const Admin = () => {
         <PageWrapper title={"Сторінка адміністратора"}>
             {err.length !== 0 && <MyError onClick={() => setErr([])}>{err}</MyError>}
             {
-                isLoading || isStatFetching
+                isLoading 
                     ? <MyLoader />
                     : <div>
                         <MyModal visible={modalPlan} setVisible={setModalPlan}>
@@ -139,18 +140,7 @@ const Admin = () => {
                                     : <PlanModalChecker saveFunc={e => savePlan(newPlans)} cancelFunc={cencelPlans} newPlans={newPlans} setPlans={setNewPlans} />
                             }
                         </MyModal>
-                        <div className={statBar}>
-                            <div className={item}>
-                                <MyLabel>{'Кількість авторів :'}</MyLabel>
-                                <MyInput value={statistic.authorsCount} type={'text'} readOnly={true} />
-                                <MyButton onClick={e => navig('/add/autor')}><ion-icon name="add-outline"></ion-icon></MyButton>
-                            </div>
-                            <div className={item}>
-                                <MyLabel>{'Кількість публікацій :'}</MyLabel>
-                                <MyInput value={statistic.publicationsCount} type={'text'} readOnly={true} />
-                                <MyButton onClick={e => navig('/add/public')}><ion-icon name="add-outline"></ion-icon></MyButton>
-                            </div>
-                        </div>
+                        <MyStats setBoboErr={setErr} />
                         <div className={statBar}>
                             <div className={item}>
                                 <MyButton onClick={e => setModalPlan(true)}>{'Плани'}</MyButton>
@@ -195,10 +185,15 @@ const Admin = () => {
                                 <DepAuthors />
                             </div>
                         </div>
+                        <div className={statBar}>
+                            <div className={item}>
+                                <MyActions isAuth={isAuth} />
+                            </div>
+                        </div>
                     </div>
             }
         </PageWrapper>
     )
 }
 
-export default Admin;
+export default Editor;

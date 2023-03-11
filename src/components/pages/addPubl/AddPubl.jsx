@@ -77,7 +77,7 @@ const AddPubl = () => {
     }, [setErr, pubErr])
 
     useEffect(() => {
-        setKeyActive(1)
+        setKeyActive(0)
         isSetFetching()
         setIsLoading(false)
     }, []);

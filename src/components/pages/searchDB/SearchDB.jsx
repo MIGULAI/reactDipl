@@ -68,8 +68,7 @@ const SearchDB = () => {
     }, [searchParam])
 
     useEffect(() => {
-        if (isAuth) setKeyActive(3)
-        else setKeyActive(1)
+        isAuth ? setKeyActive(3) : setKeyActive(2)
         fetchAutors()
         setIsLoading(false)
     }, [])

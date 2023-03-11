@@ -1,0 +1,10 @@
+.key {
+    display: flex;
+    flex-direction: row;
+    min-width: 300px;
+    justify-content: space-between;
+}
+
+.key div button{
+    margin-left: 1px;
+}

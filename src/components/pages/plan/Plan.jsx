@@ -66,7 +66,8 @@ const Plan = () => {
     }
 
     useEffect(() => {
-        setKeyActive(0)
+        
+        isAuth ? setKeyActive(1) : setKeyActive(0)
         fetchYears()
         setIsLoading(false)
     }, [isLoading])

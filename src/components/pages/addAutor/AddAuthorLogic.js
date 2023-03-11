@@ -4,10 +4,10 @@ export const getSetup = async (accessToken) => {
     const response = await PostService.fetchAutorSettings(accessToken)
     let err = null
     if (!response.data.success) err = response.data.message
-    let groups = []
-    for (let i = 0; i < response.data.data.groups.length; i++) {
-        let group = { value: response.data.data.groups[i].id, str: response.data.data.groups[i].GroupName }
-        groups.push(group)
+    let specialties = []
+    for (let i = 0; i < response.data.data.specialties.length; i++) {
+        let specialty = { value: response.data.data.specialties[i].id, str: response.data.data.specialties[i].SpecialtyName }
+        specialties.push(specialty)
     }
     let organizations = []
     for (let i = 0; i < response.data.data.organizations.length; i++) {
@@ -34,5 +34,5 @@ export const getSetup = async (accessToken) => {
         let scientific_rank = { value: response.data.data.ranks[i].id, str: response.data.data.ranks[i].RankName }
         ranks.push(scientific_rank)
     }
-    return [err, groups, organizations, departments, places, degrees, ranks]
+    return [err, specialties, organizations, departments, places, degrees, ranks]
 }
