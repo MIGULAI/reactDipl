@@ -3,7 +3,7 @@ import classes from "./MyTable.module.css"
 import PropTypes from 'prop-types';
 
 
-const MyTable = ({ children, header}) => {
+const MyTable = ({ children, header }) => {
     return (
         <table className={classes.myTable}>
             <thead>
@@ -17,8 +17,11 @@ const MyTable = ({ children, header}) => {
                     }
 
                 </tr>
-                {children}
+
             </thead>
+            <tbody>
+                {children}
+            </tbody>
         </table>
     );
 }
@@ -28,7 +31,7 @@ MyTable.defaultProps = {
     header: []
 }
 
-MyTable.propTypes  = {
+MyTable.propTypes = {
     header: PropTypes.arrayOf(PropTypes.string).isRequired,
     children: PropTypes.node
 }

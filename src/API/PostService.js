@@ -134,6 +134,12 @@ export default class PostService {
         let response = await instance.get(`api/authors`)
         return response
     }
+    static async fetchAuthor(id) {
+        const instance = await this.protectionInit()
+
+        let response = await instance.get(`api/author?id=${id}`)
+        return response
+    }
 
     static async fetchPositions(){
         const instance = await this.protectionInit()

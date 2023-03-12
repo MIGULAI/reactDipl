@@ -1,7 +1,4 @@
 .myTable{
-    display: flex;
-    align-self: center;
-    justify-self: center;
     min-width: 50%;
     border-spacing: 0px;
     font-size: 14px;
@@ -12,12 +9,12 @@
 }
 
 .myTable tr{
-    width: auto;
+    width: 100%;
     cursor: pointer;
     transition: all .25s ease-in-out;
 }
 
 .myTable tr td{
     border: solid 1px black;
-    width: auto;
+    min-width: 100px;
 }

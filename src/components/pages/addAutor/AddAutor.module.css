@@ -1,17 +1,13 @@
-.columItem {
-    display: flex;
-    flex-direction: column;
+.table_wrapper .columItem {
+    width: 50%;
 }
 
 .inputFuild {
     padding-top: 5px;
+    min-width: 30vw;
     width: 100%;
     display: flex;
     flex-direction: row;
-}
-
-.inputFuild lable {
-    width: 50%;
 }
 
 .inputFuild input,
@@ -20,6 +16,7 @@
 }
 
 .table_wrapper {
+    width: 100%;
     display: flex;
     flex-direction: row;
 }
@@ -33,5 +30,7 @@
 .content{
     margin: 5px;
     display: flex;
+    width: 70%;
+    align-items: center;
     flex-direction: column;
 }

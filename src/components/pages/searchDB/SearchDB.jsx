@@ -93,7 +93,7 @@ const SearchDB = () => {
                                         <SearchTR
                                             key={i}
                                             option={author}
-                                            index={i}
+                                            index={author.id}
                                             selected={setTrSelected}
                                             selectedItem={trSelected}
                                         />
