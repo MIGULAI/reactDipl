@@ -24,7 +24,7 @@ const ModalAuthorSearch = ({ setAuthorId, errCallback }) => {
 
     const [authorsFetching, isAuthorsFetching, fetchErr] = useFetching(async () => {
         const response = await PostService.fetchAutors();
-        console.log(response.data.data.authors);
+       // console.log(response.data.data.authors);
         setAuthors(response.data.data.authors)
         setAuthorsList(response.data.data.authors)
     })

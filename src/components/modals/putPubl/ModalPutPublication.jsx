@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import ModalPublSearch from "./ModalPublSearch";
 import { useState } from "react";
 import { useEffect } from "react";
+import ModalPutPubl from "./ModalPutPubl";
 
 
 const ModalPutPublication = ({visible, setVisible}) => {
@@ -19,8 +20,8 @@ const ModalPutPublication = ({visible, setVisible}) => {
         <MyModal  visible={visible} setVisible={setVisible}>
             {
                 searchVisible 
-                ?<ModalPublSearch setAuthorId={setIdPubl} errCallback={setErr} />
-                :<>Публіація</>
+                ?<ModalPublSearch setPublId={setIdPubl} errCallback={setErr} />
+                :<ModalPutPubl id={idPubl} setPublId={setIdPubl} errCallback={setErr}/>
             }
         </MyModal>
     )

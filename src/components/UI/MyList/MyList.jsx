@@ -19,7 +19,6 @@ const MyList = ({ header, autorsList, autors, setAutors }) => {
     const { setValue, value } = useComboboxControls({ initialValue: '' })
 
     
-
     const addAutor = () => {
         let a = [...autors]
         let obj = { id: isSelected.id, value: isSelected.value }

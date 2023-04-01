@@ -16,7 +16,7 @@ import MySelector from "../../UI/MySelector/MySelector";
 
 const ModalChangeAuthor = ({id, setAuthorId, errCallback}) => {
     const [author, setAuthor] = useState({
-        Orcid: '', Scopus: '',Name: '', SerName: '', Patronic: '', NameENG: '', SerNameENG: '', PatronicENG: '', PIPua: '', PIPen: '', phone: '', email: '', Specialty: 1, Department: 1, Organization: 1, Position: 1, Rank: 1, Degree: 1, StartDate: '', EndDate: ''
+        Orcid: '', Scopus: '',Name: '', SerName: '', Patronic: '', NameEng: '', SerNameEng: '', PatronicEng: '', PIPua: '', PIPen: '', phone: '', email: '', Specialty: 1, Department: 1, Organization: 1, Position: 1, Rank: 1, Degree: 1, StartDate: '', EndDate: ''
     })
     const [err, setErr] = useState([])
     const {accessToken} = useContext(AuthContext)
@@ -43,6 +43,16 @@ const ModalChangeAuthor = ({id, setAuthorId, errCallback}) => {
         setDegrees(degrees)
         setRanks(ranks)
     });
+
+    const [putAuthor, isPutting, putErr] = useFetching(async () => {
+        const response = await PostService.putAuthor(author, accessToken)
+        console.log(response);
+    })
+
+    const save = () => {
+       // console.log("hello world");
+        putAuthor()
+    }
 
     useEffect(() => {
         fetchAuthor()
@@ -88,8 +98,8 @@ const ModalChangeAuthor = ({id, setAuthorId, errCallback}) => {
                             <MyInput
                                 type="text"
                                 placeholder={'Прізвище'}
-                                value={author.SerNameENG}
-                                onChange={e => setAuthor({ ...author, SerNameENG: e.target.value })}
+                                value={author.SerNameEng}
+                                onChange={e => setAuthor({ ...author, SerNameEng: e.target.value })}
                             />
                         </div>
                         <div className={classes.inputFuild}>
@@ -97,8 +107,8 @@ const ModalChangeAuthor = ({id, setAuthorId, errCallback}) => {
                             <MyInput
                                 type="text"
                                 placeholder={`Ім'я`}
-                                value={author.NameENG}
-                                onChange={e => setAuthor({ ...author, NameENG: e.target.value })}
+                                value={author.NameEng}
+                                onChange={e => setAuthor({ ...author, NameEng: e.target.value })}
                             />
                         </div>
                         <div className={classes.inputFuild}>
@@ -106,8 +116,8 @@ const ModalChangeAuthor = ({id, setAuthorId, errCallback}) => {
                             <MyInput
                                 type="text"
                                 placeholder={'Побатькові'}
-                                value={author.PatronicENG}
-                                onChange={e => setAuthor({ ...author, PatronicENG: e.target.value })}
+                                value={author.PatronicEng}
+                                onChange={e => setAuthor({ ...author, PatronicEng: e.target.value })}
                             />
                         </div>
                         <div className={classes.inputFuild}>
@@ -166,7 +176,7 @@ const ModalChangeAuthor = ({id, setAuthorId, errCallback}) => {
 
                 </div>
                 <div className={classes.but__wrapper}>
-                    <MyButton onClick={() => console.log("hello world")}>Додати</MyButton>
+                    <MyButton onClick={() => save()}>Додати</MyButton>
                 </div>
             </div>
             }

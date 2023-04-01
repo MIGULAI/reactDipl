@@ -31,7 +31,7 @@ const MyActions = ({ isAuth, ...props }) => {
             <div className={classes.bar} {...props}>
                 <Key lable={'Додати/Редагувати автора'} actionPlus={() => navig('/add/autor')} actionPut={() => setModalAuthorVisible(true)} />
                 <Key lable={'Додати/Редагувати публікацію'} actionPlus={() => navig('/add/public')} actionPut={() => setModalPublVisible(true)} />
-                <Key lable={'Додати/Редагувати план'} actionPlus={() => setModalAddPlanVisible(true)} actionPut={() => setModalPutPlanVisible(true)} />
+                <Key lable={'Додати/Редагувати план'} actionPlus={() => setModalAddPlanVisible(true)} actionPut={() => navig('/plan')} />
             </div>
         </>
 

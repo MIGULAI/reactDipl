@@ -226,5 +226,45 @@ export default class PostService {
         let response = await instance.get('api/plans/calculate', config)
         return response
     }
+    static async fetchPubls() {
+        const instance = await this.protectionInit()
+        const response = await instance.get('api/publications')
+        return response
+    }
+    static async fetchPublication(id){
+        const instance = await this.protectionInit()
+        const response = await instance.post('api/publication',{
+            id: id
+        })
+        return response
+    }
 
+    static async putPublication(publication ,token){
+        const instance = await this.protectionInit()
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        }
+        let response = await instance.put('api/publication',{
+            publication: publication
+        } , config)
+        return response
+    }
+
+    static async putAuthor(author, token)
+    {
+        const instance = await this.protectionInit()
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        }
+        let response = await instance.put('api/author',{
+            author: author
+        } , config)
+        return response
+    }
 }
