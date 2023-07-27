@@ -19,7 +19,9 @@ function App() {
   const [globalSetup, setGlobalSetup] = useState({ authorsPublCount: '7', authoSuccess: 'false' })
 
   const [fetchGlobalSetup, setupLoading, setErr] = useFetching(async () => {
+    const responseCokie = await PostService.init()
     const response = await PostService.fetchingGlobalSetup()
+    console.log(responseCokie);
     setGlobalSetup(response.data.data)
   })
 

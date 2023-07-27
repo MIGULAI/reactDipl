@@ -15,7 +15,7 @@ export const loginLogic = async (user, setIsAuth, setApiKey ) => {
         console.log(res);
         if (res.data.access_token) {
             setCookie('auth', true, 7)
-            setCookie('access_token', res.data.access_token, 7)
+            //setCookie('access_token', res.data.access_token, 7)
             setIsAuth(true)
             setApiKey(res.data.access_token)
             accessToken = res.data.access_token

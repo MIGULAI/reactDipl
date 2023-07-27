@@ -1,70 +1,79 @@
 import axios from "axios";
-import { Env } from "../utils/data/Env"
+import { getCookie } from "../utils/functions/Cookie";
 
 export default class PostService {
+    static getConfig = {
+        headers: {
+            'Content-Type': 'application/json',
+            'X-XSRF-TOKEN': getCookie('XSRF-TOKEN')
+        },
+        withCredentials: true
+    }
 
-    static protectionInit = async() => {
+    static protectionInit = async () => {
         const axiosInstance = axios.create({
-            baseURL: Env.API_URL_NO_API,
+            baseURL: process.env.REACT_APP_HOSTNAME,
         });
         const config = {
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+                'X-XSRF-TOKEN': getCookie('XSRF-TOKEN')
+            },
             withCredentials: true
         }
-        await axiosInstance.get(`/sanctum/csrf-cookie`, config)
+        // console.log(config);
         return axiosInstance
     }
 
-    static async fetchingGlobalSetup(){
+    static async init() {
+        let response = await axios.get(`${process.env.REACT_APP_HOSTNAME}sanctum/csrf-cookie`, this.getConfig);
+        return response
+    }
+    static async fetchingGlobalSetup() {
         const instance = await this.protectionInit()
-        let response = await instance.get('api/setup')
+        let response = await instance.get(`${process.env.REACT_APP_HOSTNAME}api/setup`, this.getConfig)
         return response
     }
 
     static async loginService(obj) {
-        const instance = await this.protectionInit()
-        let response = await instance.post('/api/login', obj)
+        // const crsf = getCookie('XSRF-TOKEN')
+        let response = await axios.post(`${process.env.REACT_APP_HOSTNAME}api/login`, obj, {withCredentials: true})
         return response;
     }
 
     static async fetchPlanYearList() {
-        const instance = await this.protectionInit()
-        let response = await instance.get(`api/plans/years`)
+        let response = await axios.get(`${process.env.REACT_APP_HOSTNAME}api/plans/years`)
         return response;
     }
 
     static async fetchPlansByYear(year) {
-        const instance = await this.protectionInit()
-
-        let response = await instance.post(`api/plans/year`, {
+        let response = await axios.post(`${process.env.REACT_APP_HOSTNAME}api/plans/year`, {
             year: year
         })
         return response;
     }
 
     static async createNextYearPlan(nextYear, apiKey) {
-        let response = await axios.post(`${Env.API_URL}/plans/new`, {
+        let response = await axios.post(`${process.env.REACT_APP_HOSTNAME}api/plans/new`, {
             nextYear: nextYear,
             apiKey: apiKey
         })
         return response;
     }
     static async fetchPlanById(id) {
-        const instance = await this.protectionInit()
-        let response = await instance.post(`api/plan/about`, {
+        let response = await axios.post(`${process.env.REACT_APP_HOSTNAME}api/plan/about`, {
             id: id
         })
         return response
     }
     static async setPlan(plan, id, token, autorId) {
-        const instance = await this.protectionInit()
         const config = {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             }
         }
-        let response = await instance.put(`api/plan/set`, {
+        let response = await axios.put(`${process.env.REACT_APP_HOSTNAME}api/plan/set`, {
             plan: plan,
             id: id,
             autorId: autorId
@@ -72,122 +81,108 @@ export default class PostService {
         return response
     }
     static async fetchPubsByAutorId(id) {
-        const instance = await this.protectionInit()
-        let response = await instance.post(`api/publication/byAutorId`, {
+        let response = await axios.post(`${process.env.REACT_APP_HOSTNAME}api/publication/byAutorId`, {
             id: id
         })
         return response
     }
     static async fetchAutorSettings(token) {
-        const instance = await this.protectionInit()
         const config = {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             }
         }
-        let response = await instance.get(`api/authors/setup`, config)
+        let response = await axios.get(`${process.env.REACT_APP_HOSTNAME}api/authors/setup`, config)
         return response
     }
 
     static async fetchPublSettings(token) {
-        const instance = await this.protectionInit()
         const config = {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             }
         }
-        let response = await instance.get(`api/publications/setup`, config)
+        let response = await axios.get(`${process.env.REACT_APP_HOSTNAME}api/publications/setup`, config)
         return response
     }
     static async addAutor(obj, token) {
-        const instance = await this.protectionInit()
         const config = {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             }
         }
-        let response = await instance.post(`api/author/add`, {
+        let response = await axios.post(`${process.env.REACT_APP_HOSTNAME}api/author/add`, {
             obj: obj
-        },config)
+        }, config)
         return response
     }
 
     static async addPub(obj, token) {
-        const instance = await this.protectionInit()
         const config = {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             }
         }
-        let response = await instance.post(`api/publications/add`, {
+        let response = await axios.post(`${process.env.REACT_APP_HOSTNAME}api/publications/add`, {
             obj: obj
-        },config)
+        }, config)
         return response
     }
     static async fetchAutors() {
-        const instance = await this.protectionInit()
-
-        let response = await instance.get(`api/authors`)
+        let response = await axios.get(`${process.env.REACT_APP_HOSTNAME}api/authors`)
         return response
     }
     static async fetchAuthor(id) {
-        const instance = await this.protectionInit()
-
-        let response = await instance.get(`api/author?id=${id}`)
+        let response = await axios.get(`${process.env.REACT_APP_HOSTNAME}api/author?id=${id}`)
         return response
     }
 
-    static async fetchPositions(){
-        const instance = await this.protectionInit()
-        let response = await instance.get(`api/positions`)
+    static async fetchPositions() {
+        let response = await axios.get(`${process.env.REACT_APP_HOSTNAME}api/positions`)
         return response
     }
-    
-    static async fetchingStatistic(token){
-        const instance = await this.protectionInit()
+
+    static async fetchingStatistic(token) {
         const config = {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             }
         }
-        let response = await instance.get('api/statistic/auth',config)
+        let response = await axios.get(`${process.env.REACT_APP_HOSTNAME}api/statistic/auth`, config)
         return response
     }
 
-    static async createPlanOnYear(token, year){
-        const instance = await this.protectionInit()
+    static async createPlanOnYear(token, year) {
         const config = {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             }
         }
-        let response = await instance.post('api/plans/create',{
+        let response = await axios.post(`${process.env.REACT_APP_HOSTNAME}api/plans/create`, {
             year: year,
-        },config)
+        }, config)
         return response
     }
-    static async savePlan(token, plan){
-        const instance = await this.protectionInit()
+    static async savePlan(token, plan) {
         const config = {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             }
         }
-        let response = await instance.put('api/plans/create',{
+        let response = await axios.put(`${process.env.REACT_APP_HOSTNAME}api/plans/create`, {
             plan: plan,
-        },config)
+        }, config)
         return response
     }
 
-    static async fetchJSONAuthors(token, file){
-        const instance = await this.protectionInit()
+    static async fetchJSONAuthors(token, file) {
         const config = {
             headers: {
                 'Content-Type': 'multipart/form-data',
@@ -195,76 +190,69 @@ export default class PostService {
                 'Authorization': `Bearer ${token}`
             }
         }
-        let response = await instance.post('api/authors/json',{
+        let response = await axios.post(`${process.env.REACT_APP_HOSTNAME}api/authors/json`, {
             body: file
-        },config)
+        }, config)
         return response
     }
 
-    static async putMaxAuthors(token, number){
-        const instance = await this.protectionInit()
+    static async putMaxAuthors(token, number) {
         const config = {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             }
         }
-        let response = await instance.put('api/setup/authors',{
+        let response = await axios.put(`${process.env.REACT_APP_HOSTNAME}api/setup/authors`, {
             number: number
         }, config)
         return response
     }
 
-    static async calculatePlans(token){
-        const instance = await this.protectionInit()
+    static async calculatePlans(token) {
         const config = {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             }
         }
-        let response = await instance.get('api/plans/calculate', config)
+        let response = await axios.get(`${process.env.REACT_APP_HOSTNAME}api/plans/calculate`, config)
         return response
     }
     static async fetchPubls() {
-        const instance = await this.protectionInit()
-        const response = await instance.get('api/publications')
+        const response = await axios.get(`${process.env.REACT_APP_HOSTNAME}api/publications`)
         return response
     }
-    static async fetchPublication(id){
-        const instance = await this.protectionInit()
-        const response = await instance.post('api/publication',{
+    static async fetchPublication(id) {
+        const response = await axios.post(`${process.env.REACT_APP_HOSTNAME}api/publication`, {
             id: id
         })
         return response
     }
 
-    static async putPublication(publication ,token){
-        const instance = await this.protectionInit()
+    static async putPublication(publication, token) {
         const config = {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             }
         }
-        let response = await instance.put('api/publication',{
+        let response = await axios.put(`${process.env.REACT_APP_HOSTNAME}api/publication`, {
             publication: publication
-        } , config)
+        }, config)
         return response
     }
 
-    static async putAuthor(author, token)
-    {
-        const instance = await this.protectionInit()
+    static async putAuthor(author, token) {
         const config = {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             }
         }
-        let response = await instance.put('api/author',{
+        let response = await axios.put(`${process.env.REACT_APP_HOSTNAME}api/author`, {
             author: author
-        } , config)
+        }, config)
         return response
     }
 }

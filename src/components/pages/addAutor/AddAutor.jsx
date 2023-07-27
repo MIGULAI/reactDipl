@@ -14,6 +14,7 @@ import MyError from "../../UI/MyError/MyError";
 import { getSetup } from "./AddAuthorLogic";
 import CyrillicToTranslit from 'cyrillic-to-translit-js';
 import myClasses from "../addPubl/AddPubl.module.css"
+import AddForm from "../../forms/AuthorForms/AddForm";
 
 const AddAutor = () => {
 
@@ -83,6 +84,7 @@ const AddAutor = () => {
                         ? <MyLoader />
                         :
                         <div>
+                            {/* <AddForm /> */}
                             <div className={myClasses.form__wrapper}>
                                 <div className={classes.columItem}>
                                     <div className={classes.inputFuild}>
@@ -112,6 +114,7 @@ const AddAutor = () => {
                                             onChange={e => setAutor({ ...autor, partonic: e.target.value })}
                                         />
                                     </div>
+                                    
                                     <div className={classes.inputFuild}>
                                         <MyLabel>{'Прізвище (ENG):'}</MyLabel>
                                         <MyInput
