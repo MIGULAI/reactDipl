@@ -62,6 +62,9 @@ const SearchDB = () => {
         setSearchType(type)
         setIsLoading(false)
     }
+    useEffect(()=> {
+        autErr && console.log(autErr);
+    },[autErr])
 
     useEffect(() => {
         sernameFilter(searchParam)

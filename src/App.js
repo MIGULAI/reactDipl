@@ -4,12 +4,14 @@ import Menu from "./components/menu/Menu";
 import AppRouter from "./components/AppRouter";
 import { getCookie } from "./utils/functions/Cookie";
 
-import './styles/App.css';
+import './resources/styles/App.css';
 import { AuthContext } from "./context";
 import { useMemo } from "react";
 import { useFetching } from "./hooks/useFetching";
 import PostService from "./API/PostService";
 import MyLoader from "./components/UI/MyLoader/MyLoader";
+import MyModal from "./components/UI/MyModal/MyModal";
+import SesionMessage from "./components/modals/messageModals/SesionMessageModal";
 
 function App() {
   const [isAuth, setIsAuth] = useState(false);
@@ -17,7 +19,9 @@ function App() {
   const [accessToken, setAccessToken] = useState(null)
   const [keyActive, setKeyActive] = useState(0)
   const [globalSetup, setGlobalSetup] = useState({ authorsPublCount: '7', authoSuccess: 'false' })
-
+  const [messageArray, setMessageArray] = useState()
+  const [messageClasses, setMessageClasses] = useState()
+  const [messageModalVisible, setMessageModalVisible] = useState(true)
   const [fetchGlobalSetup, setupLoading, setErr] = useFetching(async () => {
     const responseCokie = await PostService.init()
     const response = await PostService.fetchingGlobalSetup()
@@ -34,14 +38,20 @@ function App() {
 
   return (
     <AuthContext.Provider value={{
-      isAuth, setIsAuth, isLoading, accessToken, setAccessToken, keyActive, globalSetup, setGlobalSetup, setKeyActive
+      isAuth, setIsAuth, setMessageArray, setMessageClasses, setMessageModalVisible, isLoading, accessToken, setAccessToken, keyActive, globalSetup, setGlobalSetup, setKeyActive
     }}>
       <BrowserRouter>
 
-
         {
-           isLoading || setupLoading
-            ? <div className="globalLoaderWrapper"><MyLoader></MyLoader></div> 
+          messageModalVisible
+            ? <MyModal visible={messageModalVisible} setVisible={setMessageModalVisible}>
+              <SesionMessage messageArray={messageArray} messageClasses={messageClasses} />
+            </MyModal>
+            : <></>
+        }
+        {
+          isLoading || setupLoading
+            ? <div className="globalLoaderWrapper"><MyLoader></MyLoader></div>
             :
             <>
               <Menu />
