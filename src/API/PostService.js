@@ -2,36 +2,43 @@ import axios from "axios";
 import { getCookie } from "../utils/functions/Cookie";
 
 export default class PostService {
+    static barrerToken = getCookie('access_token') 
     static getConfig = {
         headers: {
             'Content-Type': 'application/json',
             'X-XSRF-TOKEN': getCookie('XSRF-TOKEN')
         },
-        withCredentials: true
+        withCredentials: true,
     }
 
-    static protectionInit = async () => {
-        const axiosInstance = axios.create({
-            baseURL: process.env.REACT_APP_HOSTNAME,
-        });
-        const config = {
-            headers: {
-                'Content-Type': 'application/json',
-                'X-XSRF-TOKEN': getCookie('XSRF-TOKEN')
-            },
-            withCredentials: true
-        }
-        // console.log(config);
-        return axiosInstance
-    }
+    // static protectionInit = async () => {
+    //     const axiosInstance = axios.create({
+    //         baseURL: process.env.REACT_APP_HOSTNAME,
+    //     });
+    //     const config = {
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //             'X-XSRF-TOKEN': getCookie('XSRF-TOKEN')
+    //         },
+    //         withCredentials: true,
+            
+    //     }
+    //     // console.log(config);
+    //     return axiosInstance
+    // }
 
     static async init() {
-        let response = await axios.get(`${process.env.REACT_APP_HOSTNAME}sanctum/csrf-cookie`, this.getConfig);
+        let response = await axios.get(`${process.env.REACT_APP_HOSTNAME}sanctum/csrf-cookie`,  this.getConfig);
+        return response
+    }
+
+    static async initUser(){
+        let response = await axios.get(`${process.env.REACT_APP_HOSTNAME}api/userinit`,  this.getConfig);
         return response
     }
     static async fetchingGlobalSetup() {
-        const instance = await this.protectionInit()
-        let response = await instance.get(`${process.env.REACT_APP_HOSTNAME}api/setup`, this.getConfig)
+        // const instance = await this.protectionInit()
+        let response = await axios.get(`${process.env.REACT_APP_HOSTNAME}api/setup`, this.getConfig)
         return response
     }
 
@@ -91,20 +98,23 @@ export default class PostService {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
-            }
+            },
+            withCredentials: true
         }
         let response = await axios.get(`${process.env.REACT_APP_HOSTNAME}api/authors/setup`, config)
         return response
     }
 
     static async fetchPublSettings(token) {
-        const config = {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            }
-        }
-        let response = await axios.get(`${process.env.REACT_APP_HOSTNAME}api/publications/setup`, config)
+        // const config = {
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //         'Authorization': `Bearer ${token}`
+        //     },
+            
+
+        // }
+        let response = await axios.get(`${process.env.REACT_APP_HOSTNAME}api/publications/setup`, this.getConfig)
         return response
     }
     static async addAutor(obj, token) {
@@ -112,7 +122,8 @@ export default class PostService {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
-            }
+            },
+            withCredentials: true
         }
         let response = await axios.post(`${process.env.REACT_APP_HOSTNAME}api/author/add`, {
             obj: obj
@@ -151,7 +162,8 @@ export default class PostService {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
-            }
+            },
+            withCredentials: true
         }
         let response = await axios.get(`${process.env.REACT_APP_HOSTNAME}api/statistic/auth`, config)
         return response
@@ -162,7 +174,8 @@ export default class PostService {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
-            }
+            },
+            withCredentials: true
         }
         let response = await axios.post(`${process.env.REACT_APP_HOSTNAME}api/plans/create`, {
             year: year,

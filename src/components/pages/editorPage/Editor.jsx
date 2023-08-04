@@ -32,7 +32,7 @@ const Editor = () => {
     })
 
 
-    const [setAuthorNumber, isNumberSetting, numbErr] = useFetching(async () => {
+    const [setAuthorNumber, , numbErr] = useFetching(async () => {
         const response = await PostService.putMaxAuthors(accessToken, authorsPublCount)
         console.log(response);
         if (response.data.success) setGlobalSetup({ ...globalSetup, authorsPublCount: authorsPublCount })
@@ -51,6 +51,10 @@ const Editor = () => {
         setAuthorNumber()
     }
 
+    useEffect(() => {
+        fileErr && console.log(fileErr);
+        numbErr && console.log(numbErr);
+    }, [fileErr, numbErr])
     useEffect(() => {
         setKeyActive(0)
         setIsLoading(false)

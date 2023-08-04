@@ -12,6 +12,8 @@ import PostService from "./API/PostService";
 import MyLoader from "./components/UI/MyLoader/MyLoader";
 import MyModal from "./components/UI/MyModal/MyModal";
 import SesionMessage from "./components/modals/messageModals/SesionMessageModal";
+// import MessageBox from "./components/UI/MessageBox/MessageBox";
+import { useEffect } from "react";
 
 function App() {
   const [isAuth, setIsAuth] = useState(false);
@@ -21,21 +23,31 @@ function App() {
   const [globalSetup, setGlobalSetup] = useState({ authorsPublCount: '7', authoSuccess: 'false' })
   const [messageArray, setMessageArray] = useState()
   const [messageClasses, setMessageClasses] = useState()
-  const [messageModalVisible, setMessageModalVisible] = useState(true)
-  const [fetchGlobalSetup, setupLoading, setErr] = useFetching(async () => {
-    const responseCokie = await PostService.init()
+  const [messageModalVisible, setMessageModalVisible] = useState(false)
+  const [fetchGlobalSetup, setupLoading, err] = useFetching(async () => {
+    await PostService.init()
     const response = await PostService.fetchingGlobalSetup()
-    console.log(responseCokie);
+    const responseInit = await PostService.initUser()
+    if (responseInit.data.success) {
+      responseInit.data.authStatus ? setIsAuth(true) : setIsAuth(false)
+    }
     setGlobalSetup(response.data.data)
   })
 
-  useMemo(() => {
-    fetchGlobalSetup()
-    getCookie('auth') && setIsAuth(true)
-    getCookie('access_token') && setAccessToken(getCookie('access_token'))
-    setIsLoading(false)
+  const token = useMemo(() => {
+    const token = getCookie('access_token')
+    const result = token ? token : null;
+    return result;
   }, []);
+  useEffect(() => {
+    err && console.log(err);
+  }, [err])
+  useEffect(() => {
+    setAccessToken(token)
+    fetchGlobalSetup()
+    setIsLoading(false)
 
+  }, [])
   return (
     <AuthContext.Provider value={{
       isAuth, setIsAuth, setMessageArray, setMessageClasses, setMessageModalVisible, isLoading, accessToken, setAccessToken, keyActive, globalSetup, setGlobalSetup, setKeyActive

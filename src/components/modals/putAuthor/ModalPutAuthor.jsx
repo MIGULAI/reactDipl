@@ -10,7 +10,7 @@ import ModalChangeAuthor from "./ModalChangeAuthor";
 const ModalPutAuthor = ({visible, setVisible}) => {
     const [idAuthor, setIdAuthor] = useState(null)
     const [searchVisible, setSearchVisible] = useState(true)
-    const [err, setErr] = useState([])
+    const [/*err*/, setErr] = useState([])
 
     useEffect(() => {
         idAuthor !== null && setSearchVisible(false)

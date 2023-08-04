@@ -25,7 +25,7 @@ const PlanModalChecker = ({ newPlans, setPlans, saveFunc, cancelFunc }) => {
     }
 
     useEffect(()=>{
-        if(active.j !== null, active.i !== null){
+        if(active.j !== null && active.i !== null){
             let ready = []
             for(let i = 0; i < newPlans.length ; i++){
                 ready.push([true, true, true, true])

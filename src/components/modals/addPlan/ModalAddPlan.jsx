@@ -7,11 +7,11 @@ import { useFetching } from "../../../hooks/useFetching";
 import PostService from "../../../API/PostService";
 import { useContext } from "react";
 import { AuthContext } from "../../../context";
-import PlanModalChecker from "../../pages/editorPage/modals/PlanModalChecker";
 import classes from "../../pages/editorPage/Editor.module.css"
 import { CheckYear } from "../../../utils/functions/CheckYear";
 import ModalPlanControl from "./ModalPlanControl";
 import MyFileLoader from "../../UI/MyFileLoader/MyFileLoader";
+import { useEffect } from "react";
 
 
 const ModalAddPlan = ({ visible, setVisible }) => {
@@ -19,8 +19,8 @@ const ModalAddPlan = ({ visible, setVisible }) => {
     const [newPlans, setNewPlans] = useState([])
     const { accessToken } = useContext(AuthContext)
     const { statBar, item } = classes
-    const [defaultYear, setDefaultYear] = useState(() => CheckYear())
-    const [posibleYears, setPossibleYears] = useState([])
+    const [defaultYear, /*setDefaultYear*/] = useState(() => CheckYear())
+    const [/*posibleYears*/, setPossibleYears] = useState([])
 
     const [fetchPlansYear, isYearFetching, yearErr] = useFetching(async () => {
         const response = await PostService.fetchPlanYearList();
@@ -34,7 +34,8 @@ const ModalAddPlan = ({ visible, setVisible }) => {
         let start = Math.max(...years)
         // console.log(max);
         // let start = parseInt(years[0], 10)
-        for (let i = 0; i < years.length; i = i) {
+        // for (let i = 0; i < years.length; i = i) {
+        for (let i = 0; i < years.length; i += 1) {
             start += 1;
             (start !== Number(years[i]) && start < Number(years[years.length - 1])) ? posibleYears.push(start) : ++i
         }
@@ -76,6 +77,11 @@ const ModalAddPlan = ({ visible, setVisible }) => {
         setModalPlan(true)
         createPlanFetching(year, status)
     }
+    useEffect(() => {
+        saveErr && console.log(saveErr);
+        createErr && console.log(createErr);
+        yearErr && console.log(yearErr);
+    }, [saveErr, createErr, yearErr])
     return (
         <MyModal visible={visible} setVisible={setVisible}>
             {

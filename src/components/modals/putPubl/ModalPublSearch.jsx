@@ -12,7 +12,7 @@ import ModalPublTr from "./ModalPublTr";
 import MyButton from "../../UI/MyButton/MyButton";
 
 const ModalPublSearch = ({ setPublId, errCallback }) => {
-    const [publs, setPubls] = useState([])
+    const [/*publs*/, setPubls] = useState([])
     const [publList, setPublList] = useState([])
     const [publName, setPublName] = useState()
     const [selectedPubl, setSelectedPubl] = useState()
@@ -23,7 +23,9 @@ const ModalPublSearch = ({ setPublId, errCallback }) => {
         setPublList(response.data.data.publications)
         //console.log(response.data.data.publications);
     })
-
+    useEffect(() => {
+        fetchErr && console.log(fetchErr);
+    },[fetchErr])
     useEffect(() => {
         publFetching()
     }, []);

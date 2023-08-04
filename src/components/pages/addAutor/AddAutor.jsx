@@ -14,11 +14,11 @@ import MyError from "../../UI/MyError/MyError";
 import { getSetup } from "./AddAuthorLogic";
 import CyrillicToTranslit from 'cyrillic-to-translit-js';
 import myClasses from "../addPubl/AddPubl.module.css"
-import AddForm from "../../forms/AuthorForms/AddForm";
+// import AddForm from "../../forms/AuthorForms/AddForm";
 
 const AddAutor = () => {
 
-    const cyrillicToTranslit = new CyrillicToTranslit({ preset: 'uk' });
+    const [cyrillicToTranslit] = useState(new CyrillicToTranslit({ preset: 'uk' }));
     const { accessToken, setKeyActive } = useContext(AuthContext)
     const [err, setErr] = useState([])
     const [autor, setAutor] = useState({

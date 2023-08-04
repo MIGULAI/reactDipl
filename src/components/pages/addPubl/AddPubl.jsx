@@ -20,7 +20,7 @@ import { IsSetFetching } from "./AddPublLogic";
 
 const AddPubl = () => {
 
-    let now = new Date()
+    // let now = new Date()
     const [isLoading, setIsLoading] = useState(true)
     const { accessToken, setKeyActive, globalSetup } = useContext(AuthContext)
     const [err, setError] = useState([])
@@ -50,7 +50,7 @@ const AddPubl = () => {
         const response = await PostService.addPub(publ, accessToken)
         if (!response.data.success) setError([...err, response.data.message])
         if (response.data.success) {
-            setPubl({ name: '', startPage: 0, lastPage: 0, UPP: 0, type: 1, lang: 1, publisher: 1, date: now, issue_numb: '', url: '', authors: [], supervisor: 0})
+            setPubl({ name: '', startPage: 0, lastPage: 0, UPP: 0, type: 1, lang: 1, publisher: 1, date: new Date(), issue_numb: '', url: '', authors: [], supervisor: 0})
             setAuthors(Array(Number(globalSetup.authorsPublCount)).fill(null))
         }
     })

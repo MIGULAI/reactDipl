@@ -15,7 +15,7 @@ import AboutTR from "./AboutTR";
 const PlanById = () => {
     const params = useParams()
 
-    const [isLoading, setIsLoading] = useState(false)
+    const [/*isLoading*/, setIsLoading] = useState(false)
 
     const [planSet, setPlanSet] = useState({
         AuthorId: undefined, year_start: '', year_end: ''
@@ -30,7 +30,7 @@ const PlanById = () => {
 
 
 
-    const { isAuth, accessToken, setKeyActive } = useContext(AuthContext)
+    const { isAuth, setKeyActive } = useContext(AuthContext)
 
 
     const [fetchingPlan, isPlanLoading, plansError] = useFetching(async (id) => {
@@ -78,7 +78,10 @@ const PlanById = () => {
         }
         setFetchPlan(el, params.id, planSet.id_autor)
     }
-
+    useEffect(() => {
+        pubsError && console.log(pubsError);
+        sePlanError && console.log(sePlanError);
+    }, [pubsError, sePlanError])
     useEffect(() => {
         setKeyActive(0)
         fetchingPlan(params.id)

@@ -8,7 +8,6 @@ import PostService from "../../../API/PostService";
 import MyLabel from "../MyLabel/MyLabel";
 import classes from "./MyStats.module.css"
 import PropTypes from 'prop-types';
-import { useMemo } from "react";
 
 const MyStats = ({setBoboErr}) => {
     const { accessToken } = useContext(AuthContext)
@@ -29,7 +28,7 @@ const MyStats = ({setBoboErr}) => {
     useEffect (() => {
         statErr !== '' && setErr([...err, statErr])
     }, [statErr])
-    useMemo(() => {
+    useEffect(() => {
         statFetching(accessToken)
     }, [])
 

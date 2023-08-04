@@ -10,7 +10,7 @@ import ModalPutPubl from "./ModalPutPubl";
 const ModalPutPublication = ({visible, setVisible}) => {
     const [idPubl, setIdPubl] = useState(null)
     const [searchVisible, setSearchVisible] = useState(true)
-    const [err, setErr] = useState([])
+    const [/*err*/, setErr] = useState([])
 
     useEffect(() => {
         idPubl !== null && setSearchVisible(false)

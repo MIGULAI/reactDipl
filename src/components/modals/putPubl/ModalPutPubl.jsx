@@ -16,7 +16,7 @@ import MySuccess from "../../UI/MySuccess/MySuccess";
 
 const ModalPutPubl = ({ id, setPublId, errCallback }) => {
     const [err, setError] = useState([])
-    const { accessToken, setKeyActive, globalSetup } = useContext(AuthContext)
+    const { accessToken, globalSetup } = useContext(AuthContext)
     const [types, setTypes] = useState([])
     const [isLoading, setIsLoading] = useState(true)
     const [langueges, setLangueges] = useState([])

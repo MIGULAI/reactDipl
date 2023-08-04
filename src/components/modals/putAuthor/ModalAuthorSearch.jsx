@@ -24,7 +24,7 @@ const ModalAuthorSearch = ({ setAuthorId, errCallback }) => {
 
     const [authorsFetching, isAuthorsFetching, fetchErr] = useFetching(async () => {
         const response = await PostService.fetchAutors();
-       // console.log(response.data.data.authors);
+        // console.log(response.data.data.authors);
         setAuthors(response.data.data.authors)
         setAuthorsList(response.data.data.authors)
     })
@@ -37,6 +37,10 @@ const ModalAuthorSearch = ({ setAuthorId, errCallback }) => {
         aList = aList.filter(a => (a.Name.toLowerCase().match(rName) && a.SerName.toLowerCase().match(rSername) && a.Patronic.toLowerCase().match(rPatronic)))
         setAuthorsList(aList)
     }, [authorName, authorSername, authorPatronic])
+
+    useEffect(() => {
+        fetchErr && console.log(fetchErr);
+    }, [fetchErr])
 
     useEffect(() => {
         authorsFetching()
@@ -68,7 +72,7 @@ const ModalAuthorSearch = ({ setAuthorId, errCallback }) => {
                                 {
                                     authorsList.map((author, i) =>
                                         <ModalAuthorsTr
-                                            key={author.Orcid}
+                                            key={i}
                                             option={author}
                                             index={author.id}
                                             selected={setSelectedAuthor}
