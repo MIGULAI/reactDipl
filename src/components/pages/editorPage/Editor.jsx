@@ -10,7 +10,7 @@ import PostService from "../../../API/PostService";
 import MyError from "../../UI/MyError/MyError";
 import MyButton from "../../UI/MyButton/MyButton";
 import MyInputFile from "../../UI/MyInputFile/MyInputFile";
-import DepAuthors from "../../files/depAuthors/DepAuthors";
+// import DepAuthors from "../../files/depAuthors/DepAuthors";
 
 import Recalculate from "./SubFunctions/Recalculate";
 import MyActions from "../../UI/MyActionKeys/MyActions";
@@ -96,7 +96,7 @@ const Editor = () => {
                         </div>
                         <div className={statBar}>
                             <div className={item}>
-                                <DepAuthors />
+                                {/* <DepAuthors /> */}
                             </div>
                         </div>
                         <div className={statBar}>
