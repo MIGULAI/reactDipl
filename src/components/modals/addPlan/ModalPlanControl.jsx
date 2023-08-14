@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import MyFileLoader from "../../UI/MyFileLoader/MyFileLoader";
 import PlanModalChecker from "../../pages/editorPage/modals/PlanModalChecker";
 
-const ModalPlanControl = ({isLoading, savePlan, cencelPlans, newPlans,setNewPlans}) => {
+const ModalPlanControl = ({isLoading, savePlan, cancelPlans, newPlans,setNewPlans}) => {
     return (
         <>
             {
@@ -11,7 +11,7 @@ const ModalPlanControl = ({isLoading, savePlan, cencelPlans, newPlans,setNewPlan
                 ? <MyFileLoader/>
                 :<PlanModalChecker 
                     saveFunc={e => savePlan(newPlans)} 
-                    cancelFunc={cencelPlans} 
+                    cancelFunc={cancelPlans} 
                     newPlans={newPlans} 
                     setPlans={setNewPlans} />
             }

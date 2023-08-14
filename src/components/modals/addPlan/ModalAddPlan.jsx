@@ -17,45 +17,42 @@ import { useEffect } from "react";
 const ModalAddPlan = ({ visible, setVisible }) => {
     const [modalPlan, setModalPlan] = useState(false)
     const [newPlans, setNewPlans] = useState([])
-    const { accessToken } = useContext(AuthContext)
+    const { accessToken, setMessageArray, setMessageClasses, setMessageModalVisible } = useContext(AuthContext)
     const { statBar, item } = classes
-    const [defaultYear, /*setDefaultYear*/] = useState(() => CheckYear())
-    const [/*posibleYears*/, setPossibleYears] = useState([])
+    const [defaultYear, setDefaultYear] = useState(() => CheckYear())
 
     const [fetchPlansYear, isYearFetching, yearErr] = useFetching(async () => {
         const response = await PostService.fetchPlanYearList();
         let years = response.data.data.years
-        // let years = [2022, 2024]
         for (let i = 0; i < years.length; i++) {
             years[i] = Number(years[i])
         }
-        // console.log(years);
         let posibleYears = []
-        let start = Math.max(...years)
-        // console.log(max);
-        // let start = parseInt(years[0], 10)
-        // for (let i = 0; i < years.length; i = i) {
-        for (let i = 0; i < years.length; i += 1) {
-            start += 1;
-            (start !== Number(years[i]) && start < Number(years[years.length - 1])) ? posibleYears.push(start) : ++i
-        }
-        let j = 0
-        for (let i = years[0]; i < years[years.length - 1]; i++) {
-            if (i !== years[j]) {
-                posibleYears.push(i)
-            } else {
-                j++
+        for (let y = defaultYear; posibleYears.length <= 5 && y > defaultYear - 5; y--) {
+            if (!years.includes(y)) {
+                posibleYears.push(y)
             }
         }
-        for (let i = Number(years[years.length - 1]) + 1; i <= Number(years[years.length - 1]) + 5; i++) {
-            posibleYears.push(i)
+        if (posibleYears.length < 5) {
+            for (let y = defaultYear; posibleYears.length < 5; y++) {
+                if (!years.includes(y)) {
+                    posibleYears.push(y)
+                }
+            }
         }
-        setPossibleYears(posibleYears)
+        setDefaultYear(posibleYears.sort()[0])
     })
+
     const [createPlanFetching, isPlanCreating, createErr] = useFetching(async (year) => {
         const response = await PostService.createPlanOnYear(accessToken, year)
-
-        setNewPlans(response.data.data.plans)
+        if (response.data.success) {
+            setNewPlans(response.data.data.plans)
+        } else {
+            setVisible(false)
+            setMessageModalVisible(true)
+            setMessageArray([response.data.message])
+            setMessageClasses(['error'])
+        }
     })
 
     const [savePlan, isPlanSaving, saveErr] = useFetching(async (plan) => {
@@ -67,8 +64,7 @@ const ModalAddPlan = ({ visible, setVisible }) => {
         }
     })
 
-
-    const cencelPlans = () => {
+    const cancelPlans = () => {
         setModalPlan(false)
         setNewPlans([])
     }
@@ -77,11 +73,17 @@ const ModalAddPlan = ({ visible, setVisible }) => {
         setModalPlan(true)
         createPlanFetching(year, status)
     }
+
+    useEffect(() => {
+        fetchPlansYear()
+    }, [])
+
     useEffect(() => {
         saveErr && console.log(saveErr);
         createErr && console.log(createErr);
         yearErr && console.log(yearErr);
     }, [saveErr, createErr, yearErr])
+
     return (
         <MyModal visible={visible} setVisible={setVisible}>
             {
@@ -94,27 +96,21 @@ const ModalAddPlan = ({ visible, setVisible }) => {
                                 ? <ModalPlanControl
                                     isLoading={(isPlanCreating || isPlanSaving)}
                                     savePlan={savePlan}
-                                    cancelPlans={cencelPlans}
+                                    cancelPlans={cancelPlans}
                                     newPlans={newPlans}
                                     setNewPlans={setNewPlans}
                                 />
                                 : <>
                                     <div className={statBar}>
                                         <div className={item}>
-                                            <MyLabel>Створення плану на поточний рік :</MyLabel>
-                                            <MyButton onClick={e => createPlan(defaultYear, false)}>{`створити план на ${defaultYear}`}</MyButton>
-                                        </div>
-                                        <div className={item}>
-                                            <MyLabel>Роки з відсутнім планом :</MyLabel>
-                                            <MyButton onClick={fetchPlansYear}>Завантажити</MyButton>
-                                            {/* <MySelector   /> */}
+                                            <MyLabel>Створення плану на рік :</MyLabel>
+                                            <MyButton onClick={() => createPlan(defaultYear, false)}>{`створити план на ${defaultYear}`}</MyButton>
                                         </div>
                                     </div>
                                 </>
                         }
                     </>
             }
-
         </MyModal>
     )
 }

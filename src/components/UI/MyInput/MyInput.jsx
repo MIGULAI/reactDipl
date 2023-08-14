@@ -13,7 +13,8 @@ const MyInput = ({placeholder = "", type = "text" , ...props}) => {
 
 MyInput.defaultProps = {
     placeholder: "",
-    type: "text"
+    type: "text",
+    value: ''
 }
 
 MyInput.propTypes = {

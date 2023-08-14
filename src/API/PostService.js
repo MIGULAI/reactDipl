@@ -227,7 +227,8 @@ export default class PostService {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
-            }
+            },
+            withCredentials: true
         }
         let response = await axios.get(`${process.env.REACT_APP_HOSTNAME}api/plans/calculate`, config)
         return response
@@ -261,7 +262,8 @@ export default class PostService {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
-            }
+            },
+            withCredentials: true
         }
         let response = await axios.put(`${process.env.REACT_APP_HOSTNAME}api/author`, {
             author: author
