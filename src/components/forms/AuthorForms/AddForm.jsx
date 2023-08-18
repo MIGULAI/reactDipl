@@ -1,16 +1,25 @@
 import React, { useContext, useEffect, useState } from "react";
-import PropTypes from 'prop-types';
-import MySelector from "../../UI/MySelector/MySelector";
 import myClasses from "../../pages/addPubl/AddPubl.module.css"
 import MyLabel from "../../UI/MyLabel/MyLabel";
-import MyInput from "../../UI/MyInput/MyInput";
 import classes from "../../pages/addAutor/AddAutor.module.css"
 import { useFetching } from "../../../hooks/useFetching";
 import { AuthContext } from "../../../context";
 import { getSetup } from "../../pages/addAutor/AddAuthorLogic";
 import MyFileLoader from "../../UI/MyFileLoader/MyFileLoader";
+import { Controller, useForm, useWatch } from "react-hook-form";
+import MyButton from "../../UI/MyButton/MyButton";
+import MyFormInput from "../../UI/MyFormInput/MyFormInput";
+import MyFormSelector from "../../UI/MyFormSelector/MyFormSelector";
+import DatePicker, { registerLocale } from "react-datepicker";
+import uk from 'date-fns/locale/uk';
+import "react-datepicker/dist/react-datepicker.css";
+import CyrillicToTranslit from 'cyrillic-to-translit-js';
 
-const AuthorForm = ({ author, setAuthor, }) => {
+registerLocale('uk', uk)
+
+const AuthorForm = ({ author, submitButtonValue, onSubmit }) => {
+    const { register, handleSubmit, control, setValue, formState: { errors } } = useForm();
+    const [cyrillicToTranslit] = useState(new CyrillicToTranslit({ preset: 'uk' }));
     const [specialties, setSpecialties] = useState([]);
     const [organizations, setOrganizations] = useState([]);
     const [departments, setDepartments] = useState([]);
@@ -20,6 +29,12 @@ const AuthorForm = ({ author, setAuthor, }) => {
     const [err, setErr] = useState([])
     const { accessToken } = useContext(AuthContext)
     const [isLoading, setIsLoading] = useState(true)
+    const departmentWatcher = useWatch({ control, name: 'department' })
+    const firstNameWatcher = useWatch({ control, name: 'firstName' })
+    const serNameWatcher = useWatch({ control, name: 'serName' })
+    const patronicNameWatcher = useWatch({ control, name: 'patronicName' })
+
+    // да ну нахер таке ще хоч раз писати
     const [subArrFetch, , subArrErr] = useFetching(async () => {
         const [error, specialties, organizations, departments, places, degrees, ranks] = await getSetup(accessToken)
         error && setErr([...err, error])
@@ -32,132 +47,190 @@ const AuthorForm = ({ author, setAuthor, }) => {
         setIsLoading(false)
     });
     useEffect(() => {
+        if(firstNameWatcher) {
+            const trans  =  cyrillicToTranslit.transform(firstNameWatcher)
+            setValue('firstNameEng',trans)
+        }
+    },[firstNameWatcher]) // eslint-disable-line
+    useEffect(() => {
+        if(serNameWatcher) {
+            const trans  =  cyrillicToTranslit.transform(serNameWatcher)
+            setValue('serNameEng',trans)
+        }
+    },[serNameWatcher]) // eslint-disable-line
+    useEffect(() => {
+        if(patronicNameWatcher) {
+            const trans  =  cyrillicToTranslit.transform(patronicNameWatcher)
+            setValue('patronicEng',trans)
+        }
+        // eslint-disable-lin
+    },[patronicNameWatcher]) // eslint-disable-line
+    useEffect(() => {
         subArrErr && console.log(subArrErr);
-    }, [subArrErr])
+    }, [subArrErr]) // eslint-disable-line
     useEffect(() => {
         subArrFetch()
-    }, [])
+    }, []) // eslint-disable-line
     return (
-        <div className={myClasses.form__wrapper}>
+        <form className={myClasses.form__wrapper} onSubmit={handleSubmit(onSubmit)}>
             {
-                (isLoading && author !== {})
+                (isLoading)
                     ? <MyFileLoader />
                     : <>
-                        <div className={classes.columItem}>
-                            <div className={classes.inputFuild}>
-                                <MyLabel>{'Прізвище (UKR):'}</MyLabel>
-                                <MyInput
-                                    type="text"
-                                    placeholder={'Прізвище'}
-                                    value={author.SerName}
-                                    onChange={e => setAuthor({ ...author, SerName: e.target.value })}
-                                />
+                        <div className={myClasses.form}>
+                            <div className={classes.columItem}>
+                                <div className={classes.inputFuild}>
+                                    <MyLabel>{'Прізвище (UKR):'}</MyLabel>
+                                    <MyFormInput
+                                        type="text"
+                                        placeholder={'Прізвище'}
+                                        register={{ ...register('serName', { required: true }) }}
+                                    />
+                                    {
+                                        errors.serName && <span>Введіть Прізвище Автора</span>
+                                    }
+                                </div>
+                                <div className={classes.inputFuild}>
+                                    <MyLabel>{"Ім'я (UKR):"}</MyLabel>
+                                    <MyFormInput
+                                        type="text"
+                                        placeholder={`Ім'я`}
+                                        register={{ ...register('firstName', { required: true }) }}
+                                    />
+                                    {
+                                        errors.firstName && <span>Введіть Ім'я Автора</span>
+                                    }
+                                </div>
+                                <div className={classes.inputFuild}>
+                                    <MyLabel>{"Побатькові (UKR):"}</MyLabel>
+                                    <MyFormInput
+                                        type="text"
+                                        placeholder={'Побатькові'}
+                                        register={{ ...register('patronicName', { required: false }) }}
+                                    />
+                                </div>
+                                <div className={classes.inputFuild}>
+                                    <MyLabel>{'Прізвище (ENG):'}</MyLabel>
+                                    <MyFormInput
+                                        type="text"
+                                        placeholder={'Прізвище'}
+                                        register={{ ...register('serNameEng', { required: true }) }}
+                                    />
+                                    {
+                                        errors.serNameEng && <span>Введіть Прізвище Автора</span>
+                                    }
+                                </div>
+                                <div className={classes.inputFuild}>
+                                    <MyLabel>{"Ім'я (ENG):"}</MyLabel>
+                                    <MyFormInput
+                                        type="text"
+                                        placeholder={`Ім'я`}
+                                        register={{ ...register('firstNameEng', { required: true }) }}
+                                    />
+                                    {
+                                        errors.firstNameEng && <span>Введіть Ім'я Автора</span>
+                                    }
+                                </div>
+                                <div className={classes.inputFuild}>
+                                    <MyLabel>{"Побатькові (ENG):"}</MyLabel>
+                                    <MyFormInput
+                                        type="text"
+                                        placeholder={'Побатькові'}
+                                        register={{ ...register('patronicEng', { required: false }) }}
+                                    />
+                                </div>
+                                <div className={classes.inputFuild}>
+                                    <MyLabel>Группа:</MyLabel>
+                                    <MyFormSelector
+                                        options={specialties}
+                                        register={{ ...register('specialty', { required: true }) }}
+                                    />
+                                    {
+                                        errors.specialties && <span>Виберіть групу</span>
+                                    }
+                                </div>
+                                <div className={classes.inputFuild}>
+                                    <MyLabel>Відділ (Кафедра):</MyLabel>
+                                    <MyFormSelector
+                                        options={departments}
+                                        register={{ ...register('department', { required: true }) }}
+                                    />
+                                    {
+                                        errors.department && <span>Виберіть кафедру</span>
+                                    }
+                                </div>
                             </div>
-                            <div className={classes.inputFuild}>
-                                <MyLabel>{"Ім'я (UKR):"}</MyLabel>
-                                <MyInput
-                                    type="text"
-                                    placeholder={`Ім'я`}
-                                    value={author.Name}
-                                    onChange={e => setAuthor({ ...author, Name: e.target.value })}
-                                />
+                            <div className={classes.columItem}>
+                                <div className={classes.inputFuild}>
+                                    <MyLabel>Організація:</MyLabel>
+                                    <MyFormSelector
+                                        options={organizations}
+                                        register={{ ...register('organization', { required: true }) }}
+                                    />
+                                    {
+                                        errors.organization && <span>Виберіть організацію</span>
+                                    }
+                                </div>
+                                <div className={classes.inputFuild}>
+                                    <MyLabel>Посада:</MyLabel>
+                                    <MyFormSelector
+                                        options={places}
+                                        register={{ ...register('position', { required: true }) }}
+                                    />
+                                    {
+                                        errors.position && <span>Виберіть посаду</span>
+                                    }
+                                </div>
+                                <div className={classes.inputFuild}>
+                                    <MyLabel>Вчене звання:</MyLabel>
+                                    <MyFormSelector
+                                        options={ranks}
+                                        register={{ ...register('rank', { required: true }) }}
+                                    />
+                                    {
+                                        errors.rank && <span>Виберіть вчене звання</span>
+                                    }
+                                </div>
+                                <div className={classes.inputFuild}>
+                                    <MyLabel>Науковий ступінь:</MyLabel>
+                                    <MyFormSelector
+                                        options={degrees}
+                                        register={{ ...register('degree', { required: true }) }}
+                                    />
+                                    {
+                                        errors.degree && <span>Виберіть вчене звання</span>
+                                    }
+                                </div>
+                                {
+                                    Number(departmentWatcher) === 2 &&
+                                    <>
+                                        <div className={classes.inputFuild}>
+                                            <MyLabel >Дата початку:</MyLabel>
+                                            <Controller
+                                                control={control}
+                                                name="startDate"
+                                                render={({ field }) => <DatePicker
+                                                    placeholderText="Оберіть дату початку роботи викладача"
+                                                    onChange={(date) => field.onChange(date)}
+                                                    selected={field.value}
+                                                    locale={uk}
+                                                />}
+                                            />
+                                        </div>
+                                    </>
+                                }
                             </div>
-                            <div className={classes.inputFuild}>
-                                <MyLabel>{"Побатькові (UKR):"}</MyLabel>
-                                <MyInput
-                                    type="text"
-                                    placeholder={'Побатькові'}
-                                    value={author.Patronic}
-                                    onChange={e => setAuthor({ ...author, Patronic: e.target.value })}
-                                />
-                            </div>
-                            <div className={classes.inputFuild}>
-                                <MyLabel>{'Прізвище (ENG):'}</MyLabel>
-                                <MyInput
-                                    type="text"
-                                    placeholder={'Прізвище'}
-                                    value={author.SerNameEng}
-                                    onChange={e => setAuthor({ ...author, SerNameEng: e.target.value })}
-                                />
-                            </div>
-                            <div className={classes.inputFuild}>
-                                <MyLabel>{"Ім'я (ENG):"}</MyLabel>
-                                <MyInput
-                                    type="text"
-                                    placeholder={`Ім'я`}
-                                    value={author.NameEng}
-                                    onChange={e => setAuthor({ ...author, NameEng: e.target.value })}
-                                />
-                            </div>
-                            <div className={classes.inputFuild}>
-                                <MyLabel>{"Побатькові (ENG):"}</MyLabel>
-                                <MyInput
-                                    type="text"
-                                    placeholder={'Побатькові'}
-                                    value={author.PatronicEng}
-                                    onChange={e => setAuthor({ ...author, PatronicEng: e.target.value })}
-                                />
-                            </div>
-                            <div className={classes.inputFuild}>
-                                <MyLabel>Группа:</MyLabel>
-                                <MySelector options={specialties} selected={author.Specialty} onChange={e => setAuthor({ ...author, Specialty: Number(e.target.value) })} />
-                            </div>
-                            <div className={classes.inputFuild}>
-                                <MyLabel>Відділ (Кафедра):</MyLabel>
-                                <MySelector options={departments} selected={author.Department} onChange={e => setAuthor({ ...author, Department: Number(e.target.value) })} />
-                            </div>
-                        </div>
-                        <div className={classes.columItem}>
-                            <div className={classes.inputFuild}>
-                                <MyLabel>Організація:</MyLabel>
-                                <MySelector options={organizations} selected={author.Organization} onChange={e => setAuthor({ ...author, Organization: Number(e.target.value) })} />
-                            </div>
-                            <div className={classes.inputFuild}>
-                                <MyLabel>Посада:</MyLabel>
-                                <MySelector options={places} selected={author.Position} onChange={e => setAuthor({ ...author, Position: Number(e.target.value) })} />
-                            </div>
-                            <div className={classes.inputFuild}>
-                                <MyLabel>Вчене звання:</MyLabel>
-                                <MySelector options={ranks} selected={author.Rank} onChange={e => setAuthor({ ...author, Rank: Number(e.target.value) })} />
-                            </div>
-                            <div className={classes.inputFuild}>
-                                <MyLabel>Науковий ступінь:</MyLabel>
-                                <MySelector options={degrees} selected={author.Degree} onChange={e => setAuthor({ ...author, Degree: Number(e.target.value) })} />
-                            </div>
-                            {
-                                author.department === 2 &&
-                                <>
-                                    <div className={classes.inputFuild}>
-                                        <MyLabel >Дата початку:</MyLabel>
-                                        <MyInput
-                                            type="number"
-                                            placeholder={'Дата початку:'}
-                                            value={author.startDate}
-                                            onChange={e => setAuthor({ ...author, startDate: e.target.value })}
-                                        />
-                                    </div>
-                                    <div className={classes.inputFuild}>
-                                        <MyLabel >Дата початку:</MyLabel>
-                                        <MyInput
-                                            type="number"
-                                            placeholder={'Дата кінця:'}
-                                            value={author.endDate}
-                                            onChange={e => setAuthor({ ...author, endDate: e.target.value })}
-                                        />
-                                    </div>
-                                </>
 
-                            }
+
+                        </div>
+                        <div className={myClasses.submit}>
+                            <MyButton type="submit" children={submitButtonValue} />
                         </div>
                     </>
             }
-        </div>
+        </form>
     )
 }
 
-AuthorForm.propTypes = {
-    author: PropTypes.object,
-    setAuthor: PropTypes.func
-}
 
 export default AuthorForm;

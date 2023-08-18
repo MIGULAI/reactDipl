@@ -19,6 +19,7 @@
     color: #fff;
     background-color: #428bca;
     border-color: #357ebd;
+    max-width: 400px;
 }
 
 .myBtn:hover{

@@ -6,15 +6,22 @@
     padding-top: 5px;
     min-width: 30vw;
     width: 100%;
+    max-width: 100%;
     display: flex;
-    flex-direction: row;
+    flex-wrap: wrap;
 }
 
 .inputFuild input,
-.inputFuild select {
-    width: 50%
+.inputFuild label,
+.inputFuild select,
+.inputFuild span
+{
+    width: 50%;
+    flex: 1 0 50%;
 }
-
+.inputFuild span{
+    text-align: center;
+}
 .table_wrapper {
     width: 100%;
     display: flex;
