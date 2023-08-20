@@ -22,7 +22,7 @@ function App() {
   const [keyActive, setKeyActive] = useState(0)
   const [globalSetup, setGlobalSetup] = useState({ authorsPublCount: '7', authoSuccess: 'false' })
   const [messageArray, setMessageArray] = useState()
-  const [messageClasses, setMessageClasses] = useState()
+  const [messageClasses, setMessageClasses] = useState([])
   const [messageModalVisible, setMessageModalVisible] = useState(false)
   const [fetchGlobalSetup, setupLoading, err] = useFetching(async () => {
     await PostService.init()
@@ -48,19 +48,22 @@ function App() {
     setIsLoading(false)
 
   }, [])
-  return (
+
+  return (<>
+
+    {
+      (messageModalVisible)
+       && <MyModal zIndex={999} visible={messageModalVisible} setVisible={setMessageModalVisible}>
+         <SesionMessage messageArray={messageArray} classesArray={messageClasses} />
+       </MyModal>
+      
+    }
     <AuthContext.Provider value={{
       isAuth, setIsAuth, setMessageArray, setMessageClasses, setMessageModalVisible, isLoading, accessToken, setAccessToken, keyActive, globalSetup, setGlobalSetup, setKeyActive
     }}>
       <BrowserRouter>
 
-        {
-          messageModalVisible
-            ? <MyModal visible={messageModalVisible} setVisible={setMessageModalVisible}>
-              <SesionMessage messageArray={messageArray} messageClasses={messageClasses} />
-            </MyModal>
-            : <></>
-        }
+
         {
           isLoading || setupLoading
             ? <div className="globalLoaderWrapper"><MyLoader></MyLoader></div>
@@ -72,7 +75,7 @@ function App() {
         }
       </BrowserRouter>
     </AuthContext.Provider>
-
+  </>
   );
 }
 

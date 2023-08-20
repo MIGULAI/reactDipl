@@ -17,6 +17,7 @@ import MyButton from "../../UI/MyButton/MyButton";
 import myClasses from "./AddPubl.module.css"
 import MyError from "../../UI/MyError/MyError";
 import { IsSetFetching } from "./AddPublLogic";
+import AddPublForm from "../../forms/PublsForms/AddForm";
 
 const AddPubl = () => {
 
@@ -88,6 +89,7 @@ const AddPubl = () => {
                 isLoading || isFetching || isSaveFetching
                     ? <MyLoader />
                     : <div>
+                        <AddPublForm submitButtonValue={'Додати'}/>
                         {err.length !== 0 && <MyError onClick={e => setError([])}>{err}</MyError>}
 
                         <div className={myClasses.form__wrapper} >

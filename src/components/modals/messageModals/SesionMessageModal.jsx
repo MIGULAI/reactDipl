@@ -2,22 +2,20 @@ import React from "react";
 import PropTypes from "prop-types";
 import classes from './MessageStatuses.module.css'
 
-const SesionMessage = ({messageArray, classesArray}) => {
+const SesionMessage = ({ messageArray, classesArray }) => {
     return (
         <>
             {
-                messageArray.map((message, i) => <span className={classes[classesArray[i]]} key={i}>
+                messageArray && classesArray && messageArray.map((message, i) => <span className={classes[classesArray[i]]} key={i}>
                     {message}
                 </span>)
             }
         </>
     )
-
-
 }
+
 SesionMessage.defaultProps = {
     messageArray: ['Message Placeholder'],
-    classesArray: ['error']
 }
 
 SesionMessage.propTypes = {

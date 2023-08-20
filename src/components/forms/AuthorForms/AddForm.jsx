@@ -46,33 +46,82 @@ const AuthorForm = ({ author, submitButtonValue, onSubmit }) => {
         setRanks(ranks)
         setIsLoading(false)
     });
+
+    const beforeSubmit = (data) => {
+        data.orcid = data.orcid.replaceAll('-', '')
+        // console.log(data.orcid);
+        onSubmit(data)
+    }
+
     useEffect(() => {
-        if(firstNameWatcher) {
-            const trans  =  cyrillicToTranslit.transform(firstNameWatcher)
-            setValue('firstNameEng',trans)
+        if (firstNameWatcher) {
+            const trans = cyrillicToTranslit.transform(firstNameWatcher)
+            if (!(author)) {
+                setValue('firstNameEng', trans)
+            }
         }
-    },[firstNameWatcher]) // eslint-disable-line
+    }, [firstNameWatcher]) // eslint-disable-line
     useEffect(() => {
-        if(serNameWatcher) {
-            const trans  =  cyrillicToTranslit.transform(serNameWatcher)
-            setValue('serNameEng',trans)
+        if (serNameWatcher) {
+            const trans = cyrillicToTranslit.transform(serNameWatcher)
+            if (!(author)) {
+                setValue('serNameEng', trans)
+            }
         }
-    },[serNameWatcher]) // eslint-disable-line
+    }, [serNameWatcher]) // eslint-disable-line
     useEffect(() => {
-        if(patronicNameWatcher) {
-            const trans  =  cyrillicToTranslit.transform(patronicNameWatcher)
-            setValue('patronicEng',trans)
+        if (patronicNameWatcher) {
+            const trans = cyrillicToTranslit.transform(patronicNameWatcher)
+            if (!(author)) {
+                setValue('patronicEng', trans)
+
+            }
         }
         // eslint-disable-lin
-    },[patronicNameWatcher]) // eslint-disable-line
+    }, [patronicNameWatcher]) // eslint-disable-line
     useEffect(() => {
         subArrErr && console.log(subArrErr);
     }, [subArrErr]) // eslint-disable-line
     useEffect(() => {
         subArrFetch()
     }, []) // eslint-disable-line
+    useEffect(() => {
+        if (author && !isLoading) {
+            setValue('serName', author.SerName)
+            setValue('firstName', author.Name)
+            setValue('patronicName', author.Patronic)
+            setValue('serNameEng', author.SerNameEng ? author.SerNameEng : '')
+            setValue('firstNameEng', author.NameEng ? author.NameEng : '')
+            setValue('nameEng', author.NameEng ? author.NameEng : '')
+            setValue('patronicEng', author.PatronicEng ? author.PatronicEng : '')
+            setValue('startDate', author.StarDate);
+            setValue('patronicEng', author.PatronicEng ? author.PatronicEng : '')
+            author.Orcid && setValue('orcid', author.Orcid)
+            if (ranks) {
+                const rank = ranks.filter(el => el.value === author.Rank)[0]
+                if (rank) setValue('rank', rank.value)
+            }
+            if (degrees) {
+                const degree = degrees.filter(el => el.value === author.Degree)[0]
+                if (degree) setValue('degree', degree.value)
+            }
+            if (places) {
+                const place = places.filter(el => el.value === author.Position)[0]
+                if (place) setValue('position', place.value)
+            }
+            if (departments) {
+                const department = departments.filter(el => el.value === author.Department)[0]
+                if (department) setValue('department', department.value)
+            }
+            if (specialties) {
+                const specialty = specialties.filter(el => el.value === author.Specialty)[0]
+                if (specialty) setValue('department', specialty.value)
+            }
+        }
+    }, [author, isLoading])
+
     return (
-        <form className={myClasses.form__wrapper} onSubmit={handleSubmit(onSubmit)}>
+        <form className={myClasses.form__wrapper} onSubmit={handleSubmit(beforeSubmit)}>
             {
                 (isLoading)
                     ? <MyFileLoader />
@@ -138,6 +187,16 @@ const AuthorForm = ({ author, submitButtonValue, onSubmit }) => {
                                         placeholder={'Побатькові'}
                                         register={{ ...register('patronicEng', { required: false }) }}
                                     />
+                                </div>
+                                <div className={classes.inputFuild}>
+                                    <MyLabel>{"Orcid автора:"}</MyLabel>
+                                    <MyFormInput
+                                        type="text"
+                                        placeholder={'____-____-____-____'}
+                                        register={{ ...register('orcid', { required: true, minLength: 16, maxLength: 20 }) }}
+                                        mask={'9999-9999-9999-9999'}
+                                    />
+                                    {errors.orcid && <span>Orcid введено не коректно</span>}
                                 </div>
                                 <div className={classes.inputFuild}>
                                     <MyLabel>Группа:</MyLabel>

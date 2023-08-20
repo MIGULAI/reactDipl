@@ -3,7 +3,7 @@ import classes from "./MyModal.module.css"
 import PropTypes from 'prop-types';
 import close from '../../../resources/svg/close.svg'
 
-const MyModal = ({ visible, setVisible, canClouse, children }) => {
+const MyModal = ({ visible, setVisible, canClouse, children, zIndex = 888 }) => {
     const { modal, active, modalContent } = classes
 
     const rootClasses = `${modal} ${visible ? active : ''}`;
@@ -13,7 +13,7 @@ const MyModal = ({ visible, setVisible, canClouse, children }) => {
     }
 
     return (
-        <div className={rootClasses} onClick={() => clouse()}>
+        <div className={rootClasses} style={{zIndex: zIndex}} onClick={() => clouse()}>
             <div className={modalContent} onClick={(e) => e.stopPropagation()}>
                 <div className={classes.modalHeader}>
                     <div className={classes.imgWrapper}>

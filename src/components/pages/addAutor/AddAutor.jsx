@@ -10,14 +10,14 @@ import AddForm from "../../forms/AuthorForms/AddForm";
 const AddAutor = () => {
     const { accessToken } = useContext(AuthContext)
     const [err, setErr] = useState([])
-    const [saveNewAuthor, isAuthorSaving, saveError] = useFetching(async (newAuthor) => {
-        const response = await PostService.addAutor(newAuthor, accessToken)
+    const [saveNewAuthor, isAuthorSaving, saveError] = useFetching(async (data) => {
+        const response = await PostService.addAutor(data, accessToken)
         console.log(response.data);
         if (!response.data.success) setErr([...err, response.data.message])
     })
     const saveAuthor = (data) => {
         console.log(data);
-        // saveNewAuthor(autor)
+        saveNewAuthor(data)
     }
     return (
         <PageWrapper style={{ justifyContent: 'space-around' }} title={'Створення нового автора'}>
