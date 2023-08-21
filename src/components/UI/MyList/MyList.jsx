@@ -13,22 +13,23 @@ const MyList = ({ header, autorsList, autors, setAutors }) => {
 
 
     const [isActivate, setIsActivate] = useState(null)
-    const [index, setIndex] = useState(() =>indexSelector(autors))
+    const [index, setIndex] = useState(() => indexSelector(autors))
     const [isSelected, setIsSelected] = useState(null)
 
     const { setValue, value } = useComboboxControls({ initialValue: '' })
 
-    
+
     const addAutor = () => {
         let a = [...autors]
+        if(!isSelected) return;
         let obj = { id: isSelected.id, value: isSelected.value }
         const pos = autorsList.map(e => e.id).indexOf(isSelected.id)
-        const isContain = a.map(e=> e && e.id).indexOf(isSelected.id)
+        const isContain = a.map(e => e && e.id).indexOf(isSelected.id)
         let i = index
         if (pos !== -1) {
             a[index] = obj
         }
-        if(isContain === -1) {
+        if (isContain === -1) {
             i++
             setAutors(a)
         }
@@ -77,8 +78,8 @@ const MyList = ({ header, autorsList, autors, setAutors }) => {
                     items={autorsList}
                 />
                 <div className={buttonWrapper}>
-                    <MyButton onClick={addAutor}>Додати</MyButton>
-                    {isActivate && <MyButton onClick={deleteAutor} >Видалити</MyButton>}
+                    <MyButton buttonType="button" onClick={addAutor} disabled={ false}>Додати</MyButton>
+                    {isActivate && <MyButton buttonType="button" onClick={deleteAutor} >Видалити</MyButton>}
                 </div>
             </div>
         </div>

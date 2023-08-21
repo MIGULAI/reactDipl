@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 
 import classes from "./MyButton.module.css"
 
-const MyButton = ({ children, buttonType, ...props }) => {
+const MyButton = ({ children, buttonType, disabled, ...props }) => {
     const { myBtn } = classes
     return (
-        <button className={myBtn} type={buttonType} {...props}>
+        <button className={myBtn} type={buttonType} disabled={disabled} {...props}>
             {children}
         </button>
     )
@@ -14,7 +14,8 @@ const MyButton = ({ children, buttonType, ...props }) => {
 
 MyButton.defaultProps = {
     children: null,
-    buttonType: "submit"
+    buttonType: "submit",
+    disabled : false
 }
 
 MyButton.propTypes  = {
@@ -22,7 +23,8 @@ MyButton.propTypes  = {
         PropTypes.string,
         PropTypes.element
     ]),
-    buttonType: PropTypes.string
+    buttonType: PropTypes.string,
+    disabled: PropTypes.bool
 }
 
 export default MyButton

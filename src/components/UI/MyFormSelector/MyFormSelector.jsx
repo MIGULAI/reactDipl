@@ -8,8 +8,9 @@ const MyFormSelector = ({ options, register }) => {
             className={classes.selector}
             {...register}
         >
+            <option value="" disabled selected>Нічого не вибрано</option>
             {options.map((option, i) =>
-                <option key={option.value ? option.value : i} value={option.value ? option.value : i} >{option.str}</option>
+                <option key={option.value ? option.value : i} value={option.value ? option.value : i}   >{option.str}</option>
             )}
         </select>
     )

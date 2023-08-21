@@ -41,3 +41,11 @@
     align-items: center;
     flex-direction: column;
 }
+
+.dataPicker{
+    width: 100% !important;
+
+}
+/* .dataPicker input {
+    width: 100% !important;
+} */
