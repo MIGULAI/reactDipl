@@ -2,7 +2,7 @@ import axios from "axios";
 import { getCookie } from "../utils/functions/Cookie";
 
 export default class PostService {
-    static barrerToken = getCookie('access_token') 
+    static barrerToken = getCookie('access_token')
     static getConfig = {
         headers: {
             'Content-Type': 'application/json',
@@ -21,19 +21,19 @@ export default class PostService {
     //             'X-XSRF-TOKEN': getCookie('XSRF-TOKEN')
     //         },
     //         withCredentials: true,
-            
+
     //     }
     //     // console.log(config);
     //     return axiosInstance
     // }
 
     static async init() {
-        let response = await axios.get(`${process.env.REACT_APP_HOSTNAME}sanctum/csrf-cookie`,  this.getConfig);
+        let response = await axios.get(`${process.env.REACT_APP_HOSTNAME}sanctum/csrf-cookie`, this.getConfig);
         return response
     }
 
-    static async initUser(){
-        let response = await axios.get(`${process.env.REACT_APP_HOSTNAME}api/userinit`,  this.getConfig);
+    static async initUser() {
+        let response = await axios.get(`${process.env.REACT_APP_HOSTNAME}api/userinit`, this.getConfig);
         return response
     }
     static async fetchingGlobalSetup() {
@@ -44,7 +44,7 @@ export default class PostService {
 
     static async loginService(obj) {
         // const crsf = getCookie('XSRF-TOKEN')
-        let response = await axios.post(`${process.env.REACT_APP_HOSTNAME}api/login`, obj, {withCredentials: true})
+        let response = await axios.post(`${process.env.REACT_APP_HOSTNAME}api/login`, obj, { withCredentials: true })
         return response;
     }
 
@@ -111,7 +111,7 @@ export default class PostService {
         //         'Content-Type': 'application/json',
         //         'Authorization': `Bearer ${token}`
         //     },
-            
+
 
         // }
         let response = await axios.get(`${process.env.REACT_APP_HOSTNAME}api/publications/setup`, this.getConfig)
@@ -131,6 +131,19 @@ export default class PostService {
         return response
     }
 
+    static async addPublisher(data, token) {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            withCredentials: true
+        }
+        const response = await axios.post(`${process.env.REACT_APP_HOSTNAME}api/publisher/add`, {
+            ...data
+        }, config)
+        return response;
+    }
     static async addPub(obj, token) {
         const config = {
             headers: {
@@ -141,7 +154,8 @@ export default class PostService {
 
         }
         let response = await axios.post(`${process.env.REACT_APP_HOSTNAME}api/publications/add`, {
-            obj: obj
+            ...obj,
+            authors: obj.authorList
         }, config)
         return response
     }
@@ -159,6 +173,10 @@ export default class PostService {
         return response
     }
 
+    static async fetchAuthorsOfPubl(id) {
+        let response = await axios.get(`${process.env.REACT_APP_HOSTNAME}api/publication/authors?id=${id}`)
+        return response
+    }
     static async fetchingStatistic(token) {
         const config = {
             headers: {
@@ -251,10 +269,11 @@ export default class PostService {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
-            }
+            },
+            withCredentials: true
         }
         let response = await axios.put(`${process.env.REACT_APP_HOSTNAME}api/publication`, {
-            publication: publication
+            ...publication
         }, config)
         return response
     }

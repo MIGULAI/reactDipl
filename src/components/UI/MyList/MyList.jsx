@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DatalistInput, { useComboboxControls } from 'react-datalist-input';
 import 'react-datalist-input/dist/styles.css';
 import MyButton from "../MyButton/MyButton";
@@ -9,15 +9,14 @@ import classes from "./MyList.module.css"
 
 const MyList = ({ header, autorsList, autors, setAutors }) => {
     const { activate, listWrapper, table, headerClass, buttonWrapper } = classes
-
-
-
     const [isActivate, setIsActivate] = useState(null)
     const [index, setIndex] = useState(() => indexSelector(autors))
     const [isSelected, setIsSelected] = useState(null)
 
     const { setValue, value } = useComboboxControls({ initialValue: '' })
-
+    useEffect(() => {
+        setIndex(()=>indexSelector(autors))
+    },[autors])
 
     const addAutor = () => {
         let a = [...autors]

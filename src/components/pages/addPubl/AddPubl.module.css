@@ -8,6 +8,11 @@
     flex-direction: row;
 }
 
+.formOneRow{
+    display: flex;
+    flex-direction: column;
+}
+
 .form__wrapper .columItem {
     width: 50%;
 

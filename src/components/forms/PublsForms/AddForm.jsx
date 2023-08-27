@@ -14,8 +14,10 @@ import myClasses from "../../pages/addPubl/AddPubl.module.css"
 import MyFileLoader from "../../UI/MyFileLoader/MyFileLoader";
 import MyButton from "../../UI/MyButton/MyButton";
 import MyList from "../../UI/MyList/MyList";
+import toIsoString from "../../../utils/functions/ToIsoString";
+import AddPublisherModal from "../../modals/addPublisher/AddPublisherModal";
 
-const AddPublForm = ({ publication, onSubmit, submitButtonValue = 'Додати' }) => {
+const AddPublForm = ({ publication, onSubmit, submitButtonValue = 'Додати', afterPublisherCallback }) => {
     const { accessToken, globalSetup } = useContext(AuthContext)
     const { register, handleSubmit, control, setValue, setError, clearErrors, formState: { errors } } = useForm({
         defaultValues: {
@@ -27,8 +29,8 @@ const AddPublForm = ({ publication, onSubmit, submitButtonValue = 'Додати'
     const [publishers, setPublishers] = useState([])
     const [types, setTypes] = useState([])
     const [supervisorList, setSupervisorList] = useState([])
+    const [modalAddPublisherVisible, setModalAddPublisherVisible] = useState(false)
     const [authors, setAuthors] = useState(Array(Number(globalSetup.authorsPublCount)).fill(null))
-
     const watcherStarPage = useWatch({ control, name: 'startPage' })
     const watcherEndPage = useWatch({ control, name: 'lastPage' })
 
@@ -52,6 +54,7 @@ const AddPublForm = ({ publication, onSubmit, submitButtonValue = 'Додати'
 
     const beforeSubmit = (data) => {
         if (checkValidAuthorList(data.authorList)) {
+            data.date = toIsoString(new Date(data.date))
             onSubmit(data)
         } else {
             setError('authorList', { type: 'required' })
@@ -59,7 +62,7 @@ const AddPublForm = ({ publication, onSubmit, submitButtonValue = 'Додати'
         console.log(data);
     }
     useEffect(() => {
-        if (watcherEndPage && watcherStarPage && !publication) {
+        if (watcherEndPage && watcherStarPage) {
             const value = (Number(watcherEndPage) - Number(watcherStarPage) + 1) * 0.1031
             setValue('UPP', value.toFixed(2))
         }
@@ -68,199 +71,225 @@ const AddPublForm = ({ publication, onSubmit, submitButtonValue = 'Додати'
         setErr && console.log(setErr);
     }, [setErr])
     useEffect(() => {
-        if (publication) {
-            // Додати встановлення значень за замовчуваннями у полі форми дпри редагуванні публікації
+        if (publication && autorList.length !== 0) {
+            let authorArray = [...authors]
+            const authorsOfPublication = [...publication.authors]
+            for (let i = 0; i < authorsOfPublication.length; i++) {
+                let item = autorList.find(el => Number(el.id) === Number(authorsOfPublication[i].Author))
+                authorArray[i] = item
+            }
+            setAuthors(authorArray)
+            setValue('authorList', authorArray)
+            setValue('name', publication.Name)
+            setValue('startPage', Number(publication.StartPage))
+            setValue('lastPage', Number(publication.EndPage))
+            setValue('UPP', Number(publication.UPP))
+            setValue('type', publication.Type)
+            setValue('lang', publication.Language)
+            setValue('publisher', publication.Publisher)
+            setValue('date', new Date(publication.PublicationDate))
+            setValue('issue_numb', publication.PublicationNumber)
+            setValue('url', publication.DOI)
+            setValue('supervisor', publication.Supervisor)
+
         }
-    }, [publication])// eslint-disable-line react-hooks/exhaustive-deps
+    }, [publication, autorList])// eslint-disable-line react-hooks/exhaustive-deps
+
     useEffect(() => {
         isSetFetching()
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
-    return <form className={myClasses.form__wrapper} onSubmit={handleSubmit(beforeSubmit)}>
-        {
-            (isLoading)
-                ? <MyFileLoader />
-                : <>
-                    <div className={myClasses.form}>
-                        <div className={classes.columItem}>
-                            <div className={classes.inputFuild}
-                            >
-                                <MyLabel >Назва публікації :</MyLabel>
-                                <MyFormInput
-                                    type="text"
-                                    placeholder={'Назва публікації'}
-                                    register={{ ...register('name', { required: true }) }}
-                                />
-                                {
-                                    errors.name && <span>Введіть назву публікації</span>
-                                }
-                            </div>
-                            <div className={classes.inputFuild}>
-                                <MyLabel >Тип :</MyLabel>
-                                <MyFormSelector
-                                    options={types}
-                                    register={{ ...register('type', { required: true }) }}
-                                />
-                                {
-                                    errors.type && <span>Виберіть тип публікації</span>
-                                }
-                            </div>
-                            <div className={classes.inputFuild}>
-                                <MyLabel >Мова :</MyLabel>
-                                <MyFormSelector
-                                    options={langueges}
-                                    register={{ ...register('lang', { required: true }) }}
-                                />
-                                {
-                                    errors.languege && <span>Виберіть мову публікації</span>
-                                }
-                            </div>
-                            <div className={classes.inputFuild}>
-                                <MyLabel >Видавець :</MyLabel>
-                                <MyFormSelector
-                                    options={publishers}
-                                    register={{ ...register('publisher', { required: true }) }}
-                                />
-                                {
-                                    errors.publishers && <span>Виберіть видавництво публікації</span>
-                                }
-                            </div>
+    return <>
+        <AddPublisherModal visible={modalAddPublisherVisible} setVisible={setModalAddPublisherVisible} onClose={() => isSetFetching()}/>
+        <form className={myClasses.form__wrapper} onSubmit={handleSubmit(beforeSubmit)}>
+            {
+                (isLoading)
+                    ? <MyFileLoader />
+                    : <>
+                        <div className={myClasses.form}>
                             <div className={classes.columItem}>
                                 <div className={classes.inputFuild}
-                                    style={{ flexWrap: "" }}
                                 >
-                                    <MyLabel >Дата публікації:</MyLabel>
-                                    <span style={{ minWidth: '200px' }}>
-                                        <Controller
-                                            control={control}
-                                            name={'date'}
-
-                                            rules={{ required: true }}
-                                            render={({ field }) => <DatePicker
-
-                                                className={classes.dataPicker}
-                                                placeholderText={'Дата публікації'}
-                                                onChange={(date) => field.onChange(date)}
-                                                selected={field.value}
-                                                locale={uk}
-                                                dateFormat="MMMM yyyy"
-                                                showMonthYearPicker
-                                            />}
-                                        />
-                                    </span>
-                                    {
-                                        errors.date && <span>Виберіть дату публікації</span>
-                                    }
-                                </div>
-                            </div>
-                            <div className={classes.columItem}>
-                                <div className={classes.inputFuild}>
-                                    <MyLabel >Номер видання :</MyLabel>
+                                    <MyLabel >Назва публікації :</MyLabel>
                                     <MyFormInput
-                                        placeholder={'Номер видання'}
-                                        register={{ ...register('issue_numb', { required: true }) }}
+                                        type="text"
+                                        placeholder={'Назва публікації'}
+                                        register={{ ...register('name', { required: true }) }}
                                     />
                                     {
-                                        errors.issue_numb && <span>Ввведіть номер публікації</span>
-                                    }
-                                </div>
-                            </div>
-                            <div className={classes.columItem}>
-                                <div className={classes.inputFuild}>
-                                    <MyLabel >DOI :</MyLabel>
-                                    <MyFormInput
-                                        placeholder={'DOI'}
-                                        register={{ ...register('url', { required: false }) }}
-                                    />
-                                    {
-                                        errors.url && <span>Ввведіть DOI публікації</span>
-                                    }
-                                </div>
-                            </div>
-                            <div className={classes.columItem}>
-                                <div className={classes.inputFuild}>
-                                    <MyLabel >Сторінка початку :</MyLabel>
-                                    <MyFormInput
-                                        placeholder={'Сторінка початку'}
-                                        register={{ ...register('startPage', { required: true }) }}
-                                    />
-                                    {
-                                        errors.startPage && <span>Ввведіть сторінку початку публікації</span>
+                                        errors.name && <span>Введіть назву публікації</span>
                                     }
                                 </div>
                                 <div className={classes.inputFuild}>
-                                    <MyLabel >Сторінка закінчення :</MyLabel>
-                                    <MyFormInput
-                                        placeholder={'Сторінка закінчення'}
-                                        register={{ ...register('lastPage', { required: true, min: watcherStarPage }) }}
-                                    />
-                                    {
-                                        errors.lastPage && <span>Ввведіть сторінку закінчення публікації</span>
-                                    }
-                                </div>
-                                <div className={classes.inputFuild}>
-                                    <MyLabel >Друковані аркуші :</MyLabel>
-                                    <MyFormInput
-                                        placeholder={'Кількість друкаованих аркушів'}
-                                        register={{ ...register('UPP', { required: true }) }}
-                                    />
-                                    {
-                                        errors.UPP && <span>Ввведіть сторінку початку та закінчення публікації або кількість друкованихз аркушів</span>
-                                    }
-                                </div>
-                            </div>
-                        </div>
-                        <div className={classes.columItem}>
-                        </div>
-                        <div className={classes.columItem}>
-                            <div className={classes.columItem}
-
-                            >
-
-                                <Controller
-                                    control={control}
-                                    name={"authorList"}
-                                    rules={{ required: true }}
-                                    render={() =>
-                                        <MyList
-                                            header={'Прізвище'}
-                                            autors={authors}
-                                            setAutors={(authors) => {
-                                                setAuthors(authors)
-                                                setValue('authorList', authors)
-                                                clearErrors('authorList')
-                                            }}
-                                            autorsList={autorList}
-                                        />
-                                    }
-                                />
-                                {
-                                    errors.authorList && <span>Публікаці яповинан мати хочаб одного автора</span>
-                                }
-                            </div>
-                            <div className={classes.columItem}>
-                                <div className={classes.inputFuild}>
-                                    <MyLabel>Наукове керівництво</MyLabel>
+                                    <MyLabel >Тип :</MyLabel>
                                     <MyFormSelector
-                                        options={supervisorList}
-                                        register={{ ...register('supervisor', { required: false }) }}
+                                        options={types}
+                                        register={{ ...register('type', { required: true }) }}
                                     />
-
                                     {
-                                        errors.supervisor && <span>Як?</span>
+                                        errors.type && <span>Виберіть тип публікації</span>
                                     }
+                                </div>
+                                <div className={classes.inputFuild}>
+                                    <MyLabel >Мова :</MyLabel>
+                                    <MyFormSelector
+                                        options={langueges}
+                                        register={{ ...register('lang', { required: true }) }}
+                                    />
+                                    {
+                                        errors.languege && <span>Виберіть мову публікації</span>
+                                    }
+                                </div>
+                                <div className={classes.inputFuild}>
+                                    <MyLabel >Видавець :</MyLabel>
+                                    <MyFormSelector
+                                        options={publishers}
+                                        register={{ ...register('publisher', { required: true }) }}
+                                    />
+                                    <MyButton type={'button'} onClick={() => setModalAddPublisherVisible(true)}>+</MyButton>
+                                    {
+                                        errors.publishers && <span>Виберіть видавництво публікації</span>
+                                    }
+                                </div>
+                                <div className={classes.columItem}>
+                                    <div className={classes.inputFuild}
+                                        style={{ flexWrap: "" }}
+                                    >
+                                        <MyLabel >Дата публікації:</MyLabel>
+                                        <span style={{ minWidth: '200px' }}>
+                                            <Controller
+                                                control={control}
+                                                name={'date'}
+
+                                                rules={{ required: true }}
+                                                render={({ field }) => <DatePicker
+
+                                                    className={classes.dataPicker}
+                                                    placeholderText={'Дата публікації'}
+                                                    onChange={(date) => {
+                                                        field.onChange(date)
+                                                    }}
+                                                    selected={field.value}
+                                                    locale={uk}
+                                                    dateFormat="MMMM yyyy"
+                                                    showMonthYearPicker
+                                                />}
+                                            />
+                                        </span>
+                                        {
+                                            errors.date && <span>Виберіть дату публікації</span>
+                                        }
+                                    </div>
+                                </div>
+                                <div className={classes.columItem}>
+                                    <div className={classes.inputFuild}>
+                                        <MyLabel >Номер видання :</MyLabel>
+                                        <MyFormInput
+                                            placeholder={'Номер видання'}
+                                            register={{ ...register('issue_numb', { required: true }) }}
+                                        />
+                                        {
+                                            errors.issue_numb && <span>Ввведіть номер публікації</span>
+                                        }
+                                    </div>
+                                </div>
+                                <div className={classes.columItem}>
+                                    <div className={classes.inputFuild}>
+                                        <MyLabel >DOI :</MyLabel>
+                                        <MyFormInput
+                                            placeholder={'DOI'}
+                                            register={{ ...register('url', { required: false }) }}
+                                        />
+                                        {
+                                            errors.url && <span>Ввведіть DOI публікації</span>
+                                        }
+                                    </div>
+                                </div>
+                                <div className={classes.columItem}>
+                                    <div className={classes.inputFuild}>
+                                        <MyLabel >Сторінка початку :</MyLabel>
+                                        <MyFormInput
+                                            placeholder={'Сторінка початку'}
+                                            register={{ ...register('startPage', { required: true }) }}
+                                        />
+                                        {
+                                            errors.startPage && <span>Ввведіть сторінку початку публікації</span>
+                                        }
+                                    </div>
+                                    <div className={classes.inputFuild}>
+                                        <MyLabel >Сторінка закінчення :</MyLabel>
+                                        <MyFormInput
+                                            placeholder={'Сторінка закінчення'}
+                                            register={{ ...register('lastPage', { required: true, min: watcherStarPage }) }}
+                                        />
+                                        {
+                                            errors.lastPage && <span>Ввведіть сторінку закінчення публікації</span>
+                                        }
+                                    </div>
+                                    <div className={classes.inputFuild}>
+                                        <MyLabel >Друковані аркуші :</MyLabel>
+                                        <MyFormInput
+                                            placeholder={'Кількість друкаованих аркушів'}
+                                            register={{ ...register('UPP', { required: true }) }}
+                                        />
+                                        {
+                                            errors.UPP && <span>Ввведіть сторінку початку та закінчення публікації або кількість друкованихз аркушів</span>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <div className={classes.columItem}>
+                            </div>
+                            <div className={classes.columItem}>
+                                <div className={classes.columItem}
+
+                                >
+
+                                    <Controller
+                                        control={control}
+                                        name={"authorList"}
+                                        rules={{ required: true }}
+                                        render={() =>
+                                            <MyList
+                                                header={'Прізвище'}
+                                                autors={authors}
+                                                setAutors={(authors) => {
+                                                    setAuthors(authors)
+                                                    setValue('authorList', authors)
+                                                    clearErrors('authorList')
+                                                }}
+                                                autorsList={autorList}
+                                            />
+                                        }
+                                    />
+                                    {
+                                        errors.authorList && <span>Публікаці яповинан мати хочаб одного автора</span>
+                                    }
+                                </div>
+                                <div className={classes.columItem}>
+                                    <div className={classes.inputFuild}>
+                                        <MyLabel>Наукове керівництво</MyLabel>
+                                        <MyFormSelector
+                                            options={supervisorList}
+                                            register={{ ...register('supervisor', { required: false }) }}
+                                        />
+
+                                        {
+                                            errors.supervisor && <span>Оберіть наукове курівництво</span>
+                                        }
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div className={myClasses.submit}>
-                        <MyButton type="submit"  >
-                            {submitButtonValue}
-                        </MyButton>
-                    </div>
-                </>
-        }
-    </form>
+                        <div className={myClasses.submit}>
+                            <MyButton type="submit"  >
+                                {submitButtonValue}
+                            </MyButton>
+                        </div>
+                    </>
+            }
+        </form>
+    </>
 
 
 }
