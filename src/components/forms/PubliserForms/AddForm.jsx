@@ -8,7 +8,7 @@ import MyButton from "../../UI/MyButton/MyButton";
 import PropTypes from 'prop-types';
 
 const AddPublisherForm = ({publisher, onSubmitForm, submitButtonValue = 'Додати'}) => {
-    const { register, handleSubmit, setValue, setError, clearErrors, formState: { errors } } = useForm({
+    const { register, handleSubmit, formState: { errors } } = useForm({
 
     });
     const beforeSubmit = (data) => {

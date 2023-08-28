@@ -207,7 +207,8 @@ export default class PostService {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
-            }
+            },
+            withCredentials: true
         }
         let response = await axios.put(`${process.env.REACT_APP_HOSTNAME}api/plans/create`, {
             plan: plan,

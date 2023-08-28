@@ -6,8 +6,6 @@ import { useState } from "react";
 import MyLoader from "../../UI/MyLoader/MyLoader";
 import { useFetching } from "../../../hooks/useFetching";
 import PostService from "../../../API/PostService";
-
-import MyError from "../../UI/MyError/MyError";
 import AddPublForm from "../../forms/PublsForms/AddForm";
 
 const AddPubl = () => {

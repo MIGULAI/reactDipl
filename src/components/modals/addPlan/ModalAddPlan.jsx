@@ -12,7 +12,7 @@ import { CheckYear } from "../../../utils/functions/CheckYear";
 import ModalPlanControl from "./ModalPlanControl";
 import MyFileLoader from "../../UI/MyFileLoader/MyFileLoader";
 import { useEffect } from "react";
-
+import MySelector from "../../UI/MySelector/MySelector";
 
 const ModalAddPlan = ({ visible, setVisible }) => {
     const [modalPlan, setModalPlan] = useState(false)
@@ -20,6 +20,7 @@ const ModalAddPlan = ({ visible, setVisible }) => {
     const { accessToken, setMessageArray, setMessageClasses, setMessageModalVisible } = useContext(AuthContext)
     const { statBar, item } = classes
     const [defaultYear, setDefaultYear] = useState(() => CheckYear())
+    const [optionsYear, setOptionsYear] = useState([])
 
     const [fetchPlansYear, isYearFetching, yearErr] = useFetching(async () => {
         const response = await PostService.fetchPlanYearList();
@@ -39,7 +40,10 @@ const ModalAddPlan = ({ visible, setVisible }) => {
                     posibleYears.push(y)
                 }
             }
+            const optionsYears = posibleYears.map(year => { return { value: year, str: year } })
+            setOptionsYear(optionsYears)
         }
+
         setDefaultYear(posibleYears.sort()[0])
     })
 
@@ -57,10 +61,16 @@ const ModalAddPlan = ({ visible, setVisible }) => {
 
     const [savePlan, isPlanSaving, saveErr] = useFetching(async (plan) => {
         const response = await PostService.savePlan(accessToken, plan)
+        setVisible(false)
+        setMessageModalVisible(true)
+        setMessageArray([response.data.message])
         if (response.data.success) {
+            setMessageClasses(['message'])
             setNewPlans([])
-            alert(response.data.message)
             setModalPlan(false)
+        } else {
+            setMessageClasses(['error'])
+
         }
     })
 
@@ -76,7 +86,7 @@ const ModalAddPlan = ({ visible, setVisible }) => {
 
     useEffect(() => {
         fetchPlansYear()
-    }, [])
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
         saveErr && console.log(saveErr);
@@ -104,6 +114,7 @@ const ModalAddPlan = ({ visible, setVisible }) => {
                                     <div className={statBar}>
                                         <div className={item}>
                                             <MyLabel>Створення плану на рік :</MyLabel>
+                                            <MySelector options={optionsYear} selected={defaultYear} onChange={(e) => setDefaultYear(e.target.value)} />
                                             <MyButton onClick={() => createPlan(defaultYear, false)}>{`створити план на ${defaultYear}`}</MyButton>
                                         </div>
                                     </div>

@@ -10,7 +10,7 @@ const ModalPublTr = ({ option, index, selected, selectedItem }) => {
                 <span>{option.Name}</span>
             </td>
             <td>
-                <span>{option.PublicationDate}</span>
+                <span>{new Date(option.PublicationDate).toLocaleDateString()}</span>
             </td>
 
         </tr>
