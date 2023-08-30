@@ -144,6 +144,19 @@ export default class PostService {
         }, config)
         return response;
     }
+    static async addLang(data, token) {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            withCredentials: true
+        }
+        const response = await axios.post(`${process.env.REACT_APP_HOSTNAME}api/lang/add`, {
+            ...data
+        }, config)
+        return response;
+    }
     static async addPub(obj, token) {
         const config = {
             headers: {

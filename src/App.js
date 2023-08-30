@@ -46,8 +46,17 @@ function App() {
     setAccessToken(token)
     fetchGlobalSetup()
     setIsLoading(false)
+  }, [])// eslint-disable-line react-hooks/exhaustive-deps
 
-  }, [])
+  const showMessage = (data) => {
+    setMessageModalVisible(true)
+    setMessageArray(data.message)
+    if(data.success) {
+      setMessageClasses(['message'])
+    } else {
+      setMessageClasses(['error'])
+    }
+  }
 
   return (<>
 
@@ -59,7 +68,7 @@ function App() {
       
     }
     <AuthContext.Provider value={{
-      isAuth, setIsAuth, setMessageArray, setMessageClasses, setMessageModalVisible, isLoading, accessToken, setAccessToken, keyActive, globalSetup, setGlobalSetup, setKeyActive
+      isAuth, setIsAuth, showMessage, setMessageArray, setMessageClasses, setMessageModalVisible, isLoading, accessToken, setAccessToken, keyActive, globalSetup, setGlobalSetup, setKeyActive
     }}>
       <BrowserRouter>
 

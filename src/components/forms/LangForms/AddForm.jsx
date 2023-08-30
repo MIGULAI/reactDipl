@@ -1,31 +1,41 @@
 import React from "react";
-import { useForm } from "react-hook-form";
+import PropTypes from 'prop-types';
 import classes from "../../pages/addAutor/AddAutor.module.css"
 import myClasses from "../../pages/addPubl/AddPubl.module.css"
+import MyButton from "../../UI/MyButton/MyButton";
+import { useForm } from "react-hook-form";
 import MyLabel from "../../UI/MyLabel/MyLabel";
 import MyFormInput from "../../UI/MyFormInput/MyFormInput";
-import MyButton from "../../UI/MyButton/MyButton";
-import PropTypes from 'prop-types';
 
-const AddPublisherForm = ({publisher, onSubmitForm, submitButtonValue = 'Додати'}) => {
+const AddLangForm = ({ onSubmitForm, submitButtonValue = 'Додати' }) => {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const beforeSubmit = (data) => {
         console.log(data);
         onSubmitForm(data)
     }
-
     return <form className={myClasses.form__wrapper} onSubmit={handleSubmit(beforeSubmit)} >
         <div className={myClasses.formOneRow}>
             <div className={classes.columItem}>
                 <div className={classes.inputFuild}>
-                    <MyLabel >Назва видавця :</MyLabel>
+                    <MyLabel>Мова :</MyLabel>
                     <MyFormInput
                         type="text"
-                        placeholder={'Назва видавця'}
-                        register={{ ...register('publisherName', { required: true }) }}
+                        placeholder={'Мова'}
+                        register={{ ...register('langName', { required: true }) }}
                     />
                     {
-                        errors.name && <span>Введіть назву видавця</span>
+                        errors.langName && <span>Введіть мову</span>
+                    }
+                </div>
+                <div className={classes.inputFuild}>
+                    <MyLabel>Коротка назва :</MyLabel>
+                    <MyFormInput
+                        type="text"
+                        placeholder={'Мова'}
+                        register={{ ...register('langShortName', { required: true }) }}
+                    />
+                    {
+                        errors.langShortName && <span>Введіть Коротку назву</span>
                     }
                 </div>
             </div>
@@ -36,12 +46,11 @@ const AddPublisherForm = ({publisher, onSubmitForm, submitButtonValue = 'Дод�
             </div>
         </div>
     </form >
-
 }
 
-AddPublisherForm.propTypes = {
+AddLangForm.propTypes = {
     onSubmitForm: PropTypes.func,
     submitButtonValue: PropTypes.string
 }
 
-export default AddPublisherForm
+export default AddLangForm

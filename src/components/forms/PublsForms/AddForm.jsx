@@ -16,6 +16,7 @@ import MyButton from "../../UI/MyButton/MyButton";
 import MyList from "../../UI/MyList/MyList";
 import toIsoString from "../../../utils/functions/ToIsoString";
 import AddPublisherModal from "../../modals/addPublisher/AddPublisherModal";
+import AddLanguageModal from "../../modals/addLanguageModal/AddLanguageModal";
 
 const AddPublForm = ({ publication, onSubmit, submitButtonValue = 'Додати', afterPublisherCallback }) => {
     const { accessToken, globalSetup } = useContext(AuthContext)
@@ -30,6 +31,7 @@ const AddPublForm = ({ publication, onSubmit, submitButtonValue = 'Додати'
     const [types, setTypes] = useState([])
     const [supervisorList, setSupervisorList] = useState([])
     const [modalAddPublisherVisible, setModalAddPublisherVisible] = useState(false)
+    const [modalAddLangVisible, setModalAddLangVisible] = useState(false)
     const [authors, setAuthors] = useState(Array(Number(globalSetup.authorsPublCount)).fill(null))
     const watcherStarPage = useWatch({ control, name: 'startPage' })
     const watcherEndPage = useWatch({ control, name: 'lastPage' })
@@ -99,7 +101,8 @@ const AddPublForm = ({ publication, onSubmit, submitButtonValue = 'Додати'
         isSetFetching()
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
     return <>
-        <AddPublisherModal visible={modalAddPublisherVisible} setVisible={setModalAddPublisherVisible} onClose={() => isSetFetching()}/>
+        <AddLanguageModal visible={modalAddLangVisible} setVisible={setModalAddLangVisible} onClose={() => isSetFetching()} />
+        <AddPublisherModal visible={modalAddPublisherVisible} setVisible={setModalAddPublisherVisible} onClose={() => isSetFetching()} />
         <form className={myClasses.form__wrapper} onSubmit={handleSubmit(beforeSubmit)}>
             {
                 (isLoading)
@@ -135,6 +138,8 @@ const AddPublForm = ({ publication, onSubmit, submitButtonValue = 'Додати'
                                         options={langueges}
                                         register={{ ...register('lang', { required: true }) }}
                                     />
+                                    <MyButton type={'button'} onClick={() => setModalAddLangVisible(true)}>+</MyButton>
+
                                     {
                                         errors.languege && <span>Виберіть мову публікації</span>
                                     }

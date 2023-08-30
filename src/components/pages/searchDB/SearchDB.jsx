@@ -68,13 +68,13 @@ const SearchDB = () => {
 
     useEffect(() => {
         sernameFilter(searchParam)
-    }, [searchParam])
+    }, [searchParam]) // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
         isAuth ? setKeyActive(3) : setKeyActive(2)
         fetchAutors()
         setIsLoading(false)
-    }, [])
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <PageWrapper title="Сторінка пошуку по БД">
@@ -107,13 +107,8 @@ const SearchDB = () => {
                         {
                             trSelected && <div className={btnWrapper}><MyButton>Детальніше</MyButton></div>
                         }
-                        
-
                     </div>
-
-
             }
-
         </PageWrapper>
     )
 }
