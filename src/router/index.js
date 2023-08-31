@@ -7,6 +7,7 @@ import PlanById from "../components/pages/planById/PlanById"
 import AddPubl from "../components/pages/addPubl/AddPubl"
 import AddAutor from "../components/pages/addAutor/AddAutor"
 import Editor from "../components/pages/editorPage/Editor"
+import AboutAuthor from '../components/pages/about/author/Author';
 
 
 export const privateRoutes = [
@@ -17,6 +18,8 @@ export const privateRoutes = [
     {path: '/analyze', element: <Analyze/>, exact: true},
     {path: '/plan/change/:id', element: <PlanById/>, exact: true},
     {path: '/editor', element: <Editor/>, exact: true},
+    {path: '/about/author/:id', element: <AboutAuthor/>, exact: true}
+
 
 ]
 
@@ -26,5 +29,6 @@ export const publicRoutes = [
     {path: '/search', element: <SearchDB/>, exact: true},
     {path: '/analyze', element: <Analyze/>, exact: true},
     {path: '/plan/about/:id', element: <PlanById/>, exact: true},
+    {path: '/about/author/:id', element: <AboutAuthor/>, exact: true}
 ]
 

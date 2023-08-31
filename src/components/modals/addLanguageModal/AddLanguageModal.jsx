@@ -18,7 +18,6 @@ const AddLanguageModal = ({ visible, setVisible, onClose }) => {
             setVisible(false)
         }
     })
-
     useEffect(() => {
         errPosting && console.log(errPosting);
     }, [errPosting])

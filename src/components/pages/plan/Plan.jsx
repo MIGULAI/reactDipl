@@ -17,13 +17,12 @@ import MySelector from "../../UI/MySelector/MySelector";
 import classes from "./Plan.module.css"
 
 const Plan = () => {
-    const {myContentWrapper, myContentHeader, headerItem, contTableWrapper} = classes
+    const { myContentWrapper, myContentHeader, headerItem, contTableWrapper } = classes
 
     const navig = useNavigate()
     const [isLoading, setIsLoading] = useState(true)
     const [planYear, setPlanYear] = useState(CheckYear)
     const [options, setOptions] = useState([{ value: '', str: '' }])
-    const [nextYear, setNextYear] = useState(false)
     const [plans, setPlans] = useState([])
     const [selectedPlan, setSelectedPlan] = useState(-1)
     const [err, setError] = useState([])
@@ -41,22 +40,19 @@ const Plan = () => {
         if (optionsArray[optionsArray.length - 1] < planYear) {
             setPlanYear(optionsArray[optionsArray.length - 1].value)
         }
-        setNextYear(optionsArray[optionsArray.length - 1].value + 1)
+        optionsArray =optionsArray.sort((a, b) => {
+            if (a.value > b.value) return 1
+            if (b.value > a.value) return -1
+            return 0
+        });
         setOptions(optionsArray);
     })
 
     const [fetchPlans, isPlanLoading, plansError] = useFetching(async (year, apiKey) => {
         const response = await PostService.fetchPlansByYear(year, apiKey)
-        setPlans(response.data.data.plans);
+        let planYears = response.data.data.plans
+        setPlans(planYears);
     })
-    const createNewPlan = async () => {
-        setIsLoading(true)
-        let response = await PostService.createNextYearPlan(nextYear, apiKey)
-        if (response.data[0] === false) {
-            setError(response.data[1])
-        }
-        setIsLoading(false)
-    }
 
     const About = () => {
         navig(`/plan/about/${selectedPlan}`)
@@ -66,28 +62,28 @@ const Plan = () => {
     }
 
     useEffect(() => {
-        
+
         isAuth ? setKeyActive(1) : setKeyActive(0)
         fetchYears()
         setIsLoading(false)
-    }, [isLoading])
+    }, [isLoading]) // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
         let errorArray = []
         plansError !== '' && errorArray.push(plansError)
         yearError !== '' && errorArray.push(yearError)
         errorArray.length !== 0 && setError([...err, errorArray])
-    }, [plansError, yearError])
+    }, [plansError, yearError]) // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
         fetchPlans(planYear, apiKey)
         setSelectedPlan(-1)
-    }, [planYear])
+    }, [planYear]) // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <PageWrapper title="Сторінка плану">
             {err.length !== 0
-                ? <MyError onClick={e => setError([]) }>{err}</MyError>
+                ? <MyError onClick={e => setError([])}>{err}</MyError>
                 : <>
                     {isYearLoading
                         ? < MyLoader />
@@ -100,13 +96,7 @@ const Plan = () => {
                                         onChange={e => setPlanYear(Number(e.target.value))}
                                     />
                                 </div>
-                                {isAuth
-                                    ? <div className={headerItem}>
-                                        <MyButton
-                                            onClick={createNewPlan}
-                                        >{`Створити план на ${nextYear} - ${nextYear + 1} р.`}</MyButton> </div>
-                                    : <></>
-                                }
+
                             </div>
                             <div className={contTableWrapper}>
                                 {isPlanLoading

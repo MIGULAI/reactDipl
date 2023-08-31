@@ -21,7 +21,7 @@ const AuthorForm = ({ author, submitButtonValue, onSubmit }) => {
     const { register, handleSubmit, control, setValue, formState: { errors } } = useForm();
     const [cyrillicToTranslit] = useState(new CyrillicToTranslit({ preset: 'uk' }));
     const [specialties, setSpecialties] = useState([]);
-    const [organizations, setOrganizations] = useState([]);
+    const [/*organizations*/, setOrganizations] = useState([]);
     const [departments, setDepartments] = useState([]);
     const [places, setPlaces] = useState([]);
     const [degrees, setDegrees] = useState([]);
@@ -115,10 +115,10 @@ const AuthorForm = ({ author, submitButtonValue, onSubmit }) => {
             }
             if (specialties) {
                 const specialty = specialties.filter(el => el.value === author.Specialty)[0]
-                if (specialty) setValue('department', specialty.value)
+                if (specialty) setValue('specialty', specialty.value)
             }
         }
-    }, [author, isLoading])
+    }, [author, isLoading]) // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <form className={myClasses.form__wrapper} onSubmit={handleSubmit(beforeSubmit)}>
@@ -220,7 +220,7 @@ const AuthorForm = ({ author, submitButtonValue, onSubmit }) => {
                                 </div>
                             </div>
                             <div className={classes.columItem}>
-                                <div className={classes.inputFuild}>
+                                {/* <div className={classes.inputFuild}>
                                     <MyLabel>Організація:</MyLabel>
                                     <MyFormSelector
                                         options={organizations}
@@ -229,7 +229,7 @@ const AuthorForm = ({ author, submitButtonValue, onSubmit }) => {
                                     {
                                         errors.organization && <span>Виберіть організацію</span>
                                     }
-                                </div>
+                                </div> */}
                                 <div className={classes.inputFuild}>
                                     <MyLabel>Посада:</MyLabel>
                                     <MyFormSelector

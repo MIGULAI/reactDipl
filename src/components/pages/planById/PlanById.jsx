@@ -27,7 +27,7 @@ const PlanById = () => {
     const [manusl, setManual] = useState(0)
     const [publs, setPubls] = useState([])
     const [selectedItem, setSelectedItem] = useState(-1)
-
+    const [author, setAuthor] = useState()
 
 
     const { isAuth, setKeyActive } = useContext(AuthContext)
@@ -36,8 +36,6 @@ const PlanById = () => {
     const [fetchingPlan, isPlanLoading, plansError] = useFetching(async (id) => {
         const response = await PostService.fetchPlanById(id);
         if (response.data.success) {
-            console.log(response.data.data.plan);
-
             setTDK(response.data.data.plan.Theses)
             setManual(response.data.data.plan.Manuals)
             setScopus(response.data.data.plan.Scopus)
@@ -60,14 +58,20 @@ const PlanById = () => {
     })
 
     const [setAutorPubs, isPubsFetching, pubsError] = useFetching(async (autorId) => {
-        
+
         if (autorId !== undefined) {
             const response = await PostService.fetchPubsByAutorId(autorId);
-            console.log(response.data);
-
             setPubls(response.data.data.publs)
         }
     })
+
+    const [fetchAuthor, isFetching, errFetching] = useFetching(async (autorId) => {
+        const response = await PostService.fetchAuthor(autorId)
+        if (response.data.success) {
+            setAuthor(response.data.data.author)
+        }
+    })
+
 
     const saveData = () => {
         let el = {
@@ -81,33 +85,35 @@ const PlanById = () => {
     useEffect(() => {
         pubsError && console.log(pubsError);
         sePlanError && console.log(sePlanError);
-    }, [pubsError, sePlanError])
+        errFetching && console.log(errFetching);
+    }, [pubsError, sePlanError, errFetching])
     useEffect(() => {
         setKeyActive(0)
         fetchingPlan(params.id)
         setIsLoading(false)
-    }, []);
+
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
-        if (planSet !== []) {
+        if (planSet && planSet !== []) {
             setAutorPubs(planSet.AuthorId)
+            fetchAuthor(planSet.AuthorId)
         }
-
-    }, [planSet])
+    }, [planSet]) // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
         if (plansError !== '') setErr([...err, plansError])
-    }, [plansError])
+    }, [plansError]) // eslint-disable-line react-hooks/exhaustive-deps
     return (
         <>
             {
-                isPlanLoading || isPubsFetching || isPlanFetching
+                isPlanLoading || isPubsFetching || isPlanFetching || isFetching
                     ? <PageWrapper><MyLoader /></PageWrapper>
                     : <>
                         {
                             err.length !== 0
                                 ? <PageWrapper><MyError>{err}</MyError></PageWrapper>
-                                : <PageWrapper style={{ flexDirection: 'column', justifyContent: 'start' }} title={`${planSet.autor} ${planSet.year_start} - ${planSet.year_end} `}>
+                                : <PageWrapper style={{ flexDirection: 'column', justifyContent: 'start' }} title={`${author.SerName} ${author.Name} ${author.Patronic} - ${planSet.Year} рік`}>
                                     {
                                         isAuth
                                             ? <div className={classes.pageTable}>

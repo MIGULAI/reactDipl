@@ -14,6 +14,7 @@ import PostService from "../../../API/PostService";
 import MyButton from "../../UI/MyButton/MyButton";
 import MyTable from "../../UI/MyTable/MyTable";
 import SearchTR from "./SearchTR";
+import { useNavigate } from "react-router-dom";
 
 const SearchDB = () => {
     const { isAuth, setKeyActive } = useContext(AuthContext)
@@ -27,6 +28,7 @@ const SearchDB = () => {
     const [trSelected, setTrSelected] = useState(null)
     const [autorsList, setAutorsList] = useState([])
     const [searchedAutorsList, setSearchedAutorsList] = useState([])
+    const navigate = useNavigate()
 
     const [fetchAutors, isFetchingAutors, autErr] = useFetching(async () => {
         const authors = await PostService.fetchAutors()
@@ -61,6 +63,9 @@ const SearchDB = () => {
         setSearchParam(data)
         setSearchType(type)
         setIsLoading(false)
+    }
+    const about= (id) => {
+        navigate(`/about/author/${id}`)
     }
     useEffect(()=> {
         autErr && console.log(autErr);
@@ -105,7 +110,7 @@ const SearchDB = () => {
                             </MyTable>
                         </div>
                         {
-                            trSelected && <div className={btnWrapper}><MyButton>Детальніше</MyButton></div>
+                            trSelected && <div className={btnWrapper}><MyButton onClick={() => about(trSelected)}>Детальніше</MyButton></div>
                         }
                     </div>
             }

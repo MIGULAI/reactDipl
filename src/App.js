@@ -50,7 +50,7 @@ function App() {
 
   const showMessage = (data) => {
     setMessageModalVisible(true)
-    setMessageArray(data.message)
+    setMessageArray(Array.isArray(data.message) ? data.message: [data.message])
     if(data.success) {
       setMessageClasses(['message'])
     } else {
