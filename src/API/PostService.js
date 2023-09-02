@@ -3,6 +3,7 @@ import { getCookie } from "../utils/functions/Cookie";
 
 export default class PostService {
     static barrerToken = getCookie('access_token')
+    static hostname = window.location.host.includes('localhost') ? process.env.REACT_APP_HOSTNAME : '/'
     static getConfig = {
         headers: {
             'Content-Type': 'application/json',
@@ -28,47 +29,47 @@ export default class PostService {
     // }
 
     static async init() {
-        let response = await axios.get(`${process.env.REACT_APP_HOSTNAME}sanctum/csrf-cookie`, this.getConfig);
+        let response = await axios.get(`${this.hostname}sanctum/csrf-cookie`, this.getConfig);
         return response
     }
 
     static async initUser() {
-        let response = await axios.get(`${process.env.REACT_APP_HOSTNAME}api/userinit`, this.getConfig);
+        let response = await axios.get(`${this.hostname}api/userinit`, this.getConfig);
         return response
     }
     static async fetchingGlobalSetup() {
         // const instance = await this.protectionInit()
-        let response = await axios.get(`${process.env.REACT_APP_HOSTNAME}api/setup`, this.getConfig)
+        let response = await axios.get(`${this.hostname}api/setup`, this.getConfig)
         return response
     }
 
     static async loginService(obj) {
         // const crsf = getCookie('XSRF-TOKEN')
-        let response = await axios.post(`${process.env.REACT_APP_HOSTNAME}api/login`, obj, { withCredentials: true })
+        let response = await axios.post(`${this.hostname}api/login`, obj, { withCredentials: true })
         return response;
     }
 
     static async fetchPlanYearList() {
-        let response = await axios.get(`${process.env.REACT_APP_HOSTNAME}api/plans/years`)
+        let response = await axios.get(`${this.hostname}api/plans/years`)
         return response;
     }
 
     static async fetchPlansByYear(year) {
-        let response = await axios.post(`${process.env.REACT_APP_HOSTNAME}api/plans/year`, {
+        let response = await axios.post(`${this.hostname}api/plans/year`, {
             year: year
         })
         return response;
     }
 
     static async createNextYearPlan(nextYear, apiKey) {
-        let response = await axios.post(`${process.env.REACT_APP_HOSTNAME}api/plans/new`, {
+        let response = await axios.post(`${this.hostname}api/plans/new`, {
             nextYear: nextYear,
             apiKey: apiKey
         })
         return response;
     }
     static async fetchPlanById(id) {
-        let response = await axios.post(`${process.env.REACT_APP_HOSTNAME}api/plan/about`, {
+        let response = await axios.post(`${this.hostname}api/plan/about`, {
             id: id
         })
         return response
@@ -80,7 +81,7 @@ export default class PostService {
                 'Authorization': `Bearer ${token}`
             }
         }
-        let response = await axios.put(`${process.env.REACT_APP_HOSTNAME}api/plan/set`, {
+        let response = await axios.put(`${this.hostname}api/plan/set`, {
             plan: plan,
             id: id,
             autorId: autorId
@@ -88,7 +89,7 @@ export default class PostService {
         return response
     }
     static async fetchPubsByAutorId(id) {
-        let response = await axios.post(`${process.env.REACT_APP_HOSTNAME}api/publication/byAutorId`, {
+        let response = await axios.post(`${this.hostname}api/publication/byAutorId`, {
             id: id
         })
         return response
@@ -101,7 +102,7 @@ export default class PostService {
             },
             withCredentials: true
         }
-        let response = await axios.get(`${process.env.REACT_APP_HOSTNAME}api/authors/setup`, config)
+        let response = await axios.get(`${this.hostname}api/authors/setup`, config)
         return response
     }
 
@@ -114,7 +115,7 @@ export default class PostService {
 
 
         // }
-        let response = await axios.get(`${process.env.REACT_APP_HOSTNAME}api/publications/setup`, this.getConfig)
+        let response = await axios.get(`${this.hostname}api/publications/setup`, this.getConfig)
         return response
     }
     static async addAutor(obj, token) {
@@ -125,7 +126,7 @@ export default class PostService {
             },
             withCredentials: true
         }
-        let response = await axios.post(`${process.env.REACT_APP_HOSTNAME}api/author/add`, {
+        let response = await axios.post(`${this.hostname}api/author/add`, {
             obj: obj
         }, config)
         return response
@@ -139,7 +140,7 @@ export default class PostService {
             },
             withCredentials: true
         }
-        const response = await axios.post(`${process.env.REACT_APP_HOSTNAME}api/publisher/add`, {
+        const response = await axios.post(`${this.hostname}api/publisher/add`, {
             ...data
         }, config)
         return response;
@@ -152,7 +153,7 @@ export default class PostService {
             },
             withCredentials: true
         }
-        const response = await axios.post(`${process.env.REACT_APP_HOSTNAME}api/lang/add`, {
+        const response = await axios.post(`${this.hostname}api/lang/add`, {
             ...data
         }, config)
         return response;
@@ -165,7 +166,7 @@ export default class PostService {
             },
             withCredentials: true
         }
-        const response = await axios.post(`${process.env.REACT_APP_HOSTNAME}api/rank/add`, {
+        const response = await axios.post(`${this.hostname}api/rank/add`, {
             ...data
         }, config)
         return response;
@@ -178,7 +179,7 @@ export default class PostService {
             },
             withCredentials: true
         }
-        const response = await axios.post(`${process.env.REACT_APP_HOSTNAME}api/degree/add`, {
+        const response = await axios.post(`${this.hostname}api/degree/add`, {
             ...data
         }, config)
         return response;
@@ -191,7 +192,7 @@ export default class PostService {
             },
             withCredentials: true
         }
-        const response = await axios.post(`${process.env.REACT_APP_HOSTNAME}api/posision/add`, {
+        const response = await axios.post(`${this.hostname}api/posision/add`, {
             ...data
         }, config)
         return response;
@@ -204,7 +205,7 @@ export default class PostService {
             },
             withCredentials: true
         }
-        const response = await axios.post(`${process.env.REACT_APP_HOSTNAME}api/cafedra/add`, {
+        const response = await axios.post(`${this.hostname}api/cafedra/add`, {
             ...data
         }, config)
         return response;
@@ -218,28 +219,28 @@ export default class PostService {
             withCredentials: true
 
         }
-        let response = await axios.post(`${process.env.REACT_APP_HOSTNAME}api/publications/add`, {
+        let response = await axios.post(`${this.hostname}api/publications/add`, {
             ...obj,
             authors: obj.authorList
         }, config)
         return response
     }
     static async fetchAutors() {
-        let response = await axios.get(`${process.env.REACT_APP_HOSTNAME}api/authors`)
+        let response = await axios.get(`${this.hostname}api/authors`)
         return response
     }
     static async fetchAuthor(id) {
-        let response = await axios.get(`${process.env.REACT_APP_HOSTNAME}api/author?id=${id}`)
+        let response = await axios.get(`${this.hostname}api/author?id=${id}`)
         return response
     }
 
     static async fetchPositions() {
-        let response = await axios.get(`${process.env.REACT_APP_HOSTNAME}api/positions`)
+        let response = await axios.get(`${this.hostname}api/positions`)
         return response
     }
 
     static async fetchAuthorsOfPubl(id) {
-        let response = await axios.get(`${process.env.REACT_APP_HOSTNAME}api/publication/authors?id=${id}`)
+        let response = await axios.get(`${this.hostname}api/publication/authors?id=${id}`)
         return response
     }
     static async fetchingStatistic(token) {
@@ -250,7 +251,7 @@ export default class PostService {
             },
             withCredentials: true
         }
-        let response = await axios.get(`${process.env.REACT_APP_HOSTNAME}api/statistic/auth`, config)
+        let response = await axios.get(`${this.hostname}api/statistic/auth`, config)
         return response
     }
 
@@ -262,7 +263,7 @@ export default class PostService {
             },
             withCredentials: true
         }
-        let response = await axios.post(`${process.env.REACT_APP_HOSTNAME}api/plans/create`, {
+        let response = await axios.post(`${this.hostname}api/plans/create`, {
             year: year,
         }, config)
         return response
@@ -275,7 +276,7 @@ export default class PostService {
             },
             withCredentials: true
         }
-        let response = await axios.put(`${process.env.REACT_APP_HOSTNAME}api/plans/create`, {
+        let response = await axios.put(`${this.hostname}api/plans/create`, {
             plan: plan,
         }, config)
         return response
@@ -289,7 +290,7 @@ export default class PostService {
                 'Authorization': `Bearer ${token}`
             }
         }
-        let response = await axios.post(`${process.env.REACT_APP_HOSTNAME}api/authors/json`, {
+        let response = await axios.post(`${this.hostname}api/authors/json`, {
             body: file
         }, config)
         return response
@@ -302,7 +303,7 @@ export default class PostService {
                 'Authorization': `Bearer ${token}`
             }
         }
-        let response = await axios.put(`${process.env.REACT_APP_HOSTNAME}api/setup/authors`, {
+        let response = await axios.put(`${this.hostname}api/setup/authors`, {
             number: number
         }, config)
         return response
@@ -316,15 +317,15 @@ export default class PostService {
             },
             withCredentials: true
         }
-        let response = await axios.get(`${process.env.REACT_APP_HOSTNAME}api/plans/calculate`, config)
+        let response = await axios.get(`${this.hostname}api/plans/calculate`, config)
         return response
     }
     static async fetchPubls() {
-        const response = await axios.get(`${process.env.REACT_APP_HOSTNAME}api/publications`)
+        const response = await axios.get(`${this.hostname}api/publications`)
         return response
     }
     static async fetchPublication(id) {
-        const response = await axios.post(`${process.env.REACT_APP_HOSTNAME}api/publication`, {
+        const response = await axios.post(`${this.hostname}api/publication`, {
             id: id
         })
         return response
@@ -338,7 +339,7 @@ export default class PostService {
             },
             withCredentials: true
         }
-        let response = await axios.put(`${process.env.REACT_APP_HOSTNAME}api/publication`, {
+        let response = await axios.put(`${this.hostname}api/publication`, {
             ...publication
         }, config)
         return response
@@ -352,7 +353,7 @@ export default class PostService {
             },
             withCredentials: true
         }
-        let response = await axios.put(`${process.env.REACT_APP_HOSTNAME}api/author`, {
+        let response = await axios.put(`${this.hostname}api/author`, {
             author: author
         }, config)
         return response
