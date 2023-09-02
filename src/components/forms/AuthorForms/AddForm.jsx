@@ -14,6 +14,10 @@ import DatePicker, { registerLocale } from "react-datepicker";
 import uk from 'date-fns/locale/uk';
 import "react-datepicker/dist/react-datepicker.css";
 import CyrillicToTranslit from 'cyrillic-to-translit-js';
+import ModalAddPosition from "../../modals/addPosition/ModalAddPosition";
+import AddRankModal from "../../modals/addRank/AddRankModal";
+import AddDegreeModal from "../../modals/addDegree/AddDegreeModal";
+import ModalAddCafedra from "../../modals/addCafedra/ModalAddCafedra";
 
 registerLocale('uk', uk)
 
@@ -29,6 +33,10 @@ const AuthorForm = ({ author, submitButtonValue, onSubmit }) => {
     const [err, setErr] = useState([])
     const { accessToken } = useContext(AuthContext)
     const [isLoading, setIsLoading] = useState(true)
+    const [positionAddModalVisible, setPositionAddModalVisible] = useState(false)
+    const [rankAddModalVisible, setRankAddModalVisible] = useState(false)
+    const [degreeAddModalVisible, setDegreeAddModalVisible] = useState(false)
+    const [cafedraAddModalVisible, setCafedraAddModalVisible] = useState(false)
     const departmentWatcher = useWatch({ control, name: 'department' })
     const firstNameWatcher = useWatch({ control, name: 'firstName' })
     const serNameWatcher = useWatch({ control, name: 'serName' })
@@ -120,7 +128,11 @@ const AuthorForm = ({ author, submitButtonValue, onSubmit }) => {
         }
     }, [author, isLoading]) // eslint-disable-line react-hooks/exhaustive-deps
 
-    return (
+    return <>
+        <AddRankModal visible={rankAddModalVisible} setVisible={setRankAddModalVisible} onClose={() => subArrFetch()}/>
+        <ModalAddPosition visible={positionAddModalVisible} setVisible={setPositionAddModalVisible} onClose={() => subArrFetch()}/>
+        <AddDegreeModal visible={degreeAddModalVisible} setVisible={setDegreeAddModalVisible} onClose={() => subArrFetch()}/>
+        <ModalAddCafedra visible={cafedraAddModalVisible} setVisible={setCafedraAddModalVisible} onClose={() => subArrFetch()}/>
         <form className={myClasses.form__wrapper} onSubmit={handleSubmit(beforeSubmit)}>
             {
                 (isLoading)
@@ -214,6 +226,8 @@ const AuthorForm = ({ author, submitButtonValue, onSubmit }) => {
                                         options={departments}
                                         register={{ ...register('department', { required: true }) }}
                                     />
+                                    <MyButton type={'button'} onClick={() => setCafedraAddModalVisible(true)}>+</MyButton>
+                                    
                                     {
                                         errors.department && <span>Виберіть кафедру</span>
                                     }
@@ -236,6 +250,7 @@ const AuthorForm = ({ author, submitButtonValue, onSubmit }) => {
                                         options={places}
                                         register={{ ...register('position', { required: true }) }}
                                     />
+                                    <MyButton type={'button'} onClick={() => setPositionAddModalVisible(true)}>+</MyButton>
                                     {
                                         errors.position && <span>Виберіть посаду</span>
                                     }
@@ -246,6 +261,8 @@ const AuthorForm = ({ author, submitButtonValue, onSubmit }) => {
                                         options={ranks}
                                         register={{ ...register('rank', { required: true }) }}
                                     />
+                                    <MyButton type={'button'} onClick={() => setRankAddModalVisible(true)}>+</MyButton>
+
                                     {
                                         errors.rank && <span>Виберіть вчене звання</span>
                                     }
@@ -256,6 +273,8 @@ const AuthorForm = ({ author, submitButtonValue, onSubmit }) => {
                                         options={degrees}
                                         register={{ ...register('degree', { required: true }) }}
                                     />
+                                    <MyButton type={'button'} onClick={() => setDegreeAddModalVisible(true)}>+</MyButton>
+
                                     {
                                         errors.degree && <span>Виберіть вчене звання</span>
                                     }
@@ -288,7 +307,7 @@ const AuthorForm = ({ author, submitButtonValue, onSubmit }) => {
                     </>
             }
         </form>
-    )
+    </>
 }
 
 

@@ -157,6 +157,58 @@ export default class PostService {
         }, config)
         return response;
     }
+    static async addRank(data, token) {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            withCredentials: true
+        }
+        const response = await axios.post(`${process.env.REACT_APP_HOSTNAME}api/rank/add`, {
+            ...data
+        }, config)
+        return response;
+    }
+    static async addDegree(data, token) {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            withCredentials: true
+        }
+        const response = await axios.post(`${process.env.REACT_APP_HOSTNAME}api/degree/add`, {
+            ...data
+        }, config)
+        return response;
+    }
+    static async addPosision(data, token) {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            withCredentials: true
+        }
+        const response = await axios.post(`${process.env.REACT_APP_HOSTNAME}api/posision/add`, {
+            ...data
+        }, config)
+        return response;
+    }
+    static async addCafedra(data, token) {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            withCredentials: true
+        }
+        const response = await axios.post(`${process.env.REACT_APP_HOSTNAME}api/cafedra/add`, {
+            ...data
+        }, config)
+        return response;
+    }
     static async addPub(obj, token) {
         const config = {
             headers: {
