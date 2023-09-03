@@ -107,15 +107,14 @@ export default class PostService {
     }
 
     static async fetchPublSettings(token) {
-        // const config = {
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //         'Authorization': `Bearer ${token}`
-        //     },
-
-
-        // }
-        let response = await axios.get(`${this.hostname}api/publications/setup`, this.getConfig)
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            withCredentials: true
+         }
+        let response = await axios.get(`${this.hostname}api/publications/setup`, config)
         return response
     }
     static async addAutor(obj, token) {
