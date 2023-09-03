@@ -33,8 +33,7 @@ const PlanModalChecker = ({ newPlans, setPlans, saveFunc, cancelFunc }) => {
             ready[active.i][active.j] = false
             setIsReadOnly(ready)
         }
-
-    }, [active])
+    }, [active]) // eslint-disable-line react-hooks/exhaustive-deps
     
     return (
         <div>

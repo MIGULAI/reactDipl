@@ -20,7 +20,6 @@ const SearchDB = () => {
     const { isAuth, setKeyActive, showMessage } = useContext(AuthContext)
     const { header, subWrapper, tableWrapper, btnWrapper } = classes
     const [isLoading, setIsLoading] = useState(true)
-
     const [state, setState] = useState(0)
     const [searchParam, setSearchParam] = useState(SearchStates[state].parametrs().data)
     const [searchType, setSearchType] = useState(SearchStates[state].type)
@@ -31,7 +30,7 @@ const SearchDB = () => {
     const navigate = useNavigate()
 
     const [fetchAutors, isFetchingAutors, autErr] = useFetching(async () => {
-        const authors = await PostService.fetchAutors()
+        const authors = await PostService.fetchAutorsFull()
         if(authors.data.success){
             setAutorsList(authors.data.data.authors)
             setSearchedAutorsList(authors.data.data.authors)
@@ -101,12 +100,13 @@ const SearchDB = () => {
                         </div>
                         <div className={tableWrapper}>
                             <MyTable
-                                header={['Прізвище', "Ім'я", 'По Батькові', 'Організація', 'Наукове звання', 'Наукова ступінь', 'Email']}
+                                header={['№', 'Orcid', 'Прізвище', "Ім'я", 'По Батькові', 'Ступінь', 'Наукове звання', 'Посада']}
                             >
                                 {
                                     searchedAutorsList.map((author, i) =>
                                         <SearchTR
                                             key={i}
+                                            subIndex={i}
                                             option={author}
                                             index={author.id}
                                             selected={setTrSelected}

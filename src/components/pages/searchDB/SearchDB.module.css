@@ -1,12 +1,11 @@
-
-
 .header {
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
-.subWrapper{
+
+.subWrapper {
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -14,7 +13,7 @@
     align-items: center;
 }
 
-.tableWrapper{
+.tableWrapper {
     margin-top: 10px;
     width: auto;
     justify-content: center;
@@ -24,10 +23,17 @@
     border: 1px solid black;
 }
 
-.btnWrapper{
+.btnWrapper {
     margin-top: 10px;
     display: flex;
 }
-.header > * {
+
+.header>* {
     margin-top: 10px;
+}
+
+@media (max-width:500px) {
+    .subWrapper {
+        display: block;
+    }
 }

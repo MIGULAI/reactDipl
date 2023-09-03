@@ -1,7 +1,7 @@
 import React from "react";
 import classes from "./MyModal.module.css"
 import PropTypes from 'prop-types';
-import close from '../../../resources/svg/close.svg'
+import CloseIcon from "../../../resources/jsx/CloseIcon";
 
 const MyModal = ({ visible, setVisible, canClouse, onClose, children, zIndex = 888 }) => {
     const { modal, active, modalContent } = classes
@@ -13,11 +13,11 @@ const MyModal = ({ visible, setVisible, canClouse, onClose, children, zIndex = 8
         onClose && onClose()
     }
     return (
-        <div className={rootClasses} style={{zIndex: zIndex}} onClick={() => clouse()}>
+        <div className={rootClasses} style={{ zIndex: zIndex }} onClick={() => clouse()}>
             <div className={modalContent} onClick={(e) => e.stopPropagation()}>
                 <div className={classes.modalHeader}>
                     <div className={classes.imgWrapper}>
-                        <img className={classes.exitSVG} onClick={() => clouse()} src={close} alt="Закрити вікно" />
+                        <span className={classes.exitSVG} onClick={() => clouse()} ><CloseIcon /></span>
                     </div>
                 </div>
                 {children}

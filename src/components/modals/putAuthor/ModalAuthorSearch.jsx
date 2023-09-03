@@ -36,7 +36,7 @@ const ModalAuthorSearch = ({ setAuthorId, errCallback }) => {
         const rPatronic = new RegExp(authorPatronic.toLowerCase())
         aList = aList.filter(a => (a.Name.toLowerCase().match(rName) && a.SerName.toLowerCase().match(rSername) && a.Patronic.toLowerCase().match(rPatronic)))
         setAuthorsList(aList)
-    }, [authorName, authorSername, authorPatronic])
+    }, [authorName, authorSername, authorPatronic]) // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
         fetchErr && console.log(fetchErr);
@@ -44,7 +44,7 @@ const ModalAuthorSearch = ({ setAuthorId, errCallback }) => {
 
     useEffect(() => {
         authorsFetching()
-    }, [])
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <>

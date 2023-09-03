@@ -71,8 +71,6 @@ function App() {
       isAuth, setIsAuth, showMessage, setMessageArray, setMessageClasses, setMessageModalVisible, isLoading, accessToken, setAccessToken, keyActive, globalSetup, setGlobalSetup, setKeyActive
     }}>
       <BrowserRouter>
-
-
         {
           isLoading || setupLoading
             ? <div className="globalLoaderWrapper"><MyLoader></MyLoader></div>

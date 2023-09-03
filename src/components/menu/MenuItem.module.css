@@ -1,4 +1,4 @@
-.MenuItem{
+.MenuItem {
     position: relative;
     list-style: none;
     width: 100%;
@@ -10,16 +10,25 @@
     font-size: 1em;
 }
 
-.MenuItem p{
+.MenuItem p {
     text-align: center;
     display: block;
     padding-left: 10px;
     height: 60px;
     line-height: 60px;
     white-space: normal;
+    visibility: visible;
 }
 
-.icon{
+@media (max-width:500px) {
+    .MenuItem p {
+        visibility: hidden;
+    }
+
+    
+}
+
+.icon {
     position: relative;
     display: block;
     min-width: 60px;
@@ -28,11 +37,7 @@
     text-align: center;
 }
 
-.ActiveMenuItem{
+.ActiveMenuItem {
     background: #fff;
     color: #333;
 }
-
-
-
-

@@ -10,7 +10,6 @@ import PropTypes from 'prop-types';
 const AddPublisherForm = ({publisher, onSubmitForm, submitButtonValue = 'Додати'}) => {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const beforeSubmit = (data) => {
-        console.log(data);
         onSubmitForm(data)
     }
 

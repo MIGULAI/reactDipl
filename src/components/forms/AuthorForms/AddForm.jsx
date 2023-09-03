@@ -206,7 +206,7 @@ const AuthorForm = ({ author, submitButtonValue, onSubmit }) => {
                                         type="text"
                                         placeholder={'____-____-____-____'}
                                         register={{ ...register('orcid', { required: true, minLength: 16, maxLength: 20 }) }}
-                                        mask={'9999-9999-9999-9999'}
+                                        mask={'9999-9999-9999-999*'}
                                     />
                                     {errors.orcid && <span>Orcid введено не коректно</span>}
                                 </div>

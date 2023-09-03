@@ -229,6 +229,10 @@ export default class PostService {
         let response = await axios.get(`${this.hostname}api/authors`)
         return response
     }
+    static async fetchAutorsFull() {
+        let response = await axios.get(`${this.hostname}api/authors/full`)
+        return response
+    }
     static async fetchAuthor(id) {
         let response = await axios.get(`${this.hostname}api/author?id=${id}`)
         return response

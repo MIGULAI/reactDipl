@@ -58,7 +58,7 @@ const Editor = () => {
     useEffect(() => {
         setKeyActive(0)
         setIsLoading(false)
-    }, [])
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <PageWrapper title={"Сторінка адміністратора"}>

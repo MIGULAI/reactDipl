@@ -53,7 +53,7 @@ const ModalChangeAuthor = ({ id }) => {
     }, [errFetching, putErr])
     useEffect(() => {
         fetchAuthor()
-    }, [])
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <>

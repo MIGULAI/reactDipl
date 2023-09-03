@@ -30,7 +30,7 @@ const AboutTR = ({option, index, selected, selectedItem}) =>{
                 <span>{option.LanguageName}</span>
             </td>
             <td>
-                <span>{option.PublicationDate}</span>
+                <span>{new Date(option.PublicationDate).toLocaleDateString()}</span>
             </td>
         </tr>
     )

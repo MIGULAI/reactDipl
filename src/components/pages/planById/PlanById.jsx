@@ -88,7 +88,7 @@ const PlanById = () => {
         errFetching && console.log(errFetching);
     }, [pubsError, sePlanError, errFetching])
     useEffect(() => {
-        setKeyActive(0)
+        isAuth ? setKeyActive(1) : setKeyActive(0)
         fetchingPlan(params.id)
         setIsLoading(false)
 
@@ -179,7 +179,6 @@ const PlanById = () => {
                                             {
                                                 publs.map(e =>
                                                     <AboutTR key={e.id} option={e} selectedItem={selectedItem} selected={e => setSelectedItem(e)} index={e.id} />
-
                                                 )
                                             }
                                         </MyTable>

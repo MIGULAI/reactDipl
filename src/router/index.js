@@ -1,4 +1,4 @@
-import React  from 'react';
+import React from 'react';
 import Login from "../components/pages/login/Login"
 import Plan from "../components/pages/plan/Plan"
 import SearchDB from "../components/pages/searchDB/SearchDB"
@@ -11,24 +11,22 @@ import AboutAuthor from '../components/pages/about/author/Author';
 
 
 export const privateRoutes = [
-    {path:'/plan', element: <Plan/>, exact: true},
-    {path: '/add/public', element: <AddPubl/>, exact: true},
-    {path: '/add/autor', element: <AddAutor/>, exact: true},
-    {path: '/search', element: <SearchDB/>, exact: true},
-    {path: '/analyze', element: <Analyze/>, exact: true},
-    {path: '/plan/change/:id', element: <PlanById/>, exact: true},
-    {path: '/editor', element: <Editor/>, exact: true},
-    {path: '/about/author/:id', element: <AboutAuthor/>, exact: true}
-
-
+    { path: '/plan', element: <Plan />, exact: true },
+    { path: '/add/public', element: <AddPubl />, exact: true },
+    { path: '/add/autor', element: <AddAutor />, exact: true },
+    { path: '/search', element: <SearchDB />, exact: true },
+    { path: '/analyze', element: <Analyze />, exact: true },
+    { path: '/plan/change/:id', element: <PlanById />, exact: true },
+    { path: '/editor', element: <Editor />, exact: true },
+    { path: '/about/author/:id', element: <AboutAuthor />, exact: true }
 ]
 
 export const publicRoutes = [
-    {path:'/login', element: <Login/>, exact: true},
-    {path:'/plan', element: <Plan/>, exact: true},
-    {path: '/search', element: <SearchDB/>, exact: true},
-    {path: '/analyze', element: <Analyze/>, exact: true},
-    {path: '/plan/about/:id', element: <PlanById/>, exact: true},
-    {path: '/about/author/:id', element: <AboutAuthor/>, exact: true}
+    { path: '/login', element: <Login />, exact: true },
+    { path: '/plan', element: <Plan />, exact: true },
+    { path: '/search', element: <SearchDB />, exact: true },
+    { path: '/analyze', element: <Analyze />, exact: true },
+    { path: '/plan/about/:id', element: <PlanById />, exact: true },
+    { path: '/about/author/:id', element: <AboutAuthor />, exact: true }
 ]
 

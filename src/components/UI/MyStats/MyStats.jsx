@@ -24,13 +24,13 @@ const MyStats = ({setBoboErr}) => {
 
     useEffect(() => {
         (setBoboErr !== null && err.length !== 0) && setBoboErr(err)
-    }, [err])
+    }, [err]) // eslint-disable-line react-hooks/exhaustive-deps
     useEffect (() => {
-        statErr !== '' && setErr([...err, statErr])
+        statErr !== '' && setErr(prev => [...prev, statErr])
     }, [statErr])
     useEffect(() => {
         statFetching(accessToken)
-    }, [])
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
     return (
         <>

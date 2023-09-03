@@ -1,4 +1,4 @@
-.Menu__wrapper{
+.Menu__wrapper {
     position: fixed;
     top: 20px;
     left: 20px;
@@ -9,9 +9,11 @@
     border-left: 5px solid #4d5bf9;
     background-color: #4d5bf9;
     transition: 0.5s;
+    max-height: 90vh;
+
 }
 
-.Menu{
+.Menu {
     position: absolute;
     top: 0;
     left: 0;
@@ -19,4 +21,22 @@
     padding-left: 5px;
     padding-top: 40px;
 
+}
+
+@media (max-width:500px) {
+    .Menu__wrapper {
+        width: 80px;
+        z-index: 100;
+    }
+
+    .Menu__wrapper:hover,
+    .Menu__wrapper:active {
+        transition: all .5s;
+        width: 300px;
+    }
+
+    .Menu__wrapper:hover p,
+    .Menu__wrapper:active p {
+        visibility: visible;
+    }
 }

@@ -27,3 +27,13 @@
     justify-content: center;
     padding-top: 2vh;
 }
+
+@media (max-width:500px) {
+  .pageWrapper{
+    left: 150px;
+    width: 100%;
+  }   
+  .subWrapper{
+    display: block;
+  }
+}

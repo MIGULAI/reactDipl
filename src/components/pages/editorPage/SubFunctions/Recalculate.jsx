@@ -21,12 +21,12 @@ const Recalculate = ({ accessToken }) => {
 
     useEffect(() => {
         calcErr !== '' && setErr([calcErr])
-    }, [calcErr])
+    }, [calcErr]) 
 
      useEffect(() => {
         setCalcErr('')
         setErr([])
-     }, [modalVisible])
+     }, [modalVisible]) // eslint-disable-line react-hooks/exhaustive-deps
     return (
         <>
             <MyModal visible={modalVisible} canClouse={!isPlansCalcing} setVisible={setModalVisible}>

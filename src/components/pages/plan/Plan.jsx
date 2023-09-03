@@ -62,10 +62,12 @@ const Plan = () => {
     }
 
     useEffect(() => {
+        if(isLoading){
+            isAuth ? setKeyActive(1) : setKeyActive(0)
+            fetchYears()
+            setIsLoading(false)
+        }
 
-        isAuth ? setKeyActive(1) : setKeyActive(0)
-        fetchYears()
-        setIsLoading(false)
     }, [isLoading]) // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
