@@ -20,7 +20,7 @@ const Login = () => {
 
     const navig = useNavigate()
     const [user, setUser] = useState({ email: '', password: '' })
-    const [err, setErr] = useState([])
+    const [showError, setShowError] = useState(false)
 
     const [isLoging, loging, loginError] = useFetching(async () => {
         let [errorArray, accessToken] = await loginLogic(user, setIsAuth, setAccessToken)
@@ -41,9 +41,10 @@ const Login = () => {
     }, [setKeyActive]);
 
     useEffect(() => {
-        let errArray = []
-        loginError !== '' && errArray.push(loginError)
-        errArray.length && setErr(errArray)
+        if(loginError){
+            setShowError(true)
+            console.log(loginError);
+        } 
     }, [loginError])
 
     return (
@@ -54,7 +55,7 @@ const Login = () => {
                         ? <MyLoader />
                         : <form className={loginForm} onSubmit={login}>
                             {
-                                err.length !== 0 && <MyError onClick={() => setErr([])}>{err}</MyError>
+                                showError && <MyError onClick={() => setShowError(false)}>{[' Сталася помилка при авторизації, перевірте правильність введення даних']}</MyError>
                             }
                             <div className={inputWrapper}>
                                 <MyLabel htmlFor={"login"} >Email</MyLabel>

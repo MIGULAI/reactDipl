@@ -5,7 +5,6 @@ import { AuthContext } from "../context";
 
 const AppRouter = () => {
     const { isAuth } = useContext(AuthContext)
-
     return (
         <Routes>
             {isAuth
@@ -27,10 +26,8 @@ const AppRouter = () => {
                         )
                     }
                     <Route path="*" element={<Navigate to="/login" replace />} />
-
                 </Route>
             }
-
         </Routes>
     );
 }

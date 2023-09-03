@@ -17,7 +17,7 @@ import SearchTR from "./SearchTR";
 import { useNavigate } from "react-router-dom";
 
 const SearchDB = () => {
-    const { isAuth, setKeyActive } = useContext(AuthContext)
+    const { isAuth, setKeyActive, showMessage } = useContext(AuthContext)
     const { header, subWrapper, tableWrapper, btnWrapper } = classes
     const [isLoading, setIsLoading] = useState(true)
 
@@ -32,8 +32,15 @@ const SearchDB = () => {
 
     const [fetchAutors, isFetchingAutors, autErr] = useFetching(async () => {
         const authors = await PostService.fetchAutors()
-        setAutorsList(authors.data.data.authors)
-        setSearchedAutorsList(authors.data.data.authors)
+        if(authors.data.success){
+            setAutorsList(authors.data.data.authors)
+            setSearchedAutorsList(authors.data.data.authors)
+        }else {
+            let message = {...authors.data};
+            message.message = ['Сталася помилка'];
+            showMessage(message);
+        }
+
     })
 
     const positionFilter = (e) => {

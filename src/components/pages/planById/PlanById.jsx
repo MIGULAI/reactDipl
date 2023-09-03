@@ -113,7 +113,7 @@ const PlanById = () => {
                         {
                             err.length !== 0
                                 ? <PageWrapper><MyError>{err}</MyError></PageWrapper>
-                                : <PageWrapper style={{ flexDirection: 'column', justifyContent: 'start' }} title={`${author.SerName} ${author.Name} ${author.Patronic} - ${planSet.Year} рік`}>
+                                : <PageWrapper style={{ flexDirection: 'column', justifyContent: 'start' }} title={ author? `${author.SerName} ${author.Name} ${author.Patronic} - ${planSet.Year} рік` : '...'}>
                                     {
                                         isAuth
                                             ? <div className={classes.pageTable}>
