@@ -232,6 +232,14 @@ export default class PostService {
         let response = await axios.get(`${this.hostname}api/authors/full`)
         return response
     }
+    static async fetchDepStatistic() {
+        let response = await axios.get(`${this.hostname}api/depanalyze/basestat`)
+        return response
+    }
+    static async fetchAuthorCount() {
+        let response = await axios.get(`${this.hostname}api/depanalyze/authors/count`)
+        return response
+    }
     static async fetchAuthor(id) {
         let response = await axios.get(`${this.hostname}api/author?id=${id}`)
         return response
