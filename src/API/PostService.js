@@ -236,6 +236,7 @@ export default class PostService {
         let response = await axios.get(`${this.hostname}api/depanalyze/basestat`)
         return response
     }
+
     static async fetchAuthorCount() {
         let response = await axios.get(`${this.hostname}api/depanalyze/authors/count`)
         return response
