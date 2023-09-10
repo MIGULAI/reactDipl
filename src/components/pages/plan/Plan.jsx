@@ -15,6 +15,7 @@ import { CheckYear } from "../../../utils/functions/CheckYear";
 import MySelector from "../../UI/MySelector/MySelector";
 
 import classes from "./Plan.module.css"
+import Recalculate from "../editorPage/SubFunctions/Recalculate";
 
 const Plan = () => {
     const { myContentWrapper, myContentHeader, headerItem, contTableWrapper } = classes
@@ -27,7 +28,7 @@ const Plan = () => {
     const [selectedPlan, setSelectedPlan] = useState(-1)
     const [err, setError] = useState([])
 
-    const { isAuth, apiKey, setKeyActive } = useContext(AuthContext)
+    const { isAuth, apiKey, setKeyActive, accessToken } = useContext(AuthContext)
 
     const [fetchYears, isYearLoading, yearError] = useFetching(async () => {
         const response = await PostService.fetchPlanYearList()
@@ -40,7 +41,7 @@ const Plan = () => {
         if (optionsArray[optionsArray.length - 1] < planYear) {
             setPlanYear(optionsArray[optionsArray.length - 1].value)
         }
-        optionsArray =optionsArray.sort((a, b) => {
+        optionsArray = optionsArray.sort((a, b) => {
             if (a.value > b.value) return 1
             if (b.value > a.value) return -1
             return 0
@@ -62,7 +63,7 @@ const Plan = () => {
     }
 
     useEffect(() => {
-        if(isLoading){
+        if (isLoading) {
             isAuth ? setKeyActive(1) : setKeyActive(0)
             fetchYears()
             setIsLoading(false)
@@ -97,6 +98,13 @@ const Plan = () => {
                                         selected={planYear}
                                         onChange={e => setPlanYear(Number(e.target.value))}
                                     />
+                                    {
+                                    isAuth &&
+                                        <div >
+                                            <Recalculate accessToken={accessToken} />
+                                        </div>
+                                    }
+
                                 </div>
 
                             </div>

@@ -32,7 +32,10 @@ export default class PostService {
         let response = await axios.get(`${this.hostname}sanctum/csrf-cookie`, this.getConfig);
         return response
     }
-
+    static async logout() {
+        let response = await axios.get(`${this.hostname}api/logout`, this.getConfig);
+        return response
+    }
     static async initUser() {
         let response = await axios.get(`${this.hostname}api/userinit`, this.getConfig);
         return response
@@ -48,7 +51,14 @@ export default class PostService {
         let response = await axios.post(`${this.hostname}api/login`, obj, { withCredentials: true })
         return response;
     }
-
+    static async fetchPlanByAuthorAndYear(id, year) {
+        let response = await axios.get(`${this.hostname}api/plan/byyearsndbyauthor?id=${id}&year=${year}`)
+        return response;
+    }
+    static async fetchPlanYearListByAuthor(id) {
+        let response = await axios.get(`${this.hostname}api/plans/yearsbyauthor?id=${id}`)
+        return response;
+    }
     static async fetchPlanYearList() {
         let response = await axios.get(`${this.hostname}api/plans/years`)
         return response;
@@ -226,6 +236,10 @@ export default class PostService {
     }
     static async fetchAutors() {
         let response = await axios.get(`${this.hostname}api/authors`)
+        return response
+    }
+    static async fetchPlaningAutors() {
+        let response = await axios.get(`${this.hostname}api/planinauthors`)
         return response
     }
     static async fetchAutorsFull() {

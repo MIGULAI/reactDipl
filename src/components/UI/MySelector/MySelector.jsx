@@ -5,10 +5,12 @@ import PropTypes from 'prop-types';
 const MySelector = ({ options, selected, onChange }) => {
     return (
         <select
-            value={selected}
+            // value={selected}
+            defaultValue={0}
             onChange={onChange}
         >
-            {options.map((option , i) =>
+            <option value={0}  disabled={true}>{'Виберіть'}</option>
+            {options.map((option, i) =>
                 <option key={option.value ? option.value : i} value={option.value ? option.value : i} >{option.str}</option>
             )}
         </select>
@@ -21,7 +23,6 @@ MySelector.defaultProps = {
 
 MySelector.propTypes = {
     options: PropTypes.arrayOf(PropTypes.object),
-    selected: PropTypes.number,
     onChange: PropTypes.func
 }
 

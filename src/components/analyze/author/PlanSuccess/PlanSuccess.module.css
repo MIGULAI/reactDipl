@@ -1,0 +1,15 @@
+.block {
+    display: flex;
+    flex-direction: row;
+}
+
+.graph{
+    width: auto;
+}
+
+.item{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}

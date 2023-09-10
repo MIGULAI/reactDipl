@@ -4,6 +4,7 @@ import MenuItem from "./MenuItem";
 import { IsLogingMenuItems, NotLogingMenuItems } from "../../utils/data/MenuItems";
 import { eraseCookie } from "../../utils/functions/Cookie";
 import { AuthContext } from "../../context";
+import PostService from "../../API/PostService";
 
 const Menu = () => {
     const [menuItems, setMenuItems] = useState([])
@@ -11,7 +12,7 @@ const Menu = () => {
     const { isAuth, setIsAuth, setAccessToken, keyActive, setKeyActive } = useContext(AuthContext)
     useEffect(() => {
 
-        if ( typeof keyActive === 'number') {
+        if (typeof keyActive === 'number') {
             let menuArr = []
             if (isAuth) {
                 menuArr = IsLogingMenuItems
@@ -26,11 +27,15 @@ const Menu = () => {
             setIsActive(activeArray)
         }
     }, [keyActive, isAuth]);
-    const logout = () => {
-        setIsAuth(false)
-        setAccessToken(null)
-        eraseCookie('auth')
-        eraseCookie('access_token')
+    const logout = async () => {
+        const response = await PostService.logout()
+        if (response.data.success) {
+            setIsAuth(false)
+            setAccessToken(null)
+            eraseCookie('auth')
+            // eraseCookie('access_token')
+            // eraseCookie('XSRF-TOKEN')
+        }
     }
     return (
         <div className={classes.Menu__wrapper}>
@@ -51,7 +56,6 @@ const Menu = () => {
                         onClick={() => logout()}
                         changeActive={(key) => setKeyActive(key)}
                         icon={'log-out-outline'}
-                        path={'/logout'}
                         key={menuItems.length}>Вихід</MenuItem>
                     : <></>
                 }

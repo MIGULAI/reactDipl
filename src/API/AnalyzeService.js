@@ -10,4 +10,8 @@ export default class AnalyzeService extends PostService {
         let response = await axios.get(`${this.hostname}api/depanalyze/publcountbytypes`)
         return response
     }
+    static async fetchPublicationsCountByTypesAndAuthor(id) {
+        let response = await axios.get(`${this.hostname}api/authoranalyze/publcountbytypesbyauthor?id=${id}`)
+        return response
+    }
 }
