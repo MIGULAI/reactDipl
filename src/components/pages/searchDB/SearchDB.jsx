@@ -31,11 +31,11 @@ const SearchDB = () => {
 
     const [fetchAutors, isFetchingAutors, autErr] = useFetching(async () => {
         const authors = await PostService.fetchAutorsFull()
-        if(authors.data.success){
+        if (authors.data.success) {
             setAutorsList(authors.data.data.authors)
             setSearchedAutorsList(authors.data.data.authors)
-        }else {
-            let message = {...authors.data};
+        } else {
+            let message = { ...authors.data };
             message.message = ['Сталася помилка'];
             showMessage(message);
         }
@@ -70,12 +70,15 @@ const SearchDB = () => {
         setSearchType(type)
         setIsLoading(false)
     }
-    const about= (id) => {
+    const about = (id) => {
         navigate(`/about/author/${id}`)
     }
-    useEffect(()=> {
+    const publSearch = () => {
+        navigate('/search/publications')
+    }
+    useEffect(() => {
         autErr && console.log(autErr);
-    },[autErr])
+    }, [autErr])
 
     useEffect(() => {
         sernameFilter(searchParam)
@@ -89,6 +92,9 @@ const SearchDB = () => {
 
     return (
         <PageWrapper title="Сторінка пошуку по БД">
+            <div>
+                <MyButton onClick={() => publSearch()}>Пошук публікації</MyButton>
+            </div>
             {
                 isLoading || isFetchingAutors
                     ? <MyLoader />

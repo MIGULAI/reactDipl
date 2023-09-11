@@ -1,0 +1,14 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.tableWrapper {
+    margin-top: 10px;
+    width: auto;
+    justify-content: center;
+    height: auto;
+    max-height: 400px;
+    overflow: auto;
+    border: 1px solid black;
+}

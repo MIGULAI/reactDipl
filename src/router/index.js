@@ -10,6 +10,7 @@ import Editor from "../components/pages/editorPage/Editor"
 import AboutAuthor from '../components/pages/about/author/Author';
 import DepartmentAnalyze from '../components/pages/analyze/department/DepartmentAnalyze';
 import AuthorAnalyze from '../components/pages/analyze/author/AuthorAnalyze';
+import { SearchPublication } from '../components/pages/serchDbPublication/SearchPublication';
 
 
 export const privateRoutes = [
@@ -17,6 +18,7 @@ export const privateRoutes = [
     { path: '/add/public', element: <AddPubl />, exact: true },
     { path: '/add/autor', element: <AddAutor />, exact: true },
     { path: '/search', element: <SearchDB />, exact: true },
+    { path: '/search/publications', element: <SearchPublication />, exact: true },
     { path: '/analyze', element: <Analyze />, exact: true },
     { path: '/analyze/author/:id', element: <AuthorAnalyze />, exact: true },
     { path: '/analyze/department', element: <DepartmentAnalyze />, exact: true },
@@ -29,6 +31,7 @@ export const publicRoutes = [
     { path: '/login', element: <Login />, exact: true },
     { path: '/plan', element: <Plan />, exact: true },
     { path: '/search', element: <SearchDB />, exact: true },
+    { path: '/search/publications', element: <SearchPublication />, exact: true },
     { path: '/analyze', element: <Analyze />, exact: true },
     { path: '/analyze/department', element: <DepartmentAnalyze />, exact: true },
     { path: '/analyze/author/:id', element: <AuthorAnalyze />, exact: true },
