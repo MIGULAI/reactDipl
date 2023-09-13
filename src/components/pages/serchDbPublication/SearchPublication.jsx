@@ -8,6 +8,8 @@ import { AuthContext } from "../../../context";
 import MyFileLoader from "../../UI/MyFileLoader/MyFileLoader";
 import MyTable from "../../UI/MyTable/MyTable";
 import SearchPublRT from "./SearchPublRT";
+import MyButton from "../../UI/MyButton/MyButton";
+import { useNavigate } from "react-router-dom";
 
 export const SearchPublication = () => {
     const { setKeyActive, isAuth } = useContext(AuthContext)
@@ -15,6 +17,7 @@ export const SearchPublication = () => {
     const [rawPublications, setRawPublications] = useState()
     const [searchedPublications, setSearchedPublications] = useState()
     const [trSelected, setTrSelected] = useState()
+    const navigate = useNavigate()
     const [fetchPublications, isFetching, err] = useFetching(async () => {
         const response = await PostService.fetchPubls();
         if (response.data.success) {
@@ -23,6 +26,9 @@ export const SearchPublication = () => {
             setSearchedPublications(publications)
         }
     });
+    const aboutPublication = (id) => {
+        navigate(`/about/publication/${id}`)
+    }
     useEffect(() => {
         err && console.log(err);
     }, [err])
@@ -69,6 +75,10 @@ export const SearchPublication = () => {
                             }
                         </MyTable>
                     </div>
+            }
+            {
+                trSelected ? <MyButton onClick={() => aboutPublication(trSelected)} >Детальніше</MyButton>
+                : <></>
             }
 
         </div>
