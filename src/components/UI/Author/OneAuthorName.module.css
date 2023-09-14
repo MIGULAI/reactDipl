@@ -1,0 +1,17 @@
+.item {
+    display: flex;
+    flex-direction: row;
+}
+
+.label {
+    margin-right: 20px;
+}
+
+.link {
+    text-decoration: underline;
+}
+
+.link:hover{
+    color: blue;
+    cursor: pointer;
+}

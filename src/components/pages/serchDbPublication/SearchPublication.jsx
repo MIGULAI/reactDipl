@@ -59,7 +59,7 @@ export const SearchPublication = () => {
                     ? <MyFileLoader />
                     : <div className={classes.tableWrapper}>
                         <MyTable
-                            header={['№', 'Назва']}
+                            header={['№', 'Назва', "Друкованих сторінок", 'Дата видання']}
                         >
                             {
                                 searchedPublications && searchedPublications.map((publ, i) =>

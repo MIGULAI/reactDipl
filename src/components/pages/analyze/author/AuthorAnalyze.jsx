@@ -13,6 +13,13 @@ const AuthorAnalyze = () => {
     const { id } = useParams()
     const [years, setYears] = useState()
     const [year, setYear] = useState()
+    const [author, setAuthor] = useState()
+    const [fetchAuthor, isAuthorFetching, errAQuthorFetching] = useFetching(async (id) => {
+        const response = await PostService.fetchAuthor(id)
+        if (response.data.success) {
+            setAuthor(response.data.data.author)
+        }
+    }, true)
     const [fetchPlanYears, isFetching, errFetching] = useFetching(async (id) => {
         const response = await PostService.fetchPlanYearListByAuthor(id)
         if (response.data.success) {
@@ -25,12 +32,14 @@ const AuthorAnalyze = () => {
     })
     useEffect(() => {
         errFetching && console.log(errFetching);
-    }, [errFetching])
+        errAQuthorFetching && console.log(errAQuthorFetching);
+    }, [errFetching, errAQuthorFetching])
     useEffect(() => {
+        fetchAuthor(id)
         fetchPlanYears(id)
     }, [])// eslint-disable-line react-hooks/exhaustive-deps
 
-    return <PageWrapper title="Сторінка статистика по кафедрі">
+    return <PageWrapper title={isAuthorFetching ? '...' : "Сторінка статистика автору : " + author.SerName + ' ' + author.Name + ' ' + author.Patronic}>
         <CardWrapper>
             {
                 isFetching ?

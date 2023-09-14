@@ -49,7 +49,6 @@ const AuthorStats = ({ id }) => {
     const [typeCount, setTypeCount] = useState()
     const [fetchAuthorStat, isFetching, errFetching] = useFetching(async () => {
         const response = await AnalyzeService.fetchPublicationsCountByTypesAndAuthor(id)
-        console.log(response);
         if (response.data.success) {
             setTypeCount(response.data.data)
         }

@@ -1,0 +1,16 @@
+.publication{
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    align-items: center;
+
+}
+
+.item {
+    display: flex;
+    flex-direction: row;
+}
+
+.label{
+    margin-right: 20px;
+}

@@ -30,7 +30,6 @@ const PlanSuccess = ({ id, year }) => {
     const [fetchPlanStat, isFetching, errFetching] = useFetching(async () => {
         const response = await PostService.fetchPlanByAuthorAndYear(id, year)
         if (response.data.success) {
-            console.log(response.data.data);
             setPlanData(response.data.data.resultData)
             setPlan(response.data.data.plan)
         } else {

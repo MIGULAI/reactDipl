@@ -11,7 +11,12 @@ const SearchPublRT = ({ option, index, subIndex, selected, selectedItem }) => {
         <td>
             <span>{option.Name}</span>
         </td>
-
+        <td>
+            <span>{option.UPP}</span>
+        </td>
+        <td>
+            <span>{new Date(option.PublicationDate).toLocaleDateString()}</span>
+        </td>
     </tr>
 }
 
