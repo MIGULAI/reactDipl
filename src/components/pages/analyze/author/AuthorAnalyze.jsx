@@ -8,6 +8,7 @@ import MySelector from "../../../UI/MySelector/MySelector";
 import MyFileLoader from "../../../UI/MyFileLoader/MyFileLoader";
 import PlanSuccess from "../../../analyze/author/PlanSuccess/PlanSuccess";
 import AuthorStats from "../../../analyze/author/AuthorStats/AuthorStats";
+import MyButton from "../../../UI/MyButton/MyButton";
 
 const AuthorAnalyze = () => {
     const { id } = useParams()
@@ -30,6 +31,10 @@ const AuthorAnalyze = () => {
             setYears(y)
         }
     })
+    const docLink = (id) => {
+        console.log(id);
+        window.open(window.location.host.includes('localhost') ?   window.location.protocol + "//" + window.location.hostname +`:8088/author/zvit?id=${id}` :  window.location.protocol + "//" + window.location.hostname +`/author/zvit?id=${id}`, '_blank')
+    }
     useEffect(() => {
         errFetching && console.log(errFetching);
         errAQuthorFetching && console.log(errAQuthorFetching);
@@ -54,6 +59,7 @@ const AuthorAnalyze = () => {
                                         selected={year}
                                         onChange={(e) => setYear(e.target.value)}
                                     />
+                                    <MyButton onClick={() => docLink(id)} >Звіт</MyButton>
                                 </div>
                                 : <MyFileLoader />
                         }
@@ -61,10 +67,10 @@ const AuthorAnalyze = () => {
                             year
                                 ? <>
                                     <PlanSuccess id={Number(id)} year={Number(year)} />
-                                    <AuthorStats id={Number(id)} />
                                 </>
                                 : <></>
                         }
+                        <AuthorStats id={Number(id)} />
                     </>
             }
         </CardWrapper>
