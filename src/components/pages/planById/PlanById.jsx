@@ -59,8 +59,8 @@ const PlanById = () => {
 
     const [setAutorPubs, isPubsFetching, pubsError] = useFetching(async (autorId) => {
 
-        if (autorId !== undefined) {
-            const response = await PostService.fetchPubsByAutorId(autorId);
+        if (params.id !== undefined) {
+            const response = await PostService.fetchPubsByPlanId(params.id);
             setPubls(response.data.data.publs)
         }
     })
@@ -95,7 +95,7 @@ const PlanById = () => {
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
-        if (planSet && planSet !== []) {
+        if (planSet) {
             setAutorPubs(planSet.AuthorId)
             fetchAuthor(planSet.AuthorId)
         }

@@ -14,6 +14,7 @@ import {
     Legend,
 } from 'chart.js';
 import { Line } from "react-chartjs-2";
+import { typesFullNames } from "../../department/PublicationsByType/PublicationsByType";
 
 ChartJS.register(
     CategoryScale,
@@ -77,7 +78,7 @@ const AuthorStats = ({ id }) => {
                                     },
                                     title: {
                                         display: true,
-                                        text: el,
+                                        text: `${el} - ${typesFullNames[el]}`,
                                     },
                                 },
                                 scales: {
@@ -90,7 +91,7 @@ const AuthorStats = ({ id }) => {
                             labels: Object.keys(typeCount[el]),
                             datasets: [
                                 {
-                                    label: el,
+                                    label: `${el}`,
                                     data: typeCount[el],
                                     borderColor: colors[index].line ? colors[index].line : colors[0].line,
                                     backgroundColor: colors[index].bg ? colors[index].bg : colors[0].bg,

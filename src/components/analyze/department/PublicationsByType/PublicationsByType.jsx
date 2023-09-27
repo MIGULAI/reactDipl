@@ -25,6 +25,13 @@ ChartJS.register(
     Legend
 );
 
+export const typesFullNames = {
+    'ТДК': "тези",
+    'СТ': "статті",
+    "SW": "scopus",
+    "ПМ": "підручники"
+}
+
 const colors = [
     {
         line: '#D60202',
@@ -79,7 +86,7 @@ const PublicationsByType = ({ width, height }) => {
                                     },
                                     title: {
                                         display: true,
-                                        text: el,
+                                        text: `${el} - ${typesFullNames[el]}`,
                                     },
                                 },
                                 scales: {
@@ -92,7 +99,7 @@ const PublicationsByType = ({ width, height }) => {
                             labels: Object.keys(typesCount[el]),
                             datasets: [
                                 {
-                                    label: el,
+                                    label: `${el}`,
                                     data: typesCount[el],
                                     borderColor: colors[index].line ? colors[index].line : colors[0].line,
                                     backgroundColor: colors[index].bg ? colors[index].bg : colors[0].bg,

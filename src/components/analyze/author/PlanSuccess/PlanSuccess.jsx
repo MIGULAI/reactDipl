@@ -64,7 +64,7 @@ const PlanSuccess = ({ id, year }) => {
                                 },
                             }}
                             data={{
-                                labels: Object.keys(plan),
+                                labels:  Object.keys(plan),
                                 datasets: [
                                     {
                                         id: 1,

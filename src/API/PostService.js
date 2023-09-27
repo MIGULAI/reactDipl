@@ -104,6 +104,12 @@ export default class PostService {
         })
         return response
     }
+    static async fetchPubsByPlanId(id) {
+        let response = await axios.post(`${this.hostname}api/publication/byplan`, {
+            id: id
+        })
+        return response
+    }
     static async fetchAutorSettings(token) {
         const config = {
             headers: {
