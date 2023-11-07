@@ -32,8 +32,13 @@ const AuthorAnalyze = () => {
         }
     })
     const docLink = (id) => {
-        console.log(id);
+        //console.log(id);
         window.open(window.location.host.includes('localhost') ?   window.location.protocol + "//" + window.location.hostname +`:8088/author/zvit?id=${id}` :  window.location.protocol + "//" + window.location.hostname +`/author/zvit?id=${id}`, '_blank')
+    }
+    const docStudentLink = () => {
+        //console.log(id);
+        window.open(window.location.host.includes('localhost') ?   window.location.protocol + "//" + window.location.hostname +`:8088/author/zvitbysupervisor?id=${id}` :  window.location.protocol + "//" + window.location.hostname +`/author/zvitbysupervisor?id=${id}`, '_blank')
+
     }
     useEffect(() => {
         errFetching && console.log(errFetching);
@@ -46,10 +51,13 @@ const AuthorAnalyze = () => {
 
     return <PageWrapper title={isAuthorFetching ? '...' : "Сторінка статистика автору : " + author.SerName + ' ' + author.Name + ' ' + author.Patronic}>
         <CardWrapper>
+        
             {
                 isFetching ?
                     <MyFileLoader />
                     : <>
+                    <MyButton onClick={() => docLink(id)} >Звіт по викладачу</MyButton>
+                    <MyButton onClick={() => docStudentLink(id)} >Звіт по студентам</MyButton>
                         {
                             years
                                 ? <div>
@@ -59,7 +67,7 @@ const AuthorAnalyze = () => {
                                         selected={year}
                                         onChange={(e) => setYear(e.target.value)}
                                     />
-                                    <MyButton onClick={() => docLink(id)} >Звіт</MyButton>
+                                    
                                 </div>
                                 : <MyFileLoader />
                         }
