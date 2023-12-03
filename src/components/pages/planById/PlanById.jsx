@@ -11,6 +11,7 @@ import MyInput from "../../UI/MyInput/MyInput";
 import MyButton from "../../UI/MyButton/MyButton";
 import MyTable from "../../UI/MyTable/MyTable"
 import AboutTR from "./AboutTR";
+import PlanMonitirung from "./PlanMonitirung";
 
 const PlanById = () => {
     const params = useParams()
@@ -155,20 +156,44 @@ const PlanById = () => {
                                             </div>
                                             : <div className={classes.pageTable}>
                                                 <div className={classes.sub}>
-                                                    <span>ТДК</span>
-                                                    <span>{tdk}</span>
+                                                    <span>{'ТДК (План/Опублікавоно):'}</span>
+                                                    <span>{tdk}/{(() => {
+                                                        let a = 0
+                                                        publs.forEach(e => {
+                                                            if (Number(e.Type) === 1) a++
+                                                        })
+                                                        return a
+                                                    })()}</span>
                                                 </div>
                                                 <div className={classes.sub}>
-                                                    <span>СТ</span>
-                                                    <span>{pa}</span>
+                                                    <span>{'СТ (План/Опублікавоно):'}</span>
+                                                    <span>{pa}/{(() => {
+                                                        let a = 0
+                                                        publs.forEach(e => {
+                                                            if (Number(e.Type) === 2) a++
+                                                        })
+                                                        return a
+                                                    })()}</span>
                                                 </div>
                                                 <div className={classes.sub}>
-                                                    <span>SW</span>
-                                                    <span>{scopus}</span>
+                                                    <span>{'SW (План/Опублікавоно):'}</span>
+                                                    <span>{scopus}/{(() => {
+                                                        let a = 0
+                                                        publs.forEach(e => {
+                                                            if (Number(e.Type) === 3) a++
+                                                        })
+                                                        return a
+                                                    })()}</span>
                                                 </div>
                                                 <div className={classes.sub}>
-                                                    <span>ПМ</span>
-                                                    <span>{manusl}</span>
+                                                    <span>{'ПМ (План/Опублікавоно):'}</span>
+                                                    <span>{manusl}/{(() => {
+                                                        let a = 0
+                                                        publs.forEach(e => {
+                                                            if (Number(e.Type) === 4) a++
+                                                        })
+                                                        return a
+                                                    })()}</span>
                                                 </div>
                                             </div>
                                     }
@@ -182,6 +207,9 @@ const PlanById = () => {
                                                 )
                                             }
                                         </MyTable>
+                                    </div>
+                                    <div>
+                                      <PlanMonitirung planId={Number(params.id)}/>
                                     </div>
                                 </PageWrapper>
                         }

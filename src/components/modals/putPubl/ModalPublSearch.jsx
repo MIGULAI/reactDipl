@@ -47,7 +47,7 @@ const ModalPublSearch = ({ setPublId }) => {
                             <MyInput value={publName} onChange={e => setPublName(e.target.value)} placeholder="Назва публікації" />
                         </div>
                     </div>
-                    <div>
+                    <div className={classes.tableWrapper}>
                         <MyTable header={["Назва публікації", "Дата публікації"]}>
                             {
                                 publList.map(publ =>

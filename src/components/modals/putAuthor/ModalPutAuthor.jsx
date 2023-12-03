@@ -6,7 +6,6 @@ import { useState } from "react";
 import { useEffect } from "react";
 import ModalChangeAuthor from "./ModalChangeAuthor";
 
-
 const ModalPutAuthor = ({visible, setVisible}) => {
     const [idAuthor, setIdAuthor] = useState(null)
     const [searchVisible, setSearchVisible] = useState(true)
@@ -17,6 +16,7 @@ const ModalPutAuthor = ({visible, setVisible}) => {
     }, [idAuthor])
 
     return (
+      <div>
         <MyModal  visible={visible} setVisible={setVisible}>
             {
                 searchVisible 
@@ -24,6 +24,7 @@ const ModalPutAuthor = ({visible, setVisible}) => {
                 :<ModalChangeAuthor id={idAuthor} setAuthorId={setIdAuthor}  errCallback={setErr} />
             }
         </MyModal>
+      </div>
     )
 }
 

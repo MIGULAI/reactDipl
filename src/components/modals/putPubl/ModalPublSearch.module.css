@@ -3,3 +3,8 @@
     flex-direction: row;
     margin-bottom: 10px;
 }
+
+.tableWrapper {
+  height: 50vh;
+  overflow-y: scroll;
+}

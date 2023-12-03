@@ -10,7 +10,8 @@ import MyInput from "../../UI/MyInput/MyInput";
 import MyTable from "../../UI/MyTable/MyTable";
 import ModalAuthorsTr from "./ModalAuthorsTr";
 import MyButton from "../../UI/MyButton/MyButton";
-import classes from "./ModalAuthorSearch.module.css"
+import classes from "./ModalAuthorSearch.module.css";
+import classesSecond from '../putPubl/ModalPublSearch.module.css';
 
 
 const ModalAuthorSearch = ({ setAuthorId, errCallback }) => {
@@ -67,7 +68,7 @@ const ModalAuthorSearch = ({ setAuthorId, errCallback }) => {
                                 <MyInput value={authorPatronic} onChange={e => setAuthorPatronic(e.target.value)} placeholder="По батькові" />
                             </div>
                         </div>
-                        <div>
+                        <div className={classesSecond.tableWrapper}>
                             <MyTable header={["Ім'я", "Прізвище", "По Батькові"]}>
                                 {
                                     authorsList.map((author, i) =>
