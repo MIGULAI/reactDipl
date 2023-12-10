@@ -1,7 +1,7 @@
 import React from "react";
 import classes from "./AboutTR.module.css";
 
-const AboutTR = ({option, index, selected, selectedItem}) =>{
+const AboutTR = ({option, index, selected, selectedItem, setup}) =>{
 
     let paint = ''
 
@@ -17,17 +17,16 @@ const AboutTR = ({option, index, selected, selectedItem}) =>{
             selected(-1)
         }
     }
-
     return(
         <tr className={paint} onClick={selecting}>
             <td>
                 <span>{option.Name}</span>
             </td>
             <td>
-                <span>{option.TypeName}</span>
+                <span>{setup.types.find(element => element.id ===  option.Type).TypeShortName}</span>
             </td>
             <td>
-                <span>{option.LanguageName}</span>
+                <span>{setup.languages.find(element => element.id ===  option.Language).LanguageShortName}</span>
             </td>
             <td>
                 <span>{new Date(option.PublicationDate).toLocaleDateString()}</span>

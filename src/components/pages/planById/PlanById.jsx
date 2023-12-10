@@ -29,13 +29,15 @@ const PlanById = () => {
     const [publs, setPubls] = useState([])
     const [selectedItem, setSelectedItem] = useState(-1)
     const [author, setAuthor] = useState()
-
+    const [setup, setSetup] = useState();
 
     const { isAuth, setKeyActive } = useContext(AuthContext)
 
 
     const [fetchingPlan, isPlanLoading, plansError] = useFetching(async (id) => {
         const response = await PostService.fetchPlanById(id);
+        const setup = await PostService.fetchPublSettings()
+        setSetup(setup.data.data)
         if (response.data.success) {
             setTDK(response.data.data.plan.Theses)
             setManual(response.data.data.plan.Manuals)
@@ -48,6 +50,7 @@ const PlanById = () => {
 
     const [setFetchPlan, isPlanFetching, sePlanError] = useFetching(async (plan, id, autorId) => {
         const response = await PostService.setPlan(plan, id, autorId)
+
         if (response.data[0]) {
             setTDK(response.data[1].theses)
             setManual(response.data[1].manuals)
@@ -203,7 +206,7 @@ const PlanById = () => {
                                         >
                                             {
                                                 publs.map(e =>
-                                                    <AboutTR key={e.id} option={e} selectedItem={selectedItem} selected={e => setSelectedItem(e)} index={e.id} />
+                                                    <AboutTR key={e.id} option={e} setup={setup} selectedItem={selectedItem} selected={e => setSelectedItem(e)} index={e.id} />
                                                 )
                                             }
                                         </MyTable>
