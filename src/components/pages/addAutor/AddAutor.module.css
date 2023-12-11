@@ -17,11 +17,22 @@
 .inputFuild span
 {
     width: 50%;
-    flex: 1 0 50%;
+    /* flex: 1 0 50%; */
 }
 .inputFuild span{
     text-align: center;
 }
+
+.inputFueldRow{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    max-width: 100%;
+    justify-content: space-between;
+    align-items: center;
+
+}
+
 .table_wrapper {
     width: 100%;
     display: flex;

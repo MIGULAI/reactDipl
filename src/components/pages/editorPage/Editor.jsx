@@ -1,6 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-import MyInput from "../../UI/MyInput/MyInput";
-import MyLabel from "../../UI/MyLabel/MyLabel";
 import MyLoader from "../../UI/MyLoader/MyLoader";
 import PageWrapper from "../PageWrapper";
 import classes from "./Editor.module.css"
@@ -8,7 +6,6 @@ import { AuthContext } from "../../../context";
 import { useFetching } from "../../../hooks/useFetching";
 import PostService from "../../../API/PostService";
 import MyError from "../../UI/MyError/MyError";
-import MyButton from "../../UI/MyButton/MyButton";
 import Recalculate from "./SubFunctions/Recalculate";
 import MyActions from "../../UI/MyActionKeys/MyActions";
 import MyStats from "../../UI/MyStats/MyStats";
@@ -44,15 +41,6 @@ const Editor = () => {
                     : <div>
                         <MyStats setBoboErr={setErr} />
 
-                        <div className={statBar}>
-                            <div className={item}>
-                                <div className={item}>
-                                    <MyLabel>Кількість авторів у однієї публікації :</MyLabel>
-                                    <MyInput value={authorsPublCount} onChange={(e) => setAuthorsPublCount(Number(e.target.value))} />
-                                    <MyButton onClick={handleAuthorsNumber}>{`Зберегти`}</MyButton>
-                                </div>
-                            </div>
-                        </div>
                         <div className={statBar}>
                             <div className={item}>
                                 <Recalculate accessToken={accessToken} />
